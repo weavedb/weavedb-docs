@@ -18,7 +18,7 @@ const config: DocsThemeConfig = {
           fill="currentColor"
         />
       </svg>
-      <span style={{ marginLeft: '15px' }}>WeaveDB</span>
+      <span style={{ marginLeft: "15px" }}>WeaveDB</span>
     </>
   ),
   project: {
@@ -43,9 +43,9 @@ const config: DocsThemeConfig = {
   chat: {
     link: "https://discord.com/invite/YMe3eqf69M",
   },
-  docsRepositoryBase: "https://github.com/drumfeet/nextra-test",
+  docsRepositoryBase: "https://github.com/drumfeet/nextra-test/blob/main",
   footer: {
-    text: "WeaveDB Docs Repo",
+    text: "WeaveDB Docs",
   },
 }
 
