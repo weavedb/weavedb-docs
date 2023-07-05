@@ -1,0 +1,10 @@
+{
+  "setup": "Set up SDK",
+  "ownership": "Ownership",
+  "indexes": "Indexes",
+  "crons": "Crons",
+  "relayers": "Relayers",
+  "triggers": "Triggers",
+  "evolve": "Evolve Contract",
+  "version": "Version"
+}
