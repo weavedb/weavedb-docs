@@ -15,7 +15,7 @@ const config: DocsThemeConfig = {
   logo: (
     <>
       <svg
-        width="34"
+        width="24"
         height="24"
         viewBox="0 0 54 44"
         fill="none"
