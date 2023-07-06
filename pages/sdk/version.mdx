@@ -21,7 +21,7 @@ await db.getVersion()
 #### Added Features
 
 -  use [kv storage](https://academy.warp.cc/docs/sdk/advanced/kv-storage) for data and indexes
-- [triggers](/docs/sdk/triggers)
+- [triggers](/sdk/triggers)
 
 ### v0.26.4 (July 3, 2023)
 
@@ -31,7 +31,7 @@ await db.getVersion()
 
 #### Added Features
 
-- [triggers](/docs/sdk/triggers)
+- [triggers](/sdk/triggers)
 
 ### v0.26.3 (June 19, 2023)
 
@@ -41,7 +41,7 @@ await db.getVersion()
 
 #### Added Features
 
--  [dot notation](/docs/sdk/queries#where)
+-  [dot notation](/sdk/queries#where)
 
 ### v0.26.2 (June 12, 2023)
 
@@ -51,7 +51,7 @@ await db.getVersion()
 
 #### Added Features
 
--  [internal writes](/docs/sdk/relayers#internal-writes)
+-  [internal writes](/sdk/relayers#internal-writes)
 
 ### v0.26.1 (June 9, 2023)
 
@@ -71,7 +71,7 @@ await db.getVersion()
 
 #### Added Features
 
--  [bundle query](/docs/sdk/queries#bundle)
+-  [bundle query](/sdk/queries#bundle)
 
 ### v0.25.0 (Mar 10, 2023)
 
@@ -102,7 +102,7 @@ await db.getVersion()
 
 #### Added Features
 
-- [`=` deprecated](/docs/sdk/queries#get--cget)
+- [`=` deprecated](/sdk/queries#get--cget)
 
 ### v0.22.0 (Mar 02, 2023)
 
@@ -112,7 +112,7 @@ await db.getVersion()
 
 #### Added Features
 
-- [getHash()](/docs/sdk/queries#gethash) for consistency check
+- [getHash()](/sdk/queries#gethash) for consistency check
 
 
 ### v0.21.0 (Feb 21, 2023)
@@ -123,7 +123,7 @@ await db.getVersion()
 
 #### Added Features
 
-- copy new `version` to state on [migration](/docs/sdk/evolve#upgrade--evolve-db-contract) (internal change)
+- copy new `version` to state on [migration](/sdk/evolve#upgrade--evolve-db-contract) (internal change)
 - return `original_signer` for grpc-node optimizations (internal change)
 
 ### v0.20.0 (Feb 8, 2023)
@@ -134,8 +134,8 @@ await db.getVersion()
 
 #### Added Features
 
-- [batch execution of admin methods](/docs/sdk/queries#batch)
-- `contract` field to [access control rules](/docs/sdk/rules#preset-variables)
+- [batch execution of admin methods](/sdk/queries#batch)
+- `contract` field to [access control rules](/sdk/rules#preset-variables)
 
 ### v0.19.0 (Feb 2, 2023)
 
@@ -155,9 +155,9 @@ await db.getVersion()
 
 #### Added Features
 
-- [setSecure()](/docs/runlocally/repl#deploy-db-in-secure-mode)
-- [migrate()](/docs/sdk/evolve#upgrade--evolve-db-contract)
-- [getEvolve()](/docs/sdk/evolve#get-evolve-stats)
+- [setSecure()](/runlocally/repl#deploy-db-in-secure-mode)
+- [migrate()](/sdk/evolve#upgrade--evolve-db-contract)
+- [getEvolve()](/sdk/evolve#get-evolve-stats)
 
 ### v0.17.0 (Jan 28, 2023)
 
@@ -167,8 +167,8 @@ await db.getVersion()
 
 #### Added Features
 
-- [auto-index doc ids](/docs/sdk/indexes#__id__)
-- [listRelayerJobs()](/docs/sdk/relayers#list-relayer-jobs)
+- [auto-index doc ids](/sdk/indexes#__id__)
+- [listRelayerJobs()](/sdk/relayers#list-relayer-jobs)
 
 ### v0.16.0 (Jan 27, 2023)
 
@@ -178,7 +178,7 @@ await db.getVersion()
 
 #### Added Features
 
-- [better owner validation for crons](/docs/sdk/crons)
+- [better owner validation for crons](/sdk/crons)
 
 ### v0.15.0 (Jan 25, 2023)
 
@@ -188,7 +188,7 @@ await db.getVersion()
 
 #### Added Features
 
-- [set/update subcollections](/docs/sdk/queries#set)
+- [set/update subcollections](/sdk/queries#set)
 
 ### v0.14.0 (Jan 24, 2023)
 
@@ -198,7 +198,7 @@ await db.getVersion()
 
 #### Added Features
 
-- [listCollections()](/docs/sdk/queries#listcollections) : list sub collections too
+- [listCollections()](/sdk/queries#listcollections) : list sub collections too
 
 ### v0.13.0 (Jan 23, 2023)
 
@@ -208,8 +208,8 @@ await db.getVersion()
 
 #### Added Features
 
-- [listCollections()](/docs/sdk/queries#listcollections)
-- [getInfo()](/docs/sdk/queries#getInfo)
+- [listCollections()](/sdk/queries#listcollections)
+- [getInfo()](/sdk/queries#getInfo)
 
 ### v0.12.0 (Jan 17, 2023)
 
@@ -219,7 +219,7 @@ await db.getVersion()
 
 #### Added Features
 
-- [secp256k1-2 algorithm for Intmax is now settable](/docs/sdk/auth#intmaxwallet-intmax)
+- [secp256k1-2 algorithm for Intmax is now settable](/sdk/auth#intmaxwallet-intmax)
 
 ### v0.11.0 (Jan 15, 2023)
 
@@ -229,7 +229,7 @@ await db.getVersion()
 
 #### Added Features
 
-- [overwrite temporary address](/docs/sdk/auth)
+- [overwrite temporary address](/sdk/auth)
 
 ### v0.10.0 (Jan 12, 2023)
 
@@ -239,8 +239,8 @@ await db.getVersion()
 
 #### Added Features
 
-- [multisig relayers](/docs/sdk/relayers#multisig-relayer)
-- [Lit Protocol Integration](/docs/sdk/relayers#verifiable-oracles-with-lit-protocol)
+- [multisig relayers](/sdk/relayers#multisig-relayer)
+- [Lit Protocol Integration](/sdk/relayers#verifiable-oracles-with-lit-protocol)
 
 ### v0.9.0 (Dec 26, 2022)
 
@@ -250,8 +250,8 @@ await db.getVersion()
 
 #### Added Features
 
-- [relayers](/docs/sdk/relayers) : `getRelayerJob`, `setRelayerJob`, `removeRelayerJob`
-- `sign` and `relay` added to [the SDKs](/docs/sdk/setup)
+- [relayers](/sdk/relayers) : `getRelayerJob`, `setRelayerJob`, `removeRelayerJob`
+- `sign` and `relay` added to [the SDKs](/sdk/setup)
 
 ### v0.8.0 (Dec 18, 2022)
 

@@ -2,14 +2,14 @@ import { Callout } from "nextra/components"
 
 # Web2 Auth with Next.ID
 
-This demo is a variant of the [custom authentication](/docs/examples/custom-auth) flow to let WeaveDB dapps use web2 identities such as Twitter and Github.
+This demo is a variant of the [custom authentication](/examples/custom-auth) flow to let WeaveDB dapps use web2 identities such as Twitter and Github.
 
 [Next.ID](https://next.id) is a decentralized protocol to link web2 social identities to crypto public keys. You can, for example, use the [Mask Extension](https://mask.io/) or [MetaMask](https://metamask.io/) to sign a generated payload, and tweet it to your Twitter timeline, and verify your ownership of the Twitter account to link it to the signer public key, as explained [here](https://docs.next.id/getting-started/quick-start).
 
 Once your web2 identity is verified, you can always proove that your crypto wallet is the owner of that identity, which could replace the centralized OAuth flow of web2 services.
 
 <Callout type="info" emoji="💡">
-We are in the process of making the Next.ID flow built-in with the WeaveDB SDK and the core contracts. This demo is rather to show you what is possible with the [custom authentication](/docs/examples/custom-auth) flow.
+We are in the process of making the Next.ID flow built-in with the WeaveDB SDK and the core contracts. This demo is rather to show you what is possible with the [custom authentication](/examples/custom-auth) flow.
 </Callout>
 
 ## Authentication Flow
@@ -124,7 +124,7 @@ Upload the js file above to IPFS and get the `CID`. You could, for example, use 
 
 ## 3. Mint/Grant/Burn PKP
 
-[Mint/Grant/Burn a PKP](/docs/sdk/relayers#mint-grant-burn-pkp) on Chronicle testnet using the script below. You need to get some testnet LIT token through [the official faucet](https://faucet.litprotocol.com/).
+[Mint/Grant/Burn a PKP](/sdk/relayers#mint-grant-burn-pkp) on Chronicle testnet using the script below. You need to get some testnet LIT token through [the official faucet](https://faucet.litprotocol.com/).
 
 ```javascript
 const bs58 = require("bs58")

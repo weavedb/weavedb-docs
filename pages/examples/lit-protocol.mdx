@@ -2,7 +2,7 @@ import { Callout } from "nextra/components"
 
 # Cross-Chain ACL with Lit Protocol
 
-Continuing from [the previous example](/docs/examples/relayer-nft), we can take [the relayers](/docs/sdk/relayers) one step further with [Lit Protocol](https://litprotocol.com/). Using [threshold cryptography](https://developer.litprotocol.com/Introduction/howItWorks#threshold-cryptography), Lit enables us to build access control logic using states from multiple blockchains combined, and encrypt data so only certain addresses that satisfy the access control rules can decrypt it.
+Continuing from [the previous example](/examples/relayer-nft), we can take [the relayers](/sdk/relayers) one step further with [Lit Protocol](https://litprotocol.com/). Using [threshold cryptography](https://developer.litprotocol.com/Introduction/howItWorks#threshold-cryptography), Lit enables us to build access control logic using states from multiple blockchains combined, and encrypt data so only certain addresses that satisfy the access control rules can decrypt it.
 
 For this example, we will build a messaging dapp where you can send encrypted messages to only specified NFT holders. And only the holders of specified tokenIDs will be able to decrypt your messages.
 
@@ -40,12 +40,12 @@ Frontend Dapp
 
 ## Prerequisites
 
-We assume you have followed [the previous tutorial](/docs/examples/relayer-nft). If not, please do the following 3 steps and come back here.
+We assume you have followed [the previous tutorial](/examples/relayer-nft). If not, please do the following 3 steps and come back here.
 
-1. [Clone the Repo](/docs/examples/relayer-nft)
-2. [Deploy NFT](/docs/examples/relayer-nft#deploy-nft)
-3. [Deploy WeaveDB Contract](/docs/examples/relayer-nft#deploy-weavedb-contracts)
-4. [Set up Local gRPC Node](/docs/examples/lit-protocol#set-up-local-grpc-node)
+1. [Clone the Repo](/examples/relayer-nft)
+2. [Deploy NFT](/examples/relayer-nft#deploy-nft)
+3. [Deploy WeaveDB Contract](/examples/relayer-nft#deploy-weavedb-contracts)
+4. [Set up Local gRPC Node](/examples/lit-protocol#set-up-local-grpc-node)
 
 ## Create a Subgraph
 
@@ -381,12 +381,12 @@ node scripts/lit-setup.js mainnet mainnet YOUR_CONTRACT_TX_ID RELAYER_EVM_ADDRES
 
 ## NextJS Frontend Dapp
 
-If you followed [the previous tutorial](/docs/examples/relayer-nft), you should have a frontend dapp set up alreasy.
+If you followed [the previous tutorial](/examples/relayer-nft), you should have a frontend dapp set up alreasy.
 
 If not, you should follow the first two sections now.
 
-1. [Create NextJS Project](/docs/examples/relayer-nft#create-nextjs-project)
-2. [Install Dependencies](/docs/examples/relayer-nft#install-dependencies)
+1. [Create NextJS Project](/examples/relayer-nft#create-nextjs-project)
+2. [Install Dependencies](/examples/relayer-nft#install-dependencies)
 
 ### Copy ACL ABI
 
