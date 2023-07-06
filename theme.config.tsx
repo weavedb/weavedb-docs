@@ -33,6 +33,7 @@ const config: DocsThemeConfig = {
     link: "https://discord.com/invite/YMe3eqf69M",
   },
   docsRepositoryBase: "https://github.com/drumfeet/nextra-test/blob/main",
+  primaryHue: 278,
   footer: {
     component: <></>,
   },
