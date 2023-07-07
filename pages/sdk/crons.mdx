@@ -8,7 +8,7 @@ You can use JSON-based functional programming language called [FPJSON](https://f
 
 ## Add a Cron
 
-```js
+```js copy
 const cron = {
   start: 1659505371,
   span: 60 * 60 * 12,
@@ -35,26 +35,26 @@ The first argument of each job is the method. The DB operations `get` `set` `upd
 
 Exept for `get` the second argument is the query.
 
-```js
+```js copy
 ["set", [{name: "Bob", age: 20}, "people", "Bob"]]
 ```
 
 In case of `get`, the second argument is a global variable to set the return value to, and the third argument is the query.
 
-```js
+```js copy
 ["get", "Bob", ["people", "Bob"]]
 ```
 Now you can get `Bob` with `{var: "Bob"}` or `["var", "Bob"]`.
 
 `let` will assign the result of the job to a global variable.
 
-```js
+```js copy
 ["let", "age", ["compose", ["add", 1], ["prop", "age"], {var: "Bob"}]]
 ```
 
 `do` will simply execute a job without assigning the result to a variable. It's useful when you want to define variables for later use.
 
-```js
+```js copy
 ["do", ["compose",["map", ["apply", ["let"]], ["toPairs"]], {var: "Bob"}]]
 ```
 For example, the job above will first fetch a global variable `Bob` with `{var: "Bob"}`, `{name: "Bob", age: 21}`.
@@ -65,13 +65,13 @@ Then `map` the pairs and `apply` each pair to `let`, which results in defining t
 
 ## Get Crons
 
-```js
+```js copy
 await db.getCrons()
 ```
 
 ## Remove Crons
 
-```js
+```js copy
 await db.removeCrons("count-crons")
 ```
 
@@ -85,28 +85,28 @@ You should familiarize yourself with [Ramda](https://ramdajs.com) which enables 
 
 Basic
 
-```js
+```js copy
 add(1, 2) // ramdajs
 ["add", 1, 2] // JSON
 ```
 
 Currying
 
-```js
+```js copy
 add(1)(2) // ramdajs
 [["add", 1], 2] // JSON
 ```
 
 Composition
 
-```js
+```js copy
 pipe(add(10), subtract(__, 3))(5) // ramdajs
 [["pipe", ["add", 10], ["subtract", ["__"], 3]], 5] // JSON
 ```
 
 Point-free style means you cannot write something like this with the JSON format.
 
-```js
+```js copy
 sortBy((v)=> v.age)(people) // ramdajs
 ```
 
@@ -114,7 +114,7 @@ It's because you cannot write arbitrary JS lines such as `(v)=> v.age`.
 
 Instead, you can do this using another ramda funciton `prop`.
 
-```js
+```js copy
 sortBy(prop("age"), people) // ramdajs
 ["sortBy",["prop", "age"], people] // JSON
 ```
@@ -127,7 +127,7 @@ WeaveDB inserts global variables to each cron scope to ease up the unnecessary c
 
 Every time a cron executes, the global variables will start with `block` metadata.
 
-```js
+```js copy
 {
   block: {
     height: SmartWeave.block.height,
@@ -142,20 +142,20 @@ To access a variable, there are two ways.
 
 ##### Object with `var` field
 
-```js
+```js copy
 {var: "block"} // will return the block object
 {var: "block.timestamp"} // will only return the timestamp
 ```
 
 In action
 
-```js
+```js copy
 ["add", { var: "block.timestamp" }, 60 * 60] // add 1 hour to the timestamp
 ```
 
 ##### Custom ramda function
 
-```js
+```js copy
 ["var", "block.height"]
 ```
 
@@ -163,7 +163,7 @@ The `var` function needs to be invoked with another argument. The second argumen
 
 So for example, within a composition, you can rewrite the ongoing value with a new value with `var` function and keep on.
 
-```js
+```js copy
 ["pipe", ...[DOING_SOMETHING], ["var", "block.height"], ...[NOW_KEEP_ON_WITH_BLOCK_HEIGHT]]
 ```
 
@@ -175,19 +175,19 @@ The difference between `{var: "block"}` and `["var", "block"]` is `{var: "block"
 
 To define new global variables or assign a value to existing variables, use `let` custom ramda function.
 
-```js
+```js copy
 ["let", "variable_path", "value"]
 ```
 
 In action
 
-```js
+```js copy
 ["pipe", ["add", 60 * 60], ["let", "hour_later"], {var: "block.timestamp"}]
 ```
 
 After this the global variables will be...
 
-```js
+```js copy
 {
   block: {
     height: SmartWeave.block.height,
@@ -201,13 +201,13 @@ Note the difference between `var object` and `var function` when accessing the v
 
 You can do this,
 
-```js
+```js copy
 ["pipe", ["add", 60 * 60], ["let", "hour_later"], ["var", "hour_later"], {var: "block.timestamp"}]
 ```
 
 but you cannot do this since `{var: "hour_later"}` will be evaluated before the job starts.
 
-```js
+```js copy
 ["pipe", ["add", 60 * 60], ["let", "hour_later"], {var: "hour_later"}, {var: "block.timestamp"}]
 ```
 
@@ -217,13 +217,13 @@ When accessing and defining variables, you can use dynamic paths with `$`.
 
 For example, assign a path to a variable.
 
-```js
+```js copy
 ["let", "dynamic_path", "hour_later"]
 ```
 
 Then use the variable with `$`, to achieve the same result as the previous examples.
 
-```js
+```js copy
 ["pipe", ["add", 60 * 60], ["let", "$dynamic_path"], ["var", "$dynamic_path"], {var: "block.timestamp"}]
 ```
 

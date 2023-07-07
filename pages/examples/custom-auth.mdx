@@ -29,7 +29,7 @@ Deploy a WeaveDB contract using [the Web Console](https://console.weavedb.dev/),
 
 Let's name the custom authentication flow `custom` (it can be anything).
 
-```javascript
+```js copy
 const go = async () => {
   const tokenID = params.query.linkTo.split(":")[1]
   const address = params.caller
@@ -104,7 +104,7 @@ Upload the js file above to IPFS and get the `CID`. You could, for example, use 
 
 [Mint/Grant/Burn a PKP](/sdk/relayers#mint-grant-burn-pkp) on Chronicle testnet using the script below. You need to get some testnet LIT token through [the official faucet](https://faucet.litprotocol.com/).
 
-```javascript
+```js copy
 const bs58 = require("bs58")
 const { Wallet, Contract, ethers } = require("ethers")
 const privatekey = "ANY_EVM_PRIVATE_KEY" // this could be any account since the NFT will be immediately burnt
@@ -171,7 +171,7 @@ You can also run the sample script from the repo. Just replace your own values f
 
 Run the script using the terminal commands shown below.
 
-```bash
+```bash copy
 cd examples/custom-auth/pkp-script
 yarn
 node custom-auth-pkp.js
@@ -194,7 +194,7 @@ Fill in the `relayers` input field with the `ETH Address` that you had previousl
 
 Set the following schema for extra data 
 
-```javascript
+```js copy
 {
    relayers: ["PKP_Address"],
    schema: {
@@ -210,7 +210,7 @@ Set the following schema for extra data
 ```
 
 ### CLI
-```javascript
+```js copy
 const job = {
    relayers: ["PKP_Address"],
    schema: {
@@ -225,7 +225,7 @@ const job = {
  } 
 ```
 
-```javascript
+```js copy
 await db.addRelayerJob("auth:custom", job)
 ```
 
@@ -233,7 +233,7 @@ await db.addRelayerJob("auth:custom", job)
 
 Let's build a simple app using NextJS.
 
-```bash
+```bash copy
 npx create-next-app custom-auth
 cd custom-auth
 yarn add @lit-protocol/lit-node-client ethers weavedb-sdk
@@ -244,7 +244,7 @@ Now the default app is running at [localhost:3000](http://localhost:3000/).
 
 Create `.env.local` file with the following variables.
 
-```bash
+```bash copy
 NEXT_PUBLIC_CONTRACT_TX_ID=""
 NEXT_PUBLIC_PKP_ADDRESS=""
 NEXT_PUBLIC_PKP_PUBLIC_KEY=""
@@ -259,7 +259,7 @@ NEXT_PUBLIC_AUTH_NAME="custom"
 
 Then update `/pages/index.js` with the following code.
 
-```javascript 
+```js copy 
 import SDK from "weavedb-sdk"
 import { useEffect, useState } from "react"
 import { Signature, BrowserProvider } from "ethers"

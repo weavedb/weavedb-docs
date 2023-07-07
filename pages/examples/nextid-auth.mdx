@@ -53,7 +53,7 @@ Deploy a WeaveDB contract using [the Web Console](https://console.weavedb.dev/),
 The script for this Lit Action is rather complex because we need vanilla JS code to convert a compressed secp256k1 public key to an address.
 Let us omit the `toAddress()` function and focus on the main part to verify and sign the query. The entire script is deployed [here](https://cloudflare-ipfs.com/ipfs/QmQTJsCtEEvprBVRdhZGqXum2LBW82MbeB7VTXJqFMwiE1).
 
-```javascript
+```js copy
 /*
   const toAddress = (publicKey)=>{
     // convert the publicKey to an address
@@ -126,7 +126,7 @@ Upload the js file above to IPFS and get the `CID`. You could, for example, use 
 
 [Mint/Grant/Burn a PKP](/sdk/relayers#mint-grant-burn-pkp) on Chronicle testnet using the script below. You need to get some testnet LIT token through [the official faucet](https://faucet.litprotocol.com/).
 
-```javascript
+```js copy
 const bs58 = require("bs58")
 const { Wallet, Contract, ethers } = require("ethers")
 const privatekey = "ANY_EVM_PRIVATE_KEY" // this could be any account since the NFT will be immediately burnt
@@ -193,7 +193,7 @@ You can also run the sample script from the repo. Just replace your own values f
 
 Run the script using the terminal commands shown below.
 
-```bash
+```bash copy
 cd examples/custom-auth/pkp-script
 yarn
 node custom-auth-pkp.js
@@ -217,7 +217,7 @@ Fill in the `relayers` input field with the `ETH Address` that you had previousl
 
 Set the following schema for extra data 
 
-```javascript
+```js copy
 {
    relayers: [ PKP_ETH_ADDRESS ],
    schema: {
@@ -233,7 +233,7 @@ Set the following schema for extra data
 ```
 
 #### CLI
-```javascript
+```js copy
 const job = {
    relayers: [ PKP_ETH_ADDRESS ],
    schema: {
@@ -248,7 +248,7 @@ const job = {
  } 
 ```
 
-```javascript
+```js copy
 await db.addRelayerJob("auth:nextid:twitter", job)
 ```
 
@@ -256,7 +256,7 @@ await db.addRelayerJob("auth:nextid:twitter", job)
 
 Let's build a simple app using NextJS.
 
-```bash
+```bash copy
 npx create-next-app nextid-auth
 cd nextid-auth
 yarn add @lit-protocol/lit-node-client-nodejs ethers weavedb-sdk
@@ -267,7 +267,7 @@ Now the default app is running at [localhost:3000](http://localhost:3000/).
 
 Create `.env.local` file with the following variables.
 
-```bash
+```bash copy
 # public variables
 NEXT_PUBLIC_CONTRACT_TX_ID="..."
 NEXT_PUBLIC_PKP_ADDRESS="0x..."
@@ -288,7 +288,7 @@ AUTH_SIG= '{"sig":"...","derivedVia":"web3.eth.personal.sign","signedMessage":"l
 
 You can get an AuthSig by runnining the following code in browser with the `expiration` set in 100 years. The dapp admin will connect with the Lit Action via the `/api/auth` endpoint, so you might not want the AuthSig to expire.
 
-```javascript
+```js copy
 import { checkAndSignAuthMessage } from '@lit-protocol/lit-node-client';
 
 const authSig = await checkAndSignAuthMessage({
@@ -304,7 +304,7 @@ You could let users call the Lit Action in browser, but in that case, the dapp n
 
 Then update `/api/auth.js` with the following code. This is a serverless function to connect with the Lit Action to verify the ownership of your Twitter account via Next.ID, then fetch the profile data via Twitter API.
 
-```javascript 
+```js copy 
 const { Signature } = require("ethers")
 const LitJsSdk = require("@lit-protocol/lit-node-client-nodejs")
 
@@ -358,7 +358,7 @@ Finally, we will show you only the authentication related functions used in the 
 
 Connecting with an WeaveDB contract.
 
-```javascript
+```js copy
 export async function connectWithWeaveDB(contractTxId) {
   const sdk = new SDK({ contractTxId })
   await sdk.init()
@@ -370,7 +370,7 @@ export async function connectWithWeaveDB(contractTxId) {
 
 Getting a public key of the connected account. It requires the wallet to sign a message to recover the associated public key.
 
-```javascript
+```js copy
 import { publicKey } from "eth-crypto"
 import { SigningKey, getBytes, hashMessage, BrowserProvider } from "ethers"
 
@@ -392,7 +392,7 @@ export async function getPubKey(identity) {
 
 Check if the given public key is the owner of the twitter identity via Next.ID.
 
-```javascript
+```js copy
 export async function isOwner(identity, public_key) {
   const proofs = await fetch(
     `https://proof-service.next.id/v1/proof?platform=twitter&identity=${identity}`
@@ -417,7 +417,7 @@ export async function isOwner(identity, public_key) {
 
 If `isOwner` returns `false`, we need to link the public key to the twitter identity via Next.ID. The first step is to sign the generated payload.
 
-```javascript
+```js copy
 export async function signPayload(identity, public_key, signer) {
   const res = await fetch("https://proof-service.next.id/v1/proof/payload", {
     method: "POST",
@@ -447,7 +447,7 @@ export async function signPayload(identity, public_key, signer) {
 
 The user needs to tweet the generated tweet with the signature and get the status id of the tweet. Then NextId will verify the ownership by checking the tweet.
 
-```javascript
+```js copy
 export async function verifyProof(statusID, nextID) {
   try {
     const verify = await fetch("https://proof-service.next.id/v1/proof", {
@@ -473,7 +473,7 @@ export async function verifyProof(statusID, nextID) {
 
 Finally, the dapp will generate a temporary address and send a relay query to WeaveDB to link the twitter account to it with a signature from Lit Action to verify the ownership.
 
-```javascript
+```js copy
 export async function createTempAddress(handle, signer, sdk) {
 
   // sign a query to link a temporary address to the twitter handle

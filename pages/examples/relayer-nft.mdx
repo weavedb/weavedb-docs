@@ -28,7 +28,7 @@ Frontend Dapp
 
 ## Clone the Repo
 
-```bash
+```bash copy
 git clone https://github.com/weavedb/weavedb.git
 cd weavedb
 yarn
@@ -42,7 +42,7 @@ If you have no `GoerliETH`, here's [a list of faucets](https://faucetlink.to/goe
 
 This is a simple full-on-chain NFT with a free mint function.
 
-```js
+```js copy
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
@@ -82,7 +82,7 @@ contract NFT is ERC721URIStorage {
 ```
 Go to the NFT folder and install dependencies.
 
-```bash
+```bash copy
 cd examples/relayer-nft/nft-contract
 yarn
 ```
@@ -97,25 +97,25 @@ PRIVATEKEY="yourprivatekey"
 
 Compile the contract.
 
-```bash
+```bash copy
 npx hardhat compile
 ```
 
 Then deploy the contract to the Goerli testnet.
 
-```bash
+```bash copy
 npx hardhat run scripts/deploy.js --network goerli
 ```
 
 Now you should receive yoru contract address. To verify the contract on Etherscan, run the following.
 
-```bash
+```bash copy
 npx hardhat verify --network goerli YOUR_CONTRACT_ADDRESS
 ```
 
 ## Deploy WeaveDB Contracts
 
-```bash
+```bash copy
 cd ../../../
 node scripts/generate-wallet.js mainnet
 yarn deploy
@@ -134,7 +134,7 @@ We are going to set up only 1 collection.
 
 - `nft` : an NFT registry with messages
 
-```js
+```js copy
 const schema = {
   type: "object",
   required: ["owner", "text", "tokenID"],
@@ -166,7 +166,7 @@ Set a simple relayer job.
 - `schema` : JSON schema for the additional data to be attached by the relayer. The relayer will attach only one extra data of string.
 - `jobID` : our arbitrary jobID will be `nft`.
 
-```js
+```js copy
 const job = {
   relayers: [relayerAddress],
   schema: {
@@ -184,7 +184,7 @@ With these simple settings, we expect the relayer to receive an NFT-tokenID, and
 
 The NFT ownerships can be verified with Access Control Rules.
 
-```js
+```js copy
 const rules = {
   let: {
     owner: ["toLower", { var: "request.auth.extra" }],
@@ -204,7 +204,7 @@ await sdk.setRules(rules, "nft", {
 
 To set up everything with one command, run the following.
 
-```bash
+```bash copy
 node scripts/nft-setup.js mainnet mainnet YOUR_CONTRACT_TX_ID RELAYER_EVM_ADDRESS
 ```
 
@@ -216,7 +216,7 @@ Make sure `docker` and `docker-compose` are installed on your machine.
 
 If you are on Ubuntu, the following commands would install them.
 
-```bash
+```bash copy
 sudo apt-get update
 sudo apt-get install docker.io
 sudo curl -L "https://github.com/docker/compose/releases/download/v2.2.3/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
@@ -225,14 +225,14 @@ sudo chmod +x /usr/local/bin/docker-compose
 
 Then create `weavedb.config.js` to `/grpc-node/node-server` directory.
 
-```js
+```js copy
 module.exports = {
   contractTxId: "xxxxxxxx..."
 }
 ```
 Then run docker-compose with `yarn run-node`.
 
-```bash
+```bash copy
 yarn run-node
 ```
 
@@ -246,7 +246,7 @@ We are going to build the front end dapp using [NextJS](https://nextjs.org/) and
 
 Set up a NextJS project with the app name `relayer-nft`.
 
-```bash
+```bash copy
 yarn create next-app relayer-nft
 cd relayer-nft
 yarn dev
@@ -267,7 +267,7 @@ We use these minimum dependencies.
 - [Chakra UI](https://chakra-ui.com/) - UI library
 - [Ethers.js](https://docs.ethers.org/v5/) - to connect with Metamask
 
-```bash
+```bash copy
 yarn add ramda weavedb-client weavedb-node-client ethers @chakra-ui/react @emotion/react@^11 @emotion/styled@^11 framer-motion@^6
 ```
 
@@ -303,7 +303,7 @@ The relayer needs this ABI to access the Ethereum blockchain.
 
 You need to make `/lib` directory.
 
-```bash
+```bash copy
 mkdir lib
 touch lib/NFT.json
 ```
@@ -330,7 +330,7 @@ We will set up the relayer as NextJS serverless api located at `/pages/api/owner
 
 The relayer receives signed parameters from frontend users and checks the owner of the NFT with `tokenID` embedded in the prameters, then relays the DB query with an additional data of `owner` attached to the query.
 
-```js
+```js copy
 const { Contract, providers } = require("ethers")
 const provider = new providers.JsonRpcProvider(process.env.EVM_RPC)
 const contractTxId = process.env.NEXT_PUBLIC_WEAVEDB_CONTRACT_TX_ID
@@ -588,7 +588,7 @@ There are 2 key parts inside the onClick function.
 
 `sign` method signs a query and creates an object(`param`) ready to be sent to the relayer. In this code, we are setting the object `{ tokenID: +tokenID, text: message }` to `tokenID` doc of `nft` collection. `jobID` also needs to be specified when signing to relay a query.
 
-```js
+```js copy
 const params = await sdk.sign(
   "set",
   { tokenID: +tokenID, text: message },
@@ -604,7 +604,7 @@ Now send the signed object to the relayer we set up at `/api/ownerOf`. The relay
 
 The [access control rules](/examples/relayer-nft#set-up-access-control-rules) previously set will make sure the signer is the owner, and only let messages posted if it's true.
 
-```js
+```js copy
 const res = await fetch("/api/ownerOf", {
   method: "POST",
   body: JSON.stringify(params),

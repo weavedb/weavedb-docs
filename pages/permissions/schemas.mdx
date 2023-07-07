@@ -18,7 +18,7 @@ In this example, we consider `bookmarks` as the name of our collection.
 
 Set a schema to a collection:
 
-```js
+```js copy
 const schema = {
   type: "object",
   required: ["article_id", "date", "user_address"],
@@ -39,12 +39,12 @@ await db.setSchema(schema, "bookmarks")
 
 Get the schema of a collection:
 
-```js
+```js copy
 await db.getSchema("bookmarks")
 ```
 
 Remove a schema from a collection:
 
-```js
+```js copy
 await db.removeSchema(schema, "bookmarks")
 ```

@@ -14,7 +14,7 @@ See an example use case to authenticate NFT owners [here](/examples/relayer-nft)
 
 Before relayers can relay queries, relayer jobs need to be defined in the WeaveDB contract.
 
-```javascript
+```js copy
 /*
 const schema = {
   type: "object",
@@ -46,19 +46,19 @@ Multisig Types
 
 ## List Relayer Jobs
 
-```javascript
+```js copy
 await db.listRelayerJobs()
 ```
 
 ## Get Relayer Job
 
-```javascript
+```js copy
 await db.getRelayerJob("jobID")
 ```
 
 ## Remove Relayer Job
 
-```javascript
+```js copy
 await db.removeRelayerJob("jobID")
 ```
 
@@ -66,7 +66,7 @@ await db.removeRelayerJob("jobID")
 
 Before sending a query to a relayer, you need to sign the query with a jobID.
 
-```javascript
+```js copy
 const data = { name: "Bob", age: 20 }
 const relay_query = await db.sign("set", data, "ppl", "Bob", { jobID: "jobID" } )
 /*
@@ -87,7 +87,7 @@ Then send it to one of the allowed relayers for the job.
 
 As a relayer, you should know what the relay query is requesting from `jobID`. `extra` data can be added as the 3rd parameter, which must match the relay job schema defined in the contract.
 
-```javascript
+```js copy
 // const extra = { height: 180 }
 await db.relay("jobID", params, extra)
 ```
@@ -102,7 +102,7 @@ The data format to be signed should be `{ extra, jobID, params }`.
 
 EIP191 signatures can be made by the `signMessage` method with [Ethers.js Signers](https://docs.ethers.org/v5/api/signer/#Signer-signMessage).
 
-```javascript
+```js copy
 // each signer signs after their own valiations at different locations
 const sig1 = await signers.signMessage(JSON.stringify({ extra, jobID, params }))
 
@@ -128,7 +128,7 @@ You can use [Pinata](https://www.pinata.cloud/) to upload your Lit Action files 
 
 This example Lit Action will check the owner of a specified `tokenID` in the query and add the `owner` as extra data, then create a valid signature for multisig relayer verification with WeaveDB.
 
-```js
+```js copy
 const go = async () => {
   for (const v of [
     infura_key,
@@ -202,7 +202,7 @@ This function mints a PKP and assigns it to an ipfsCid then burn it in a single 
 
 Get some testnet LIT token from [the official Chronicle faucet](https://faucet.litprotocol.com/).
 
-```js
+```js copy
 const bs58 = require("bs58")
 const LitJsSdk = require("lit-js-sdk/build/index.node.js")
 const { JsonRpcProvider, Wallet, Contract, utils } = require("ethers")
@@ -270,14 +270,14 @@ Now go to the PKP page on the Lit Explorer [https://explorer.litprotocol.com/pkp
 
 Even though, the PKP doesn't require your `authSig` to sign, you still need to provide one to the LitAction. AuthSig can be obtained with the following code in a browser.
 
-```js
+```js copy
 const LitJsSdk = require("lit-js-sdk")
 const authSig = await LitJsSdk.checkAndSignAuthMessage({ chain: "polygon" });
 ```
 
 Relayers can be a simple serverless function. The following is a serverless function using the NestJS `pages/api` directory.
 
-```js
+```js copy
 const { utils } = require("ethers")
 const { pluck, compose, map, filter, append } = require("ramda")
 const SDK = require("weavedb-node-client")
@@ -342,7 +342,7 @@ export default async (req, res) => {
 
 You can access the relayer data via `request.auth.extra` in access control rules. For example, the following rules will set the `height` field to the new data to be written.
 
-```javascript
+```js copy
 // request.auth = { signer, relayer, jobID, extra }
 const rules = {
   let: {
@@ -360,7 +360,7 @@ You can let other Warp contracts write to your WeaveDB instance. In this case, t
 
 For example, let's set up a simple contract to write to a WeaveDB contract. Deploy it and get the `contractTxId`.
 
-```js
+```js copy
 export async function handle(state, action) {
   await SmartWeave.contracts.write(action.input.to, {
     function: "relay",
@@ -371,7 +371,7 @@ export async function handle(state, action) {
 ```
 Then, set up a relayer job named `add-height` to allow internal writes. `relayerContractTxId` is the intermediary contract writing to your WeaveDB contract (the one above). Contracts cannot sign to pass the relayer signature validation, to circumvent this, set `internalWrites` to `true`.
 
-```js
+```js copy
 const jobID = "add-height"
 const job = {
   relayers: [relayerContractTxId],
@@ -382,7 +382,7 @@ await db.addRelayerJob(jobID, job)
 
 You can also set up access control rules to add `height` to the uploaded doc. Note this is overly simplified.
 
-```js
+```js copy
 const rules = {
   "let create": {
     "resource.newData.height": { var: "request.auth.extra.height" },
@@ -394,7 +394,7 @@ await db.setRules(rules, "ppl")
 
 Now, you can try setting a new person through the outer contract.
 
-```js
+```js copy
 const { WarpFactory } = require("warp-contracts")
 const warp = WarpFactory.forMainnet()
 const contract = warp
@@ -409,7 +409,7 @@ await contract.bundleInteraction({ function: "relay", to: contractTxId, params }
 
 Finally, you get Bob with `height` field added.
 
-```js
+```js copy
 await db.get("ppl", "Bob")
 // { name: "Bob", age: 20, height: 180 }
 ```

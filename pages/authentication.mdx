@@ -36,7 +36,7 @@ By generating a disposal address, dapp users won't be asked for a signature with
 
 Create a temporary address. Dapps would do this only once when users sign in.
 
-```js
+```js copy
 const expiry = 60 * 60 * 24 * 7 // set expiry to a week
 
 // the first argument is to manually set a wallet.
@@ -51,7 +51,7 @@ Dapps can store the `identity` in the IndexedDB and auto-sign when the user crea
 
 Query DB with the temporary address
 
-```js
+```js copy
 await db.add({ name: "Bob", age: 20 }, "people", identity)
 ```
 
@@ -59,7 +59,7 @@ await db.add({ name: "Bob", age: 20 }, "people", identity)
 
 [Internet Identity](https://identity.ic0.app/) enables biometric authentication on any device.
 
-```js
+```js copy
 import { AuthClient } from "@dfinity/auth-client"
 
 const iiUrl = `https://identity.ic0.app`
@@ -87,7 +87,7 @@ const { identity } = await db.createTempAddressWithII(ii)
 
 [ArConnect](https://arconnect.io) is a simple browser wallet for Arweave.
 
-```js
+```js copy
 const expiry = 60 * 60 * 24 * 7 // set expiry to a week
 
 const { identity } = await db.createTempAddressWithAR(null, expiry)
@@ -100,7 +100,7 @@ const { identity } = await db.createTempAddressWithAR()
 
 [Intmax](https://intmax.io) is the most scalable Ethereum L2 zkRollup with privacy for the web.
 
-```js
+```js copy
 import { IntmaxWalletSigner } from "webmax"
 
 const signer = new IntmaxWalletSigner()
@@ -123,7 +123,7 @@ const { identity } = db.createTempAddressWithIntmax(signer)
 
 [Lens Protocol](https://lens.xyz) is a Polygon-based NFT social protocol. WeaveDB utilizes [Lit Protocol](https://litprotocol.com/) to securely authenticate Lens Profile NFT.
 
-```js
+```js copy
 const expiry = 60 * 60 * 24 * 7 // set expiry to a week
 
 const { identity } = db.createTempAddressWithLens(expiry)
@@ -136,7 +136,7 @@ const { identity } = db.createTempAddressWithLens()
 
 Get an linked address
 
-```js
+```js copy
 await db.getAddressLink(address)
 ```
 
@@ -144,7 +144,7 @@ await db.getAddressLink(address)
 
 Remove an address link
 
-```js
+```js copy
 await db.removeAddressLink({ address: identity.address })
 ```
 
@@ -154,25 +154,25 @@ You can also write to the DB without a temporary address, which requires a manua
 
 ### MetaMask (EVM)
 
-```js
+```js copy
 await db.add({ name: "Bob", age: 20 }, "ppl")
 ```
 
 ### Internet Identity (DFINITY)
 
-```js
+```js copy
 await db.add({ name: "Bob", age: 20 }, "ppl", { ii: ii })
 ```
 
 ### ArConnect (Arweave)
 
-```js
+```js copy
 await db.add({ name: "Bob", age: 20 }, "ppl", { ar: wallet })
 ```
 
 ### IntmaxWallet (Intmax)
 
-```js
+```js copy
 await db.add({ name: "Bob", age: 20 }, "ppl", { intmax: signer })
 ```
 ## Setting Authentication Algorithms
@@ -195,12 +195,12 @@ You can enable/disable authentication by setting required algorithms listed abov
 
 For example, to enable Arweave, and disable the others.
 
-```javascript
+```js copy
 await db.setAlgorithms([ "rsa256" ])
 ```
 
 For example, to enable only EVM, Arweave and Lens.
-```javascript
+```js copy
 await db.setAlgorithms(["secp256k1","rsa256","secp256k1-2"])
 ```
 
@@ -210,24 +210,24 @@ You can set a default wallet and it will be used if no wallet is specified with 
 
 ### MetaMask (EVM)
 
-```js
+```js copy
 db.setDefaultWallet(wallet, "evm")
 ```
 
 ### Internet Identity (DFINITY)
 
-```js
+```js copy
 db.setDefaultWallet(wallet, "ii")
 ```
 
 ### ArConnect (Arweave)
 
-```js
+```js copy
 db.setDefaultWallet(wallet, "ar")
 ```
 
 ### IntmaxWallet (Intmax)
 
-```js
+```js copy
 db.setDefaultWallet(wallet, "intmax")
 ```

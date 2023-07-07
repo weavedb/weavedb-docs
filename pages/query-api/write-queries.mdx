@@ -12,7 +12,7 @@ For references, see [Initialize WeaveDB](/get-started#initialize-weavedb)
 
 To add a new document:
 
-```js
+```js copy
 await db.add({ "age": 20, "name": "Bob" }, "collection_name")
 ```
 <Callout type="info" emoji="💡">
@@ -21,7 +21,7 @@ The doc id will be randomly yet deterministically assigned.
 
 ## set
 
-```js
+```js copy
 await db.set({ "age": 20, "name": "Bob" }, "collection_name", "doc_id")
 ```
 
@@ -33,13 +33,13 @@ This will reset the whole doc if the doc already exists.
 
 Upsert will merge the new data with an existing doc or will set a new doc if it does not already exist:
 
-```js
+```js copy
 await db.upsert({ "age": 20, "name": "Bob" }, "collection_name", "doc_id")
 ```
 
 ## update
 
-```js
+```js copy
 await db.update({ "age": 25 }, "collection_name", "doc_id")
 ```
 
@@ -51,41 +51,41 @@ The following is a list of special operations. WeaveDB has shortcuts for common 
 
 ### Delete a field
 
-```js
+```js copy
 await db.update({ "age": db.del() }, "collection_name", "doc_id")
 ```
 
 ### Increase a field
 
-```js
+```js copy
 await db.update({ "age": db.inc(5) }, "collection_name", "doc_id")
 ```
 
 ### Decrease a field
 
-```js
+```js copy
 await db.update({ "age": db.inc(-5) }, "collection_name", "doc_id")
 ```
 
 ### Array union
 
-```js
+```js copy
 await db.update({ "chars": db.union([ "a", "b", "c", "d" ]) }, "collection_name", "doc_id")
 ```
 
 ### Array remove
 
-```js
+```js copy
 await db.update({ "chars": db.union([ "b", "c" ]) }, "collection_name", "doc_id")
 ```
 
 ### Set block timestamp
-```js
+```js copy
 await db.update({ "date": db.ts() }, "collection_name", "doc_id")
 ```
 
 ### Set signer Ethereum address
-```js
+```js copy
 await db.update({ "address": db.signer() }, "collection_name", "doc_id")
 ```
 
@@ -93,7 +93,7 @@ await db.update({ "address": db.signer() }, "collection_name", "doc_id")
 
 Delete a doc
 
-```js
+```js copy
 await db.delete("collection_name", "doc_id")
 ```
 
@@ -103,7 +103,7 @@ An atomic batch is a feature that allows you to perform multiple read and write 
 
 Atomic means that all the operations within the batch are either fully completed or completely aborted. If any of the write operations fail, none of the changes will be applied to the database, ensuring data integrity.
 
-```js
+```js copy
 await db.batch([
   ["set", { name: "Bob" }, "people", "Bob"],
   ["upsert", { name: "Alice" }, "people", "Alice"],
@@ -117,7 +117,7 @@ You can use batch only if all the queries are by the same signer. If you have mu
 
 Admin queries can be batch-executed as well:
 
-```js
+```js copy
 await db.batch([
   ["setSchema", schema, "people"],
   ["setRules", rules, "people"],
@@ -129,7 +129,7 @@ await db.batch([
 
 Bundle multiple queries from multiple signers
 
-```js
+```js copy
 const query1 = await db.sign("set", {name: "Bob"}, "people", "Bob", {evm: wallet1})
 const query2 = await db.sign("set", {name: "Alice"}, "people", "Alice", {ii: wallet2})
 const query3 = await db.sign("set", {name: "Beth"}, "people", "Beth", {ar: wallet3})
@@ -141,7 +141,7 @@ await db.bundle([query1, query2, query3], {ar: bundler_wallet})
 
 Sign a query without sending a transaction:
 
-```js
+```js copy
 await db.sign("set", {name: "Bob", age: 20}, "collection_name", "doc_id")
 ```
 
@@ -149,7 +149,7 @@ await db.sign("set", {name: "Bob", age: 20}, "collection_name", "doc_id")
 
 Relay a query:
 
-```js
+```js copy
 const param = await db.sign("set", {name: "Bob"}, "collection_name", "doc_id")
 const extra = { age: 20 }
 await db.relay("jobID", param, extra, {evm: relayer_wallet})

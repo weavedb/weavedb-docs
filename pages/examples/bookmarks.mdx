@@ -8,7 +8,7 @@ The implementation details will be omitted for this tutorial. You can go through
 
 ## Deploy WeaveDB Contracts
 
-```bash
+```bash copy
 git clone https://github.com/weavedb/weavedb.git
 cd weavedb
 yarn
@@ -26,7 +26,7 @@ We are going to set up 3 collections.
 
 ## Set up Data Schemas
 
-```js
+```js copy
 const schemas_bookmarks = {
   type: "object",
   required: ["article_id", "date", "user_address"],
@@ -62,7 +62,7 @@ await db.setSchema(schemas_conf, "conf")
 
 ### bookmarks collection
 
-```js
+```js copy
 const rules_bookmarks = {
   let: {
     id: [
@@ -111,7 +111,7 @@ await db.setRules(rules_bookmarks, "bookmarks")
 
 ### mirror collection
 
-```js
+```js copy
 const rules_mirror = {
   "allow write": {
     "==": [{ var: "request.auth.signer" }, ADMIN_ADDRESS],
@@ -124,7 +124,7 @@ await db.setRules(rules_mirror, "mirror")
 
 ### conf collection
 
-```js
+```js copy
 const rules_conf = {
   "allow write": {
     "==": [{ var: "request.auth.signer" }, ADMIN_ADDRESS],
@@ -142,7 +142,7 @@ The frontend dapp can implement the following query for bookmarking.
 
 It forces `date` to be the block timestamp, and `user_address` to be the tx signer address which should be the same as `USER_ADDRESS`.
 
-```js
+```js copy
 await db.set(
   {
     date: db.ts(),
@@ -160,7 +160,7 @@ Our dapp will show trending articles by periodically calculating bookmark counts
 
 We will use a time-decay algorithm to rank articles by the bookmarks in the past 2 weeks.
 
-```js
+```js copy
 import {isNil, indexBy, prop} from "ramda"
 
 const conf = (await db.get("conf", "mirror-calc")) || { ver: 0 }
@@ -220,7 +220,7 @@ await db.batch(batches)
 
 You can do the same thing by automating the periodical calculation with a cron.
 
-```js
+```js copy
 const cron = {
   span: 60 * 60 * 12, // execute every 12 hours
   do: true,
@@ -397,7 +397,7 @@ await db.addCron(cron, "count")
 
 The following query will fetch top 10 trending articles in the past 2 weeks.
 
-```js
+```js copy
 const articles = await db.get("mirror", ["pt", "desc"], 10)
 ```
 

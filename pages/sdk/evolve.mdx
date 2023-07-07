@@ -6,7 +6,7 @@ Database contracts are upgradable with `evolve` function, if set so.
 
 To get the stats related to evolve, use `getEvolve`.
 
-```js
+```js copy
 await db.getEvolve()
 // { canEvolve, history, evolve, isEvolving }
 ```
@@ -15,7 +15,7 @@ await db.getEvolve()
 
 When deploying the WeaveDB contract, `canEvolve` should be set `true`, and `evolve` should be set `null` in the initial state.
 
-```js
+```js copy
 {
   "canEvolve": true,
   "evolve": null,
@@ -43,7 +43,7 @@ When deploying the WeaveDB contract, `canEvolve` should be set `true`, and `evol
 
 Upgradability can be switched by `setCanEvolve`. Only contract owners can execute the function.
 
-```js
+```js copy
 await db.setCanEvolve(false, { ar: arweave_wallet })
 ```
 
@@ -53,12 +53,12 @@ DB contracts can be upgraded to a new version with `evolve` if `canEvolve` is se
 
 The new version has to be deployed first, and pass the `contractTxId` of the new contract to the `evolve` function.
 
-```js
+```js copy
 await db.evolve(contractTxId, { ar: arweave_wallet })
 ```
 
 After evolving you need execute `migrate`. The write operations will be blocked before the migration.
 
-```js
+```js copy
 await db.migrate(newVersion, { ar: arweave_wallet })
 ```

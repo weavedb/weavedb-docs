@@ -12,7 +12,7 @@ For references, see [Initialize WeaveDB](/get-started#initialize-weavedb)
 
 Get general information about your database.
 
-```js
+```js copy
 await db.getInfo()
 ```
 
@@ -20,7 +20,7 @@ await db.getInfo()
 
 Get contract version of your database.
 
-```js
+```js copy
 await db.getVersion()
 ```
 
@@ -33,7 +33,7 @@ WeaveDB contracts keep track of valid transactions by hashing chained txIds like
 `latest_hash` = hash( [ `last_hash`, `current_txId` ] )
 </Callout>
 
-```js
+```js copy
 await db.getHash()
 ```
 
@@ -42,7 +42,7 @@ await db.getHash()
 
 To get the stats related to evolve, use `getEvolve`.
 
-```js
+```js copy
 await db.getEvolve()
 // { canEvolve, history, evolve, isEvolving }
 ```
@@ -54,7 +54,7 @@ await db.getEvolve()
 
 Get contract owners of your database.
 
-```js
+```js copy
 await db.getOwner()
 ```
 
@@ -63,7 +63,7 @@ await db.getOwner()
 
 Get the schema of a collection
 
-```js
+```js copy
 await db.getSchema("your_collection_name")
 ```
 
@@ -73,14 +73,14 @@ await db.getSchema("your_collection_name")
 {/* /docs/sdk/crons.md */}
 ## getCrons
 
-```js
+```js copy
 await db.getCrons()
 ```
 
 {/* /docs/sdk/relayers.md */}
 ## getRelayerJob
 
-```javascript
+```js copy
 await db.getRelayerJob("your_jobID")
 ```
 
@@ -90,6 +90,6 @@ await db.getRelayerJob("your_jobID")
 {/* /docs/sdk/relayers.md */}
 ## listRelayerJobs
 
-```javascript
+```js copy
 await db.listRelayerJobs()
 ```

@@ -12,7 +12,7 @@ So `write` = `create` + `update` + `delete`.
 
 Within the rules, you can access [various information](https://docs.weavedb.dev/docs/sdk/rules#preset-variables) about the contract, block, transaction, and data to be uploaded.
 
-```javascript
+```js copy
 {
   contract: { id, owners },
   request: {
@@ -31,7 +31,7 @@ And with JsonLogic, you can use `var` to access variables, such as `{var: "resou
 
 `resource.setter` is the data creator. The following ensures only the original data creators can update their own data:
 
-```javascript
+```js copy
 {
   "allow create": true,
   "allow update": {

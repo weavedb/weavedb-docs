@@ -16,7 +16,7 @@ You can think of it as an equivalent to [Firestore Triggers](https://firebase.go
 
 [FPJSON](https://fpjson.weavedb.dev/) will get an object containing the data `before` and `after` the change.
 
-```javascript
+```js copy
 {
   data: { before, after, id, setter }
 }
@@ -24,7 +24,7 @@ You can think of it as an equivalent to [Firestore Triggers](https://firebase.go
 
 A trigger to increment the like count.
 
-```javascript
+```js copy
 const { expect } = require("chai")
 
 const trigger = {
@@ -45,6 +45,6 @@ expect((await db.get("like-counts", "abc")).count).to.equal(1)
 
 Specify the trigger key to remove.
 
-```javascript
+```js copy
 await db.removeTrigger("inc-count", "like-counts")
 ```

@@ -11,20 +11,20 @@ The query APIs for both the SDKs are the same.
 
 ## Install Full SDK for the Web
 
-```bash
+```bash copy
 yarn add weavedb-sdk
 ```
 
 ## Install Full SDK for NodeJS
 
-```bash
+```bash copy
 yarn add weavedb-sdk-node
 ```
 `weavedb-sdk-node` comes with additional methods `on`, `con`, `getCache`, `cgetCache` for pub/sub integration.
 
 ## Instantiate WeaveDB
 
-```js
+```js copy
 import WeaveDB from "weavedb-sdk" // or "weavedb-sdk-node"
 
 const db = new WeaveDB({ contractTxId: WEAVEDB_CONTRACT_TX_ID })
@@ -64,7 +64,7 @@ Set the default `nocache` value. If set `false`, the SDK returns dryWrite result
 - **onUpdate** : `function`   
 A function to execute on pub/sub updates. `newState` and `input` object will be passed down.
 
-```js
+```js copy
 import WeaveDB from "weavedb-sdk-node" 
 new WeaveDB({
   contractTxId,
@@ -77,7 +77,7 @@ new WeaveDB({
 
 - **lmdb** : lmdb settings to merge with the default settings  
 
-```js
+```js copy
 {
   state: { dbLocation: "./cache/warp/state" },
   contracts: { dbLocation: "./cache/warp/contracts" },
@@ -87,7 +87,7 @@ new WeaveDB({
 
 - **redis** : redis settings  
 
-```js
+```js copy
 {
   prefix: "warp", // default to "warp"
   url: "redis://localhost:6379" // default to null
@@ -107,7 +107,7 @@ You can execute `dryRead` queries immediately after `dryWrite` to include in the
 
 This is great performance optimization to achieve web2-like speed and UX with the smart contract DB.
 
-```js
+```js copy
 const result = await db.set({ name: "Bob" }, "ppl", "Bob", {
   onDryWrite: {
     cache: true,
@@ -127,7 +127,7 @@ console.log(`regular result: ${result}`)
 
 The code below is equivalent to the above, but it will take 3-5 seconds, where as the above takes only around 50 milliseconds.
 
-```js
+```js copy
 const result = await db.set({ name: "Bob" }, "ppl", "Bob")
 console.log(`regular result: ${result}`)
 const Bob = await db.get("ppl", "Bob", true)
@@ -140,7 +140,7 @@ console.log(`this will take 3 - 5 sec: ${Bob}`)
 
 After getting a dryWrite result, you can use `getResult()` to fetch the finalized result.
 
-```js
+```js copy
 const dryWriteResult = await client.set({ name: "Bob" }, "ppl", "Bob", {
   onDryWrite: {
     cache: true,

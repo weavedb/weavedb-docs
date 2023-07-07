@@ -4,19 +4,19 @@ Single-field indexes are automatically generated, but multi-field compound index
 
 ## add an index
 
-```javascript
+```js copy
 await db.addIndex([ [ "age" ], [ "height", "desc" ] ], "people")
 ```
 
 ## get indexes of a collection
 
-```javascript
+```js copy
 await db.getIndexes("people")
 ```
 
 ## remove an index
 
-```javascript
+```js copy
 await db.removeIndex([ [ "age" ], [ "height", "desc" ] ], "people")
 ```
 
@@ -26,6 +26,6 @@ await db.removeIndex([ [ "age" ], [ "height", "desc" ] ], "people")
 
 You can, however, use `__id__` to get a collection in descending order sorted by doc id.
 
-```js
+```js copy
 await db.get("people", ["__id__", "desc"], 5)
 ```

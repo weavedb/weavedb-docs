@@ -6,7 +6,7 @@ Only owners can execute administrative functions including `setSchema`, `setRule
 
 To initially set owners with deployment, add `owner` field to the initial state. `owner` can be a single address or an array of addresses.
 
-```js
+```js copy
 let initialState = {
   "canEvolve": true,
   "evolve": null,
@@ -39,19 +39,19 @@ With `yarn deploy` command, you can specify a wallet name with `--wallet` argume
 
 For example, save your wallet JSON file at `scripts/.wallets/wallet-my_wallet.json` first.
 
-```bash
+```bash copy
 yarn deploy --wallet my_wallet
 ```
 
 The wallet file location defaults to `scripts/.wallets/wallet-mainnet.json` if unspecified.
 
-```bash
+```bash copy
 yarn deploy # same as "yarn deploy --wallet mainnet"
 ```
 
 ## Get Owner
 
-```js
+```js copy
 await db.getOwner()
 ```
 
@@ -59,7 +59,7 @@ await db.getOwner()
 
 Owners can be added one at a time.
 
-```js
+```js copy
 await db.addOwner(new_owner_address, { ar: current_owner_arweave_wallet })
 ```
 
@@ -67,6 +67,6 @@ await db.addOwner(new_owner_address, { ar: current_owner_arweave_wallet })
 
 Owners can be removed one at a time. If you remove the last owner, the database won't be configuable anymore, getting into permanent decentralization mode.
 
-```js
+```js copy
 await db.removeOwner(owner_address, { ar: current_owner_arweave_wallet })
 ```

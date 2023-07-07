@@ -14,7 +14,7 @@ For references, see [Initialize WeaveDB](/get-started#initialize-weavedb)
 
 Add rules:
 
-```js
+```js copy
 const rules = {
   let: {
     id: [
@@ -63,7 +63,7 @@ Within the rules object, each top level key defines one rule. A keys should be a
 
 You can access various data within the validation blocks.
 
-```js
+```js copy
 const data = {
   contract: { id, owners },
   request: {
@@ -106,7 +106,7 @@ You can amend the updated data before it's stored by modifying `newData` in acce
 
 For example always add `signer` address field as `address` field.
 
-```js
+```js copy
 const rules = {
   let : { "resource.newData.address" : { var: "request.auth.signer" } },
   "allow create" : true
@@ -116,7 +116,7 @@ await db.setRules(rules, "people", { ar : arweave_wallet })
 
 If you set `{ name : "Bob"}` with wallet `0xABC`, the stored data will be `{ name : "Bob", address : "0xABC" }`.
 
-```js
+```js copy
 await db.set({ name : "Bob" }, "people", "Bob")
 expect(await db.get("people", "Bob")).to.eql({name : "Bob", address: "0xABC" }) // true
 ```
@@ -127,7 +127,7 @@ Javascript functions cannot be passed and stored with Warp contracts. So WeaveDB
 Within the rules object, you can define variables under `let` key and later use them within `allow/deny` validation blocks.
 
 
-```js
+```js copy
 const rules = {
   let: {
     id: [
@@ -144,12 +144,12 @@ const rules = {
 ```
 For example, above is equivalent to
 
-```js
+```js copy
 const id = join(":", [ resource.newData.article_id, resource.newData.user_address ])
 ```
 and later forcing doc ids to be `article_id:user_address` with JsonLogic.
 
-```js
+```js copy
 {
   "==": [{ var: "resource.id" }, { var: "id" }],
 }

@@ -6,7 +6,7 @@ Navigate to the `Schema` section in the side menu, select `people` from the coll
 
 In this example, we are defining a schema for the `people` collection, which dictates that the document must be an object and should include required fields for `name` (with a data type of string) and `age` (with a data type of number).
 
-```javascript
+```js copy
 {
   type: "object",
   required: ["name", "age"],
@@ -23,7 +23,7 @@ You can copy & paste the schema object above to the popped-up textarea and hit `
 
 With the defined schema, you cannot add a document that violates the schema requirements. For example: 
 
-```bash
+```bash copy
 set {name:123,age:"Bob"} people Bob
 ```
 

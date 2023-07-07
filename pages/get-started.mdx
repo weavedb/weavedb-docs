@@ -1,5 +1,9 @@
 # Get Started
 
+```bash copy filename="Terminal"
+npx create-next-app@latest
+```
+
 ## Deploy a Database
 
 Using the [web console](https://console.weavedb.dev/), follow the instructions on [Deploying a Database](/web-console/deploy-database)
@@ -12,18 +16,18 @@ Using the [web console](https://console.weavedb.dev/), follow the instructions o
 
 ### SDK for Web
 
-```bash
+```bash copy
 yarn add weavedb-sdk
 ```
 
 ### SDK for NodeJS
 
-```bash
+```bash copy
 yarn add weavedb-sdk-node
 ```
 
 ## Initialize WeaveDB
-```js
+```js copy
 import WeaveDB from "weavedb-sdk" // or "weavedb-sdk-node"
 
 const db = new WeaveDB({ contractTxId: YOUR_WEAVEDB_CONTRACT_TX_ID })
@@ -32,7 +36,7 @@ await db.init()
 
 ## Add a document
 
-```js
+```js copy
 const personData = { name: "Bob", age: 20 }
 const result = await db.add(personData, "your_collection_name")
 ```
@@ -41,12 +45,12 @@ const result = await db.add(personData, "your_collection_name")
 
 Use `get` to read a collection:
 
-```js
+```js copy
 const result = await db.get("your_collection_name")
 ```
 
 And `cget` to return the metadata of the documents too:
 
-```js
+```js copy
 const result = await db.cget("collection_name")
 ```

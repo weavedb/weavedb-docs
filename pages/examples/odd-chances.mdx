@@ -6,7 +6,7 @@ It is simply a game of chance. A user guesses whether the number produced by the
 
 ## Deploy WeaveDB contract
 
-```bash
+```bash copy
 git clone https://github.com/weavedb/weavedb.git
 cd weavedb
 yarn
@@ -25,7 +25,7 @@ We will show you a single command script to set up everything in the end, but th
 
 ### Set up Data Schema
 
-```js
+```js copy
 const schema_game_results = {
   type: "object",
   required: ["is_even", "user_address", "date", "last_guess_date", "has_won"],
@@ -54,7 +54,7 @@ await db.setSchema(schema_game_results, "game_results")
 
 ### Set up Access Control Rules
 
-```js
+```js copy
 const rules_game_results = {
   "let create": {
     "resource.newData.has_won": [
@@ -103,7 +103,7 @@ Run the following script to set up the schema and the rules with a single comman
 
 Replace `CONTRACT_TX_ID` with the `contractTxId` returned when deploying the WeaveDB contract.
 
-```bash
+```bash copy
 node scripts/oddchances-setup.js mainnet CONTRACT_TX_ID
 ```
 
@@ -117,7 +117,7 @@ We are going to build the front end dapp using [NextJS](https://nextjs.org/)
 
 Set up a NextJS project with the app name `odd-chances`.
 
-```bash
+```bash copy
 yarn create next-app odd-chances
 cd odd-chances
 yarn dev
@@ -129,7 +129,7 @@ To keep things simple, we'll put everything in one file at `/page/index.js`
 ### Install Dependencies
 
 Open a new terminal and move to the project root directry.
-```bash
+```bash copy
 cd odd-chances
 yarn add ramda localforage weavedb-sdk buffer ethers chart.js react-toastify @chakra-ui/react @emotion/react @emotion/styled framer-motion @chakra-ui/icons
 ```
@@ -148,7 +148,7 @@ We use these minimum dependencies.
 
 Open `/page/index.js` and replace everything.
 
-```js
+```js copy
 import {
   Box,
   ChakraProvider,
@@ -175,7 +175,7 @@ import { nanoid } from "nanoid"
 
 Replace `CONTRACT_TX_ID` with the `contractTxId` returned when deploying the WeaveDB contract.
 
-```js
+```js copy
 let db
 const contractTxId = "I-4lx8uOt-tOR6ebAEDw4jw3X4ntokdIBE7l4bXIHnM"
 const COLLECTION_NAME = "game_results"
@@ -187,7 +187,7 @@ const LAST_GUESS_DATE_DEFAULT = 0
 
 ### Define React States
 
-```js
+```js copy
 export default function Home() {
   const [user, setUser] = useState(null)
   const [initDB, setInitDB] = useState(false)
@@ -213,7 +213,7 @@ export default function Home() {
 
 #### setupWeaveDB
 
-```js
+```js copy
   const setupWeaveDB = async () => {
     db = await new SDK({
       contractTxId: contractTxId,
@@ -227,7 +227,7 @@ export default function Home() {
 
 When the page is loaded, check if the user is logged in.
 
-```js
+```js copy
   const checkUser = async () => {
     const wallet_address = await lf.getItem(`temp_address:current`)
     if (!isNil(wallet_address)) {
@@ -251,7 +251,7 @@ We will generate a disposal account the first time a user logs in, link it with 
 
 `{ wallet, privateKey }` is how we need to pass the user object to the SDK when making transactions, so we will save it like so.
 
-```js
+```js copy
   const login = async () => {
     console.log(">>login()")
     const provider = new ethers.BrowserProvider(window.ethereum, "any")
@@ -300,7 +300,7 @@ We will generate a disposal account the first time a user logs in, link it with 
 
 We will simply remove the current logged in state. The disposal address will be reused the next time the user logs in.
 
-```js
+```js copy
   const logout = async () => {
     if (confirm("Would you like to sign out?")) {
       await lf.removeItem("temp_address:current")
@@ -312,7 +312,7 @@ We will simply remove the current logged in state. The disposal address will be 
 
 #### addGuess
 
-```js
+```js copy
   const onClickOdd = async () => {
     addGuess(false)
   }
@@ -364,7 +364,7 @@ We will simply remove the current logged in state. The disposal address will be 
 
 #### getMyGameResults
 
-```js
+```js copy
   const getMyGameResults = async () => {
     try {
       if (!isNil(user)) {
@@ -396,7 +396,7 @@ We will simply remove the current logged in state. The disposal address will be 
 
 #### setupPieChart
 
-```js
+```js copy
   const chart_data = {
     labels: ["Win", "Loss"],
     datasets: [
@@ -542,7 +542,7 @@ We will simply remove the current logged in state. The disposal address will be 
 
 ### Define Reactive State Changes
 
-```js
+```js copy
   useEffect(() => {
     checkUser()
     setupWeaveDB()
@@ -585,7 +585,7 @@ We will simply remove the current logged in state. The disposal address will be 
 
 ### The Complete Code
 
-```js  title="/pages/index.js"
+```js copy  title="/pages/index.js"
 import {
   Box,
   ChakraProvider,

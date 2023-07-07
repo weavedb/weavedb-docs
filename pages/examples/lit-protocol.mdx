@@ -57,7 +57,7 @@ Go to [your hosted-service dashboard](https://thegraph.com/hosted-service/dashbo
 
 ### Install Graph CLI
 
-```bash
+```bash copy
 yarn global add @graphprotocol/graph-cli
 ```
 
@@ -65,7 +65,7 @@ yarn global add @graphprotocol/graph-cli
 
 Initialize the subgraph with the following options.
 
-```bash
+```bash copy
 graph init --product hosted-service username/your-subgraph-name
 ```
 
@@ -80,7 +80,7 @@ graph init --product hosted-service username/your-subgraph-name
 
 Set your deploy key for the subgraph. You can get the deploy key from [your subgraph page](https://thegraph.com/hosted-service/dashboard).
 
-```bash
+```bash copy
 cd your-subgraph-name
 graph auth
 ```
@@ -136,7 +136,7 @@ type User @entity {
 ```
 Then generate code.
 
-```bash
+```bash copy
 graph codegen
 ```
 
@@ -170,7 +170,7 @@ export function handleTransfer(event: Transfer): void {
 
 Then, build and deploy.
 
-```bash
+```bash copy
 graph build && yarn deploy
 ```
 
@@ -196,7 +196,7 @@ But you can also make it easiler by deploying a simple real-only ACL contract an
 
 We will deploy an `ACL` contract with `isOwner` function that checks if the `addr` is the owner of any one of the given `tokenIds`.
 
-```js
+```js copy
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
@@ -229,7 +229,7 @@ contract ACL {
 
 Go to the `nft-contract` folder and compile the contract.
 
-```bash
+```bash copy
 cd examples/relayer-nft/nft-contract
 yarn
 npx hardhat compile
@@ -246,13 +246,13 @@ NFT_ADDRESS="0xABC"
 
 Then deploy the contract to the Goerli testnet.
 
-```bash
+```bash copy
 npx hardhat run scripts/deployACL.js --network goerli
 ```
 
 Now you should receive yoru contract address. To verify the contract on Etherscan, run the following.
 
-```bash
+```bash copy
 npx hardhat verify --network goerli 0xACLContractAddress 0xNFTContractAddress
 ```
 
@@ -266,7 +266,7 @@ We are going to set up only 1 collection.
 
 - `lit_messages` : encrypted messages with Lit Protocol
 
-```js
+```js copy
 const schema = {
   type: "object",
   required: ["tokenIDs", "date", "lit", "owner"],
@@ -307,7 +307,7 @@ Set a simple relayer job.
 - `schema` : JSON schema for the additional data to be attached by the relayer. The relayer will attach 3 pieces of extra data, `tokenIDs`, `lit`, and `isOwner`.
 - `jobID` : our arbitrary jobID will be `lit`.
 
-```js
+```js copy
 const job = {
   relayers: [relayerAddress],
   schema: {
@@ -346,7 +346,7 @@ Finally, it attaches 3 pieces of extra data(`lit`, `tokenIDs`, `isOwner`) to the
 
 The `date` will always evaluate to `block.timestamp` if the sender specifies `db.ts()` to the `date` field.
 
-```js
+```js copy
 const rules = {
   let: {
     "resource.newData.tokenIDs": { var: "request.auth.extra.tokenIDs" },
@@ -375,7 +375,7 @@ await sdk.setRules(rules, "lit_messages", {
 
 To set up everything with one command, run the following.
 
-```bash
+```bash copy
 node scripts/lit-setup.js mainnet mainnet YOUR_CONTRACT_TX_ID RELAYER_EVM_ADDRESS
 ```
 
@@ -449,7 +449,7 @@ The relayer needs this ABI to access the Ethereum blockchain.
 
 You need to make `/lib` directory, if it doesn't exist yet.
 
-```bash
+```bash copy
 mkdir lib
 touch lib/ACL.json
 ```
@@ -479,7 +479,7 @@ The relayer receives signed parameters and a lit object from frontend users and 
 
 It then relays the DB query with an additional data of `isOwner`, `lit` and `tokenIDs`  attached to the query.
 
-```js
+```js copy
 const { Contract, providers } = require("ethers")
 const provider = new providers.JsonRpcProvider(process.env.EVM_RPC)
 const contractTxId = process.env.NEXT_PUBLIC_WEAVEDB_CONTRACT_TX_ID

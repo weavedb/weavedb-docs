@@ -35,7 +35,7 @@ Frontend Dapp
 
 ## Clone the Repo
 
-```bash
+```bash copy
 git clone https://github.com/weavedb/weavedb.git
 cd weavedb
 yarn
@@ -43,7 +43,7 @@ yarn
 
 ## Deploy WeaveDB Contracts
 
-```bash
+```bash copy
 node scripts/generate-wallet.js mainnet
 yarn deploy
 ```
@@ -61,7 +61,7 @@ We are going to set up only 1 collection.
 
 - `notes` : a collection of notes
 
-```js
+```js copy
 const schema = {
   type: "object",
   required: ["date", "id", "author", "title"],
@@ -96,7 +96,7 @@ Set a simple relayer job.
 - `schema` : JSON schema for the additional data to be attached by the relayer. The relayer will attach 3 pieces of extra data, `date`, `id`, and `author`.
 - `jobID` : our arbitrary jobID will be `bundlr`.
 
-```js
+```js copy
 const job = {
   relayers: [relayerAddress],
   schema: {
@@ -124,7 +124,7 @@ Finally, it relays the signed WeaveDB query with extra data of (`author`, `date`
 
 ### Set up Access Control Rules
 
-```js
+```js copy
 const rules = {
   "let create,update": {
     "resource.newData.author": { var: "request.auth.extra.author" },
@@ -152,7 +152,7 @@ await sdk.setRules(rules, "notes", { ar: wallet })
 
 To set up everything with one command, run the following.
 
-```bash
+```bash copy
 node scripts/bundlr-setup.js mainnet YOUR_CONTRACT_TX_ID RELAYER_EVM_ADDRESS
 ```
 
@@ -174,7 +174,7 @@ For this example, we will fund our account with `$MATIC` on Polygon.
 
 ### Install Bundlr SDK
 
-```bash
+```bash copy
 yarn add @bundlr-network/client
 ```
 
@@ -182,7 +182,7 @@ yarn add @bundlr-network/client
 
 You need to add some credit to the account for the relayer.
 
-```js
+```js copy
 import Bundlr from "@bundlr-network/client";
 const privateKey = "yourpolygonprivatekey";
 
@@ -224,7 +224,7 @@ The relayer
 - adds extra data of `{ id, author, date }` to the user signed params
 - and relays the query to WeaveDB.
 
-```js
+```js copy
 const Bundlr = require("@bundlr-network/client")
 const contractTxId = process.env.NEXT_PUBLIC_WEAVEDB_CONTRACT_TX_ID
 const { isNil } = require("ramda")
@@ -286,7 +286,7 @@ export default async (req, res) => {
 
 This is how you would get a note in the frontend code.
 
-```js
+```js copy
 // getting 5 notes of the account in descending order by published date
 const notes = await db.get("notes", ["author", "==", account], ["date", "desc"], 5)
 
