@@ -5,7 +5,11 @@
   "query-api": " Query APIs",
   "permissions": "Permissions",
   "authentication": "Authentication",
-  "sdk" : "SDK Reference",
-  "examples" : "Examples",
-  "troubleshooting": "Troubleshooting"
+  "sdk": "SDK Reference",
+  "examples": "Examples",
+  "troubleshooting": "Troubleshooting",
+  "archive": {
+    "title": "Archive",
+    "display": "hidden"
+  }
 }
