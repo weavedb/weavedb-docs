@@ -40,9 +40,7 @@ const config: DocsThemeConfig = {
           </linearGradient>
         </defs>
       </svg>
-      <span style={{ marginLeft: '.4em', fontWeight: 800 }}>
-WeaveDB
-      </span>
+      <span style={{ marginLeft: ".4em", fontWeight: 800 }}>WeaveDB</span>
     </>
   ),
   project: {
@@ -63,6 +61,11 @@ WeaveDB
   primaryHue: 300,
   footer: {
     component: <></>,
+  },
+  useNextSeoProps() {
+    return {
+      titleTemplate: "%s – WeaveDB",
+    }
   },
 }
 
