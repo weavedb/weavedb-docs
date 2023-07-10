@@ -1,3 +1,5 @@
+import { Tabs, Tab } from 'nextra/components'
+
 # Ownership
 
 Only owners can execute administrative functions including `setSchema`, `setRules`, `addIndex`, `removeIndex`, `addCron`, `removeCron`, `setAlgorithms`, `evolve`, `setCanEvolve`, `addOwner`, and `removeOwner`.
@@ -39,15 +41,33 @@ With `yarn deploy` command, you can specify a wallet name with `--wallet` argume
 
 For example, save your wallet JSON file at `scripts/.wallets/wallet-my_wallet.json` first.
 
-```bash copy
-yarn deploy --wallet my_wallet
-```
+<Tabs items={['yarn', 'npm']}>
+  <Tab>
+    ```bash copy
+    yarn deploy --wallet my_wallet
+    ```
+  </Tab>
+  <Tab>
+    ```bash copy
+    npm run deploy --wallet my_wallet
+    ```
+  </Tab>
+</Tabs>
 
 The wallet file location defaults to `scripts/.wallets/wallet-mainnet.json` if unspecified.
 
-```bash copy
-yarn deploy # same as "yarn deploy --wallet mainnet"
-```
+<Tabs items={['yarn', 'npm']}>
+  <Tab>
+  ```bash copy
+  yarn deploy # same as "yarn deploy --wallet mainnet"
+  ```
+  </Tab>
+  <Tab>
+  ```bash copy
+  npm run deploy # same as "npm run deploy --wallet mainnet"
+  ```
+  </Tab>
+</Tabs>
 
 ## Get Owner
 
