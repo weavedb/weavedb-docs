@@ -1,13 +1,33 @@
 {
-  "index": "Introduction",
-  "quick-start": "Quick Start",
+  "index": {
+    "title": "Introduction",
+    "theme": {
+      "breadcrumb": false
+    }
+  },
+  "quick-start": {
+    "title": "Quick Start",
+    "theme": {
+      "breadcrumb": false
+    }
+  },
   "get-started": "Get Started",
   "query-api": " Query APIs",
   "permissions": "Permissions",
-  "authentication": "Authentication",
+  "authentication": {
+    "title": "Authentication",
+    "theme": {
+      "breadcrumb": false
+    }
+  },
   "sdk": "SDK Reference",
   "examples": "Examples",
-  "troubleshooting": "Troubleshooting",
+  "troubleshooting": {
+    "title": "Troubleshooting",
+    "theme": {
+      "breadcrumb": false
+    }
+  },
   "archive": {
     "title": "Archive",
     "display": "hidden"
