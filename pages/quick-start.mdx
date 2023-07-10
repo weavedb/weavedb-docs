@@ -1,3 +1,5 @@
+import { Tabs, Tab } from 'nextra/components'
+
 # Quick Start
 
 ## Deploy a Database
@@ -10,17 +12,18 @@ Using the [web console](https://console.weavedb.dev/), follow the instructions o
 
 ## Install WeaveDB
 
-### SDK for Web
-
-```bash copy
-yarn add weavedb-sdk
-```
-
-### SDK for NodeJS
-
-```bash copy
-yarn add weavedb-sdk-node
-```
+<Tabs items={['Web', 'NodeJS']}>
+  <Tab>
+    ```bash copy
+    yarn add weavedb-sdk
+    ```
+  </Tab>
+  <Tab>
+    ```bash copy
+    yarn add weavedb-sdk-node
+    ```
+  </Tab>
+</Tabs>
 
 ## Initialize WeaveDB
 ```js copy
