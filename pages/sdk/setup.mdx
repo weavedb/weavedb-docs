@@ -1,3 +1,5 @@
+import { Tabs, Tab } from 'nextra/components'
+
 # Set up SDK
 
 WeaveDB has 4 types of SDKs.
@@ -9,17 +11,31 @@ WeaveDB has 4 types of SDKs.
 
 The query APIs for both the SDKs are the same.
 
-## Install Full SDK for the Web
+## Install WeaveDB
 
-```bash copy
-yarn add weavedb-sdk
-```
+<Tabs items={['Web', 'NodeJS']}>
+  <Tab>
+    **yarn**:
+    ```bash copy
+    yarn add weavedb-sdk
+    ```
+    **npm**:
+    ```bash copy
+    npm install weavedb-sdk
+    ```
+  </Tab>
+  <Tab>
+    **yarn**:
+    ```bash copy
+    yarn add weavedb-sdk-node
+    ```
+    **npm**:
+    ```bash copy
+    npm install weavedb-sdk-node
+    ```
+  </Tab>
+</Tabs>
 
-## Install Full SDK for NodeJS
-
-```bash copy
-yarn add weavedb-sdk-node
-```
 `weavedb-sdk-node` comes with additional methods `on`, `con`, `getCache`, `cgetCache` for pub/sub integration.
 
 ## Instantiate WeaveDB
