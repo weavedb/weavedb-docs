@@ -65,6 +65,7 @@ const config: DocsThemeConfig = {
   useNextSeoProps() {
     return {
       titleTemplate: "%s – WeaveDB",
+      description: "NoSQL Database as a Smart Contract"
     }
   },
 }
