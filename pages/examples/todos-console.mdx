@@ -59,7 +59,7 @@ const schemas = {
 
 ## Access Control Rules
 
-[Access control rules](/sdk/rules) are defined by [JSONLogic](https://jsonlogic.com/).
+[Access control rules](/permissions/rules) are defined by [JSONLogic](https://jsonlogic.com/).
 
 ```js copy
 const rules = {
@@ -584,7 +584,7 @@ When the page is loaded, check if the user is logged in.
 
 ### The Complete Code
 
-```js copy  title="/pages/index.js"
+```js copy  filename="/pages/index.js"
 import { useRef, useState, useEffect } from "react"
 import lf from "localforage"
 import { isNil, map } from "ramda"
