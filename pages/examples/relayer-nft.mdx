@@ -374,7 +374,7 @@ The app page `/pages/index.js` is rather simple.
 
 Import necessary libraries. We are going to use a bunch of [RamdaJS](https://ramdajs.com/) functions for utilities and [Chakra](https://chakra-ui.com/) for UI.
 
-```jsx
+```jsx copy
 import SDK from "weavedb-client"
 import { ethers } from "ethers"
 import { useEffect, useState } from "react"
@@ -393,7 +393,7 @@ import { Button, Box, Flex, Input, ChakraProvider } from "@chakra-ui/react"
 
 #### Define Variables
 
-```jsx
+```jsx copy
 let sdk
 const contractTxId = process.env.NEXT_PUBLIC_WEAVEDB_CONTRACT_TX_ID
 const nftContractAddr = process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDR
@@ -410,7 +410,7 @@ export default function Home() {
 
 Initialize the SDK and fetch messages from the gRPC node.
 
-```jsx
+```jsx copy
   useEffect(() => {
     ;(async () => {
       const _sdk = new SDK({
@@ -433,7 +433,7 @@ Header View
 
 The Header is just a link to the NFT contract on Etherscan and shows posting status when posting a message.
 
-```jsx
+```jsx copy
   const Header = () => (
     <Flex justify="center" width="500px" p={3}>
       <Box flex={1}>
@@ -462,7 +462,7 @@ Footer View
 
 The Footer is just a link to the Warp contract page on Sonar. So users can view transactions. Nothing special.
 
-```jsx
+```jsx copy
   const Footer = () => (
     <Flex justify="center" width="500px" p={3}>
       <Box
@@ -488,7 +488,7 @@ Post View
 
 The Post component lets you post a message with your tokenIDs, and this is where the business takes place.
 
-```jsx
+```jsx copy
   const Post = () => {
     const [message, setMessage] = useState("")
     const [tokenID, setTokenID] = useState("")
@@ -621,7 +621,7 @@ Messages View
 
 The Messages component loops through `nfts` and list the messages with a link to the owner page on Etherscan.
 
-```jsx
+```jsx copy
   const Messages = () => (
     <Box>
       <Flex bg="#EDF2F7" w="500px">
@@ -661,7 +661,7 @@ The Messages component loops through `nfts` and list the messages with a link to
 
 Now return all the components wrapped by `<ChakraProvider>` tag for UI.
 
-```jsx
+```jsx copy
   return (
     <ChakraProvider>
       <Flex direction="column" align="center" fontSize="12px">
@@ -679,7 +679,7 @@ Now return all the components wrapped by `<ChakraProvider>` tag for UI.
 
 You can also access the entire code [on Github](https://github.com/weavedb/weavedb/blob/master/examples/relayer-nft/pages/index.js).
 
-```jsx
+```jsx copy
 import SDK from "weavedb-client"
 import { ethers } from "ethers"
 import { useEffect, useState } from "react"
