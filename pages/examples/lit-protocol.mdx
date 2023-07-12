@@ -532,7 +532,7 @@ We will also use [localforage](https://localforage.github.io/localForage/) to ma
 
 For nicer looks, [Jdenticon](https://jdenticon.com/) provides on-the-fly geometric avatars for evm addresses.
 
-```jsx
+```jsx copy
 import SDK from "weavedb-client"
 import Jdenticon from "react-jdenticon"
 import { ethers } from "ethers"
@@ -568,7 +568,7 @@ dayjs.extend(require("dayjs/plugin/relativeTime"))
 
 #### Define Variables
 
-```jsx
+```jsx copy
 let sdk, lit
 const contractTxId = process.env.NEXT_PUBLIC_WEAVEDB_CONTRACT_TX_ID
 const nftContractAddr = process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDR
@@ -591,7 +591,7 @@ export default function Home() {
 
 Check if `authSig` is previously stored, initialize the SDK, and set the `initSDK` flag when SDK is ready.
 
-```jsx
+```jsx copy
   useEffect(() => {
     ;(async () => {
 	  // check if authSig exists from the previous session
@@ -614,7 +614,7 @@ When the connected account has changed, get user owned tokenIDs via subgraph.
 
 Then subsequently get messages for the tokenIDs from WeaveDB, and decrypt them using Lit Protocol.
 
-```jsx
+```jsx copy
   useEffect(() => {
     ;(async () => {
       if (!isNil(authSig) && initSDK) {
@@ -711,7 +711,7 @@ The Header has a `Connect with Lit Protocol` / `Disconnect` button, which prompt
 
 It also has a link to the NFT contract on Etherscan and shows posting status when posting a message.
 
-```jsx
+```jsx copy
     <>
       <Flex justify="center" width="600px" py={3} align="center">
         {!isNil(authSig) ? (
@@ -820,7 +820,7 @@ Footer View
 
 The Footer is just a link to the Warp contract page on Sonar. So users can view transactions. Nothing special.
 
-```jsx
+```jsx copy
   const Footer = () => (
     <Flex w="100%" justify="center" p={4} bg="#1E1930" color="#F893F6">
       <Flex>
@@ -848,7 +848,7 @@ Post View
 
 The Post component lets you post a message with your tokenIDs, and this is where the business takes place.
 
-```jsx
+```jsx copy
   const Post = () => {
     const [message, setMessage] = useState("")
     const [tokenIDs, setTokenIDs] = useState("")
@@ -1095,7 +1095,7 @@ Messages View
 
 The Messages component loops through and displays the `messages`.
 
-```jsx
+```jsx copy
   const Messages = () => (
     <Box>
       {map(v => (
@@ -1137,7 +1137,7 @@ The Messages component loops through and displays the `messages`.
 
 Now return all the components wrapped by `<ChakraProvider>` tag for UI.
 
-```jsx
+```jsx copy
   return (
     <ChakraProvider>
       <style jsx global>{`
@@ -1179,7 +1179,7 @@ Now return all the components wrapped by `<ChakraProvider>` tag for UI.
 
 You can also access the entire code [on Github](https://github.com/weavedb/weavedb/blob/master/examples/relayer-nft/pages/lit-protocol.js).
 
-```jsx
+```jsx copy
 import SDK from "weavedb-client"
 import Jdenticon from "react-jdenticon"
 import { ethers } from "ethers"

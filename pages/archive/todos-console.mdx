@@ -423,7 +423,7 @@ When the page is loaded, check if the user is logged in.
 
 #### NavBar
 
-```jsx
+```jsx copy
   const NavBar = () => (
     <Flex p={3} position="fixed" w="100%" sx={{ top: 0, left: 0 }}>
       <Box flex={1} />
@@ -450,7 +450,7 @@ When the page is loaded, check if the user is logged in.
 
 #### Tabs
 
-```jsx
+```jsx copy
   const Tabs = () => (
     <Flex justify="center" style={{ display: "flex" }} mb={4}>
       {map(v => (
@@ -470,7 +470,7 @@ When the page is loaded, check if the user is logged in.
 
 #### Tasks
 
-```jsx
+```jsx copy
   const Tasks = () =>
     map(v => (
       <Flex sx={{ border: "1px solid #ddd", borderRadius: "5px" }} p={3} my={1}>
@@ -511,7 +511,7 @@ When the page is loaded, check if the user is logged in.
 
 #### NewTask
 
-```jsx
+```jsx copy
   const NewTask = () => (
     <Flex mb={4}>
       <Input
@@ -547,7 +547,7 @@ When the page is loaded, check if the user is logged in.
 
 #### Transactions
 
-```jsx
+```jsx copy
   const Transactions = () => {
     return (
       <Flex justify="center" p={4}>
@@ -567,7 +567,7 @@ When the page is loaded, check if the user is logged in.
 
 ### Return Components
 
-```jsx
+```jsx copy
   return (
     <ChakraProvider>
       <NavBar />

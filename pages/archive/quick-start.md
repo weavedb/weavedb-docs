@@ -403,7 +403,7 @@ Now you have a local app running at [localhost:3000](http://localhost:3000).
 
 Replace `/page/index.js` with the following. Styles for UI are intentionally omitted for simplicity.
 
-```jsx
+```jsx copy
 import { useState, useEffect } from "react"
 import SDK from "weavedb-sdk"
 let db
@@ -656,7 +656,7 @@ Set the following access control rules to `users` collection using [the Web Cons
 
 Frontend code.
 
-```jsx
+```jsx copy
 import { useState, useEffect } from "react"
 import SDK from "weavedb-sdk"
 import lf from "localforage" // to store user in indexedDB for persistence
