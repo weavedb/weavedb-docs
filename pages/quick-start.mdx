@@ -1,16 +1,19 @@
 import { Tabs, Tab } from 'nextra/components'
+import { Steps } from 'nextra/components'
 
 # Quick Start
 
-## Deploy a Database
+<Steps>
+
+### Deploy a Database
 
 Using the [web console](https://console.weavedb.dev/), follow the instructions on [Deploying a Database](/get-started/deploy-database)
 
-## Create a Collection
+### Create a Collection
 
 Using the [web console](https://console.weavedb.dev/), follow the instructions on [Creating a Collection](/get-started/create-collection)
 
-## Install WeaveDB
+### Install WeaveDB
 
 <Tabs items={['Web', 'NodeJS']}>
   <Tab>
@@ -35,7 +38,7 @@ Using the [web console](https://console.weavedb.dev/), follow the instructions o
   </Tab>
 </Tabs>
 
-## Initialize WeaveDB
+### Initialize WeaveDB
 ```js copy
 import WeaveDB from "weavedb-sdk" // or "weavedb-sdk-node"
 
@@ -43,14 +46,14 @@ const db = new WeaveDB({ contractTxId: YOUR_WEAVEDB_CONTRACT_TX_ID })
 await db.init()
 ```
 
-## Add a document
+### Add a document
 
 ```js copy
 const personData = { name: "Bob", age: 20 }
 const result = await db.add(personData, "your_collection_name")
 ```
 
-## Get a collection
+### Get a collection
 
 Use `get` to read a collection:
 
@@ -63,3 +66,5 @@ And `cget` to return the metadata of the documents too:
 ```js copy
 const result = await db.cget("collection_name")
 ```
+
+</Steps>
