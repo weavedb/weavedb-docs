@@ -76,6 +76,7 @@ const config: DocsThemeConfig = {
         property="og:description"
         content="NoSQL Database as a Smart Contract"
       />
+      <link rel="icon" href="/favicon.ico" />
     </>
   ),
 }
