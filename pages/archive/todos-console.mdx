@@ -114,7 +114,7 @@ const rules = {
 
 First, set up `tasks` collection. Click `Data` then `+` to open up a dialog. Enter `tasks` in the name box and copy the following access control rules to the textarea. Then click `Add`.
 
-```json
+```json copy
 {"allow create":{"and":[{"==":[{"var":"request.auth.signer"},{"var":"resource.newData.user_address"}]},{"==":[{"var":"request.block.timestamp"},{"var":"resource.newData.date"}]},{"==":[{"var":"resource.newData.done"},false]}]},"allow update":{"and":[{"==":[{"var":"request.auth.signer"},{"var":"resource.newData.user_address"}]},{"==":[{"var":"resource.newData.done"},true]}]},"allow delete":{"==":[{"var":"request.auth.signer"},{"var":"resource.data.user_address"}]}}
 ```
 
@@ -122,7 +122,7 @@ First, set up `tasks` collection. Click `Data` then `+` to open up a dialog. Ent
 
 Next, set up data schemas to `task` collection. Click `Schemas` then `+` to open up a dialog. Enter `tasks` in the name box and copy the following data schemas to the textarea. Then click `Add"
 
-```json
+```json copy
 {"type":"object","required":["task","date","user_address","done"],"properties":{"task":{"type":"string"},"user_address":{"type":"string"},"date":{"type":"number"},"done":{"type":"boolean"}}}
 ```
 
