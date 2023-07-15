@@ -1,7 +1,7 @@
 import SDK_NODE from "weavedb-sdk-node"
 import { Contract, ethers } from "ethers"
 import abi from "@/lib/NFT.json"
-const provider = new ethers.JsonRpcProvider(process.env.MUMBAI_RPC_URL)
+const provider = new ethers.JsonRpcProvider(process.env.EVM_RPC_URL)
 const contractTxId = process.env.NEXT_PUBLIC_WEAVEDB_CONTRACT_TX_ID
 const nftContractAddr = process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS
 
