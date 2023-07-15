@@ -11,7 +11,7 @@ Setting `secure` `false` will let anyone write anything to your DB, which only m
 
 For production, leave `secure` `true` and set [access control rules](/docs/sdk/rules) to each collection.
 
-```json
+```json copy
 {
   "canEvolve": true,
   "evolve": null,
