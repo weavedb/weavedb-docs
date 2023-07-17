@@ -21,7 +21,7 @@ Using the [web console](https://console.weavedb.dev/), follow the instructions o
 
 ### Set up Data Schema
 
-```js copy
+```json copy
 {
   type: "object",
   required: ["task", "date", "user_address", "done"],
@@ -42,13 +42,13 @@ Using the [web console](https://console.weavedb.dev/), follow the instructions o
 }
 ```
 
-In this example, we are defining a schema for the `tasks` collection.
+In this example, we are defining a data schema for the `tasks` collection.
 
 Copy & paste the schema object above. Then, follow the instructions on [Set up Data Schema](/get-started/setup-schema) using the [web console](https://console.weavedb.dev/)
 
 ### Set up Access Control Rules
 
-```js copy
+```json copy
 {
   "allow create": {
     and: [
@@ -103,7 +103,7 @@ Copy & paste the access control rules object above. Then, follow the instruction
 
 ### Create NextJS Project
 
-Set up a next.js project with the app name `todos`.
+Set up a NextJS project with the app name `todos`.
 
 <Tabs items={['yarn', 'npm']}>
   <Tab>
@@ -142,7 +142,6 @@ Open a new terminal and move to the project root directory to continue depelopme
 We use these minimum dependencies.
 
 - [WeaveDB SDK](https://weavedb.dev) - to connect with WeaveDB
-- [Buffer](https://github.com/feross/buffer) - a dependency for WeaveDB
 - [Ramda.js](https://ramdajs.com) - functional programming utilities
 - [Chakra UI](https://chakra-ui.com) - UI library
 - [Ethers.js](https://docs.ethers.io) - to connect with Metamask
@@ -151,12 +150,12 @@ We use these minimum dependencies.
 <Tabs items={['yarn', 'npm']}>
   <Tab>
   ```bash copy
-  yarn add ramda localforage weavedb-sdk buffer ethers@5.7.2 @chakra-ui/react @emotion/react@^11 @emotion/styled@^11 framer-motion@^6
+  yarn add ramda localforage weavedb-sdk ethers@5.7.2 @chakra-ui/react @emotion/react@^11 @emotion/styled@^11 framer-motion@^6
   ```
   </Tab>
   <Tab>
   ```bash copy
-  npm install ramda localforage weavedb-sdk buffer ethers@5.7.2 @chakra-ui/react @emotion/react@^11 @emotion/styled@^11 framer-motion@^6
+  npm install ramda localforage weavedb-sdk ethers@5.7.2 @chakra-ui/react @emotion/react@^11 @emotion/styled@^11 framer-motion@^6
   ```
   </Tab>
 </Tabs>

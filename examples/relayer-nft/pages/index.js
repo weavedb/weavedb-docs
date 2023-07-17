@@ -16,7 +16,8 @@ import { Button, Box, Flex, Input, ChakraProvider } from "@chakra-ui/react"
 export default function Home() {
   const nftContractAddr = process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS
   const contractTxId = process.env.NEXT_PUBLIC_WEAVEDB_CONTRACT_TX_ID
-  const explorerLink = `https://mumbai.polygonscan.com/token/${nftContractAddr}#writeContract`
+  const explorerBaseUrl = "https://mumbai.polygonscan.com/token/"
+  const explorerLink = `${explorerBaseUrl}${nftContractAddr}#writeContract`
   const sonarLink = `https://sonar.warp.cc/?#/app/contract/${contractTxId}`
   const [db, setDb] = useState(null)
   const [initDB, setInitDB] = useState(false)
@@ -195,7 +196,7 @@ export default function Home() {
           w="500px"
           as="a"
           target="_blank"
-          href={`https://goerli.etherscan.io/token/${nftContractAddr}?a=${v.owner}`}
+          href={`${explorerBaseUrl}${nftContractAddr}?a=${v.owner}`}
         >
           <Flex justify="center" p={2} w="75px">
             {v.tokenID}
