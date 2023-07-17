@@ -19,7 +19,7 @@ An off-chain relayer will validate NFT ownerships from another blockchain, and o
 In practice, the relayer could/should be decentralized. But we are going to set up a centralized relayer for this demo.
 </Callout>
 
-A demo dapp with [a test NFT contract on Polygon Mumbai testnet](https://mumbai.polygonscan.com/token/0x452b734E7283AA6687E6f301ee4B84dd4956B764) is deployed at [relayer-nft.vercel.app](https://relayer-nft.vercel.app) where you can free-mint NFTs and post messages via WeaveDB by authenticate with your Goerli NFTs.
+A demo dapp with [a test NFT contract on Polygon Mumbai testnet](https://mumbai.polygonscan.com/token/0x452b734E7283AA6687E6f301ee4B84dd4956B764) is deployed at [relayer-nft.vercel.app](https://relayer-nft.vercel.app) where you can free-mint NFTs and post messages via WeaveDB by authenticate with your Mumbai NFTs.
 
 <Callout type="info" emoji="💡">
 Frontend Dapp
@@ -109,7 +109,7 @@ Put your own value in place of the string values.
 </Callout>
 
 ```bash copy
-EVM_RPC_URL="https://goerli.infura.io/v3/yourapikey"
+EVM_RPC_URL="https://polygon-mumbai.infura.io/v3/yourapikey"
 POLYGONSCAN_API_KEY="yourapikey"
 PRIVATEKEY="yourprivatekey"
 ```
@@ -217,6 +217,10 @@ With these simple settings, we expect the relayer to receive an NFT-tokenID, and
 
 ### Create NextJS Project
 
+<Callout type="info" emoji="💡">
+You can also access the entire dapp code at [/examples/relayer-nft](https://github.com/weavedb/weavedb-docs/tree/main/examples/relayer-nft)
+</Callout>
+
 Set up a NextJS project with the app name `relayer-nft` and also set up the relayer as a serverless api.
 
 <Tabs items={['yarn', 'npm']}>
@@ -307,7 +311,7 @@ touch lib/NFT.json
 Create `.env.local` file in the project root directory and set the following variables.
 
 ```
-EVM_RPC_URL=""
+EVM_RPC_URL="https://polygon-mumbai.infura.io/v3/yourapikey"
 RELAYER_PRIVATEKEY="Relayer_EOA_Privatekey"
 NEXT_PUBLIC_WEAVEDB_CONTRACT_TX_ID="Your_Contract_Tx_Id"
 NEXT_PUBLIC_NFT_CONTRACT_ADDRESS="NFT_Contract_Address"
