@@ -1,4 +1,5 @@
 import { Callout } from "nextra/components"
+import { Tabs, Tab } from 'nextra/components'
 
 # Read Queries
 
@@ -20,17 +21,33 @@ The metadata returned with `cget` functions as a cursor for pagination.
 
 ### Get a doc
 
-```js copy
-await db.get("collection_name", "doc_id")
-await db.cget("collection_name", "doc_id")
-```
+<Tabs items={['get', 'cget']}>
+  <Tab>  
+    ```js copy
+    await db.get("collection_name", "doc_id")
+    ```
+  </Tab>
+  <Tab>
+    ```js copy
+    await db.cget("collection_name", "doc_id")
+    ```
+  </Tab>
+</Tabs>
 
 ### Get a collection
 
-```js copy
-await db.get("collection_name")
-await db.cget("collection_name")
-```
+<Tabs items={['get', 'cget']}>
+  <Tab>
+    ```js copy
+    await db.get("collection_name")
+    ```
+  </Tab>
+  <Tab>
+    ```js copy
+    await db.cget("collection_name")
+    ```
+  </Tab>
+</Tabs>
 
 ### Get a sub collection
 
