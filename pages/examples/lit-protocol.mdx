@@ -2,6 +2,12 @@ import { Callout } from "nextra/components"
 
 # Cross-Chain ACL with Lit Protocol
 
+<Callout type="warning" emoji="⚠️">
+  This demo is not fully functional at this time. The team is continually
+  developing the gRPC node's capabilities. Thank you for your understanding and
+  continued support.
+</Callout>
+
 Continuing from [the previous example](/examples/relayer-nft), we can take [the relayers](/sdk/relayers) one step further with [Lit Protocol](https://litprotocol.com/). Using [threshold cryptography](https://developer.litprotocol.com/Introduction/howItWorks#threshold-cryptography), Lit enables us to build access control logic using states from multiple blockchains combined, and encrypt data so only certain addresses that satisfy the access control rules can decrypt it.
 
 For this example, we will build a messaging dapp where you can send encrypted messages to only specified NFT holders. And only the holders of specified tokenIDs will be able to decrypt your messages.

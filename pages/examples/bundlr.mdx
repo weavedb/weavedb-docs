@@ -2,6 +2,12 @@ import { Callout } from "nextra/components"
 
 # Large Data Upload with Bundlr
 
+<Callout type="warning" emoji="⚠️">
+  This demo is not fully functional at this time. The team is continually
+  developing the gRPC node's capabilities. Thank you for your understanding and
+  continued support.
+</Callout>
+
 When you have large pieces of data such as images or blog entries, you wouldn't want to store them to WeaveDB. But you would store them directory in Arweave Storage and store a tiny piece of metadata (transaction ID) to WeaveDB to link to them.
 
 WeaveDB with Arweave Storage is equivalent to Firestore with Cloud Storage, or DynamoDB with S3 storage. You can use a relayer to securely store large data and bind them with WeaveDB indexes.
