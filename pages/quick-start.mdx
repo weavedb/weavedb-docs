@@ -39,12 +39,25 @@ Using the [web console](https://console.weavedb.dev/), follow the instructions o
 </Tabs>
 
 ### Initialize WeaveDB
-```js copy
-import WeaveDB from "weavedb-sdk" // or "weavedb-sdk-node"
 
-const db = new WeaveDB({ contractTxId: YOUR_WEAVEDB_CONTRACT_TX_ID })
-await db.init()
-```
+<Tabs items={['Web', 'NodeJS']}>
+  <Tab>
+  ```js copy
+  import WeaveDB from "weavedb-sdk"
+
+  const db = new WeaveDB({ contractTxId: YOUR_WEAVEDB_CONTRACT_TX_ID })
+  await db.init()
+  ```
+  </Tab>
+  <Tab>
+  ```js copy
+  import WeaveDB from "weavedb-sdk-node"
+
+  const db = new WeaveDB({ contractTxId: YOUR_WEAVEDB_CONTRACT_TX_ID })
+  await db.init()
+  ```
+  </Tab>
+</Tabs>
 
 ### Add a document
 
