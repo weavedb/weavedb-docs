@@ -32,7 +32,7 @@ add {name:"Bob",age:20} people
 To write a new document: 
 
 ```bash copy
-# set : data_JSON : collection_name : doc_name
+# set : data_JSON : collection_name : doc_id
 set {name:"Bob",age:20} people Bob
 ```
 
@@ -41,7 +41,7 @@ set {name:"Bob",age:20} people Bob
 To update an existing document:
 
 ```bash copy
-# update : data_JSON : collection_name : doc_name
+# update : data_JSON : collection_name : doc_id
 update {age:30} people Bob
 ```
 
@@ -50,7 +50,7 @@ update {age:30} people Bob
 To delete an existing document:
 
 ```bash copy
-# delete : collection_name : doc_name
+# delete : collection_name : doc_id
 delete people Bob
 ```
 
@@ -59,7 +59,7 @@ delete people Bob
 To update an existing document or create a new one if it does not already exist:
 
 ```bash copy
-# upsert : data_JSON : collection_name : doc_name
+# upsert : data_JSON : collection_name : doc_id
 upsert {name:"Bob",age:20} people Bob
 ```
 

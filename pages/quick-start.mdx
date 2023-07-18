@@ -63,7 +63,7 @@ Using the [web console](https://console.weavedb.dev/), follow the instructions o
 
 ```js copy
 const personData = { name: "Bob", age: 20 }
-const result = await db.add(personData, "your_collection_name")
+const result = await db.add(personData, collection_name)
 ```
 
 ### Get a collection
@@ -71,7 +71,7 @@ const result = await db.add(personData, "your_collection_name")
 Use `get` to read a collection:
 
 ```js copy
-const result = await db.get("your_collection_name")
+const result = await db.get(collection_name)
 ```
 
 And `cget` to return the metadata of the documents too:
