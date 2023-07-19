@@ -1,4 +1,5 @@
 import { Callout } from "nextra/components"
+import { Tabs, Tab } from 'nextra/components'
 
 # Custom Authentication
 
@@ -21,13 +22,11 @@ The Lit Action is an immutable script stored on IPFS, and the PKP can only sign 
 
 The temp address is a disposal key pair stored on the local device to auto-sign transactions. So now the temp address can auto-sign and act on behalf of the tokenID owner without forcing the user to sign every transaction with wallet pop-ups.
 
-## 1. Deploy Contract
+## 1. Deploy a Database
 
-Deploy a WeaveDB contract using [the Web Console](https://console.weavedb.dev/), and get the `contractTxId`.
+Using the [web console](https://console.weavedb.dev/), follow the instructions on [Deploying a Database](/get-started/deploy-database)
 
 ## 2. Write Lit Action Script
-
-Let's name the custom authentication flow `custom` (it can be anything).
 
 ```js copy
 const go = async () => {
@@ -98,7 +97,11 @@ const go = async () => {
 go()
 ```
 
-Upload the js file above to IPFS and get the `CID`. You could, for example, use [Pinata](https://www.pinata.cloud/) and they will be immediately available through [the Cloudflare gateway](https://developers.cloudflare.com/web3/how-to/use-ipfs-gateway/).
+Upload the js file above to IPFS and get the `CID`.
+
+You could, for example, use [Pinata](https://www.pinata.cloud/) and they will be immediately available through [the Cloudflare gateway](https://developers.cloudflare.com/web3/how-to/use-ipfs-gateway/).
+
+Let's name the custom authentication flow `custom` (it can be anything).
 
 ## 3. Mint/Grant/Burn PKP
 
@@ -171,11 +174,22 @@ You can also run the sample script from the repo. Just replace your own values f
 
 Run the script using the terminal commands shown below.
 
-```bash copy
-cd examples/custom-auth/pkp-script
-yarn
-node custom-auth-pkp.js
-```
+<Tabs items={['yarn', 'npm']}>
+  <Tab>
+  ```bash copy
+  cd examples/custom-auth/pkp-script
+  yarn
+  node custom-auth-pkp.js
+  ```
+  </Tab>
+  <Tab>
+  ```bash copy
+  cd examples/custom-auth/pkp-script
+  npm install
+  node custom-auth-pkp.js
+  ```
+  </Tab>
+</Tabs>
 
 Go to the Chronicle Explorer and check the [PKP NFT contract](https://lit-protocol.calderaexplorer.xyz/address/0x8F75a53F65e31DD0D2e40d0827becAaE2299D111)
 
@@ -233,12 +247,33 @@ await db.addRelayerJob("auth:custom", job)
 
 Let's build a simple app using NextJS.
 
-```bash copy
-npx create-next-app custom-auth
-cd custom-auth
-yarn add @lit-protocol/lit-node-client ethers weavedb-sdk
-yarn dev
-```
+<Tabs items={['yarn', 'npm']}>
+  <Tab>
+  ```bash copy
+  yarn create next-app custom-auth
+  cd custom-auth
+  yarn add @lit-protocol/lit-node-client ethers weavedb-sdk
+  yarn dev
+  ```
+  </Tab>
+  <Tab>
+  ```bash copy
+  npx create-next-app custom-auth
+  cd custom-auth
+  npm install add @lit-protocol/lit-node-client ethers weavedb-sdk
+  npm run dev
+  ```
+  </Tab>
+</Tabs>
+
+  ```terminal
+  TypeScript? No
+  ESLint? Yes
+  Tailwind CSS? No
+  `src/` directory? No
+  App Router? No 
+  import alias? No
+  ```
 
 Now the default app is running at [localhost:3000](http://localhost:3000/).
 
