@@ -97,7 +97,7 @@ const go = async () => {
 go()
 ```
 
-Upload the js file above to IPFS and get the `CID`.
+Upload the js file above to IPFS and get the `Content Identifier (CID)`.
 
 You could, for example, use [Pinata](https://www.pinata.cloud/) and they will be immediately available through [the Cloudflare gateway](https://developers.cloudflare.com/web3/how-to/use-ipfs-gateway/).
 
@@ -170,7 +170,7 @@ go()
 
 ### PKP script
 
-You can also run the sample script from the repo. Just replace your own values for `privatekey` and `ipfsCid` in [custom-auth-pkp.js](https://github.com/weavedb/weavedb/tree/master/examples/custom-auth/pkp-script/custom-auth-pkp.js)
+You can also run the sample script from the repo. Just replace your own values for `privatekey` and `ipfsCid` in [custom-auth-pkp.js](https://github.com/weavedb/weavedb-docs/blob/main/examples/custom-auth/pkp-script/custom-auth-pkp.js)
 
 Run the script using the terminal commands shown below.
 
@@ -201,47 +201,50 @@ Now go to the PKP page on the Lit Explorer [https://explorer.litprotocol.com/pkp
 
 Add a relayer job for the authentication method. You can use [the web console](https://console.weavedb.dev) or CLI.
 
-### Web Console
-![](/img/console-relayers.png)
+<Tabs items={['Web Console', 'CLI']}>
+  <Tab>
+  ![](/img/console-relayers.png)
 
-Fill in the `relayers` input field with the `ETH Address` that you had previously obtained from https://explorer.litprotocol.com/pkps/\[tokenID\]
+  Fill in the `relayers` input field with the `ETH Address` that you had previously obtained from https://explorer.litprotocol.com/pkps/\[tokenID\]
 
-Set the following schema for extra data 
+  Set the following schema for extra data 
 
-```js copy
-{
-   relayers: ["PKP_Address"],
-   schema: {
-     type: "object",
-     required: ["linkTo"],
-     properties: {
-       linkTo: {
-         type: "string",
-       },
-     },
-   },
- } 
-```
+  ```js copy
+  {
+    relayers: ["PKP_Address"],
+    schema: {
+      type: "object",
+      required: ["linkTo"],
+      properties: {
+        linkTo: {
+          type: "string",
+        },
+      },
+    },
+  } 
+  ```
+  </Tab>
+  <Tab>
+  ```js copy
+  const job = {
+    relayers: ["PKP_Address"],
+    schema: {
+      type: "object",
+      required: ["linkTo"],
+      properties: {
+        linkTo: {
+          type: "string",
+        },
+      },
+    },
+  } 
+  ```
 
-### CLI
-```js copy
-const job = {
-   relayers: ["PKP_Address"],
-   schema: {
-     type: "object",
-     required: ["linkTo"],
-     properties: {
-       linkTo: {
-         type: "string",
-       },
-     },
-   },
- } 
-```
-
-```js copy
-await db.addRelayerJob("auth:custom", job)
-```
+  ```js copy
+  await db.addRelayerJob("auth:custom", job)
+  ```
+  </Tab>
+</Tabs>
 
 ## 5. Authenticate Users
 
