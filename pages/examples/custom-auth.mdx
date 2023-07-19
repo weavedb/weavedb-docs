@@ -250,6 +250,8 @@ Add a relayer job for the authentication method. You can use [the web console](h
 
 Let's build a simple app using NextJS.
 
+### Create NextJS Project
+
 <Tabs items={['yarn', 'npm']}>
   <Tab>
   ```bash copy
@@ -280,7 +282,9 @@ Let's build a simple app using NextJS.
 
 Now the default app is running at [localhost:3000](http://localhost:3000/).
 
-Create `.env.local` file with the following variables.
+### Set Environment Variables
+
+Create `.env.local` file in the project root directory and set the following variables.
 
 ```bash copy
 NEXT_PUBLIC_CONTRACT_TX_ID=""
@@ -293,7 +297,9 @@ NEXT_PUBLIC_AUTH_NAME="custom"
 - `NEXT_PUBLIC_CONTRACT_TX_ID` - contractTxId when you deployed the WeaveDB contract.
 - `NEXT_PUBLIC_PKP_ADDRESS` - ETH Address that you had previously obtained from https://explorer.litprotocol.com/pkps/\[tokenID\]
 - `NEXT_PUBLIC_PKP_PUBLIC_KEY` - PKP Public Key that you had previously obtained from https://explorer.litprotocol.com/pkps/\[tokenID\]
-- `NEXT_PUBLIC_IPFS_ID` - IPFS content identifier obtained from Pinata.
+- `NEXT_PUBLIC_IPFS_ID` - IPFS content identifier (CID) obtained from Pinata.
+
+### Frontened Code
 
 Then update `/pages/index.js` with the following code.
 
