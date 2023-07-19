@@ -1,4 +1,5 @@
 import { Callout } from "nextra/components"
+import { Tabs, Tab } from 'nextra/components'
 
 # Custom Authentication
 
@@ -21,13 +22,11 @@ The Lit Action is an immutable script stored on IPFS, and the PKP can only sign 
 
 The temp address is a disposal key pair stored on the local device to auto-sign transactions. So now the temp address can auto-sign and act on behalf of the tokenID owner without forcing the user to sign every transaction with wallet pop-ups.
 
-## 1. Deploy Contract
+## 1. Deploy a Database
 
-Deploy a WeaveDB contract using [the Web Console](https://console.weavedb.dev/), and get the `contractTxId`.
+Using the [web console](https://console.weavedb.dev/), follow the instructions on [Deploying a Database](/get-started/deploy-database)
 
 ## 2. Write Lit Action Script
-
-Let's name the custom authentication flow `custom` (it can be anything).
 
 ```js copy
 const go = async () => {
@@ -98,7 +97,11 @@ const go = async () => {
 go()
 ```
 
-Upload the js file above to IPFS and get the `CID`. You could, for example, use [Pinata](https://www.pinata.cloud/) and they will be immediately available through [the Cloudflare gateway](https://developers.cloudflare.com/web3/how-to/use-ipfs-gateway/).
+Upload the js file above to IPFS and get the `Content Identifier (CID)`.
+
+You could, for example, use [Pinata](https://www.pinata.cloud/) and they will be immediately available through [the Cloudflare gateway](https://developers.cloudflare.com/web3/how-to/use-ipfs-gateway/).
+
+Let's name the custom authentication flow `custom` (it can be anything).
 
 ## 3. Mint/Grant/Burn PKP
 
@@ -167,15 +170,26 @@ go()
 
 ### PKP script
 
-You can also run the sample script from the repo. Just replace your own values for `privatekey` and `ipfsCid` in [custom-auth-pkp.js](https://github.com/weavedb/weavedb/tree/master/examples/custom-auth/pkp-script/custom-auth-pkp.js)
+You can also run the sample script from the repo. Just replace your own values for `privatekey` and `ipfsCid` in [custom-auth-pkp.js](https://github.com/weavedb/weavedb-docs/blob/main/examples/custom-auth/pkp-script/custom-auth-pkp.js)
 
 Run the script using the terminal commands shown below.
 
-```bash copy
-cd examples/custom-auth/pkp-script
-yarn
-node custom-auth-pkp.js
-```
+<Tabs items={['yarn', 'npm']}>
+  <Tab>
+  ```bash copy
+  cd examples/custom-auth/pkp-script
+  yarn
+  node custom-auth-pkp.js
+  ```
+  </Tab>
+  <Tab>
+  ```bash copy
+  cd examples/custom-auth/pkp-script
+  npm install
+  node custom-auth-pkp.js
+  ```
+  </Tab>
+</Tabs>
 
 Go to the Chronicle Explorer and check the [PKP NFT contract](https://lit-protocol.calderaexplorer.xyz/address/0x8F75a53F65e31DD0D2e40d0827becAaE2299D111)
 
@@ -187,62 +201,90 @@ Now go to the PKP page on the Lit Explorer [https://explorer.litprotocol.com/pkp
 
 Add a relayer job for the authentication method. You can use [the web console](https://console.weavedb.dev) or CLI.
 
-### Web Console
-![](/img/console-relayers.png)
+<Tabs items={['Web Console', 'CLI']}>
+  <Tab>
+  ![](/img/console-relayers.png)
 
-Fill in the `relayers` input field with the `ETH Address` that you had previously obtained from https://explorer.litprotocol.com/pkps/\[tokenID\]
+  Fill in the `relayers` input field with the `ETH Address` that you had previously obtained from https://explorer.litprotocol.com/pkps/\[tokenID\]
 
-Set the following schema for extra data 
+  Set the following schema for extra data 
 
-```js copy
-{
-   relayers: ["PKP_Address"],
-   schema: {
-     type: "object",
-     required: ["linkTo"],
-     properties: {
-       linkTo: {
-         type: "string",
-       },
-     },
-   },
- } 
-```
+  ```js copy
+  {
+    relayers: ["PKP_Address"],
+    schema: {
+      type: "object",
+      required: ["linkTo"],
+      properties: {
+        linkTo: {
+          type: "string",
+        },
+      },
+    },
+  } 
+  ```
+  </Tab>
+  <Tab>
+  ```js copy
+  const job = {
+    relayers: ["PKP_Address"],
+    schema: {
+      type: "object",
+      required: ["linkTo"],
+      properties: {
+        linkTo: {
+          type: "string",
+        },
+      },
+    },
+  } 
+  ```
 
-### CLI
-```js copy
-const job = {
-   relayers: ["PKP_Address"],
-   schema: {
-     type: "object",
-     required: ["linkTo"],
-     properties: {
-       linkTo: {
-         type: "string",
-       },
-     },
-   },
- } 
-```
-
-```js copy
-await db.addRelayerJob("auth:custom", job)
-```
+  ```js copy
+  await db.addRelayerJob("auth:custom", job)
+  ```
+  </Tab>
+</Tabs>
 
 ## 5. Authenticate Users
 
 Let's build a simple app using NextJS.
 
-```bash copy
-npx create-next-app custom-auth
-cd custom-auth
-yarn add @lit-protocol/lit-node-client ethers weavedb-sdk
-yarn dev
-```
+### Create NextJS Project
+
+<Tabs items={['yarn', 'npm']}>
+  <Tab>
+  ```bash copy
+  yarn create next-app custom-auth
+  cd custom-auth
+  yarn add @lit-protocol/lit-node-client ethers weavedb-sdk
+  yarn dev
+  ```
+  </Tab>
+  <Tab>
+  ```bash copy
+  npx create-next-app custom-auth
+  cd custom-auth
+  npm install add @lit-protocol/lit-node-client ethers weavedb-sdk
+  npm run dev
+  ```
+  </Tab>
+</Tabs>
+
+  ```terminal
+  TypeScript? No
+  ESLint? Yes
+  Tailwind CSS? No
+  `src/` directory? No
+  App Router? No 
+  import alias? No
+  ```
 
 Now the default app is running at [localhost:3000](http://localhost:3000/).
 
-Create `.env.local` file with the following variables.
+### Set Environment Variables
+
+Create `.env.local` file in the project root directory and set the following variables.
 
 ```bash copy
 NEXT_PUBLIC_CONTRACT_TX_ID=""
@@ -255,7 +297,9 @@ NEXT_PUBLIC_AUTH_NAME="custom"
 - `NEXT_PUBLIC_CONTRACT_TX_ID` - contractTxId when you deployed the WeaveDB contract.
 - `NEXT_PUBLIC_PKP_ADDRESS` - ETH Address that you had previously obtained from https://explorer.litprotocol.com/pkps/\[tokenID\]
 - `NEXT_PUBLIC_PKP_PUBLIC_KEY` - PKP Public Key that you had previously obtained from https://explorer.litprotocol.com/pkps/\[tokenID\]
-- `NEXT_PUBLIC_IPFS_ID` - IPFS content identifier obtained from Pinata.
+- `NEXT_PUBLIC_IPFS_ID` - IPFS content identifier (CID) obtained from Pinata.
+
+### Frontened Code
 
 Then update `/pages/index.js` with the following code.
 
