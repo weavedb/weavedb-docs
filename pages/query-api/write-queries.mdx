@@ -8,6 +8,15 @@ import { Callout } from "nextra/components"
 For reference, see [Initialize WeaveDB](/quick-start#initialize-weavedb)
 </Callout>
 
+<Callout type="info" emoji="💡">
+The differences between `set`, `upsert`, and `update` are:
+
+- `set` - if `doc_id` exists in the collection, it will override the entire document, deleting all previous properties or it will add a new document if `doc_id` does not exist.
+- `update` - if `doc_id` exists in the collection, it will merge the new data with the existing document or the query will fail if the assigned `doc_id` does not exist.
+- `upsert` - if `doc_id` exists in the collection, it will merge the new data with the existing document or it will add a new document if `doc_id` does not exist.
+
+</Callout>
+
 ## add
 
 To add a new document:
@@ -26,7 +35,7 @@ await db.set({ "age": 20, "name": "Bob" }, "collection_name", "doc_id")
 ```
 
 <Callout type="info" emoji="💡">
-This will reset the whole doc if the doc already exists.
+This will reset the whole document if the `doc_id` already exists.
 </Callout>
 
 ## upsert
@@ -44,7 +53,7 @@ await db.update({ "age": 25 }, "collection_name", "doc_id")
 ```
 
 <Callout type="info" emoji="💡">
-This will fail if the doc does not exist.
+This will fail if the `doc_id` does not exist.
 </Callout>
 
 The following is a list of special operations. WeaveDB has shortcuts for common operations that are only available with the SDK and not with the web console terminal at the moment.
