@@ -94,6 +94,13 @@ await db.update({ "date": db.ts() }, "collection_name", "doc_id")
 ```
 
 ### Set signer Ethereum address
+
+<Callout type="info" emoji="💡">
+`signer` will always be lowercase if it's an EVM wallet address. WeaveDB contract converts everything to lowercase to use them internally.
+
+In regard to Arweave wallet addresses, the case will be retained, because it's RSA hashes and the case matters.
+</Callout>
+
 ```js copy
 await db.update({ "address": db.signer() }, "collection_name", "doc_id")
 ```
