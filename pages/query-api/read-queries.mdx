@@ -59,19 +59,36 @@ await db.get("collection_name", "doc_id", "sub_collection_name_1", "sub_doc_id_1
 
 ### Limit
 
+Limit the number of docs returned
+
 ```js copy
 await db.get("collection_name", 5)
 ```
 
 ### Sort
 
+Sort by age in descending order
+```js copy
+await db.get("collection_name", [ "age", "desc" ])
+```
+
+Sort by age in ascending order
+
+By default, the property `age` is sorted in ascending order because the second element in the array is not defined
+
 ```js copy
 await db.get("collection_name", [ "age" ])
-await db.get("collection_name", [ "age", "desc" ])
+```
+
+Sort by age in descending order, then sort by name in ascending order
+
+```js copy
 await db.get("collection_name", [ "age", "desc" ], [ "name", "asc" ])
 ```
 
 ### Where
+
+Get docs where the age is 20
 
 ```js copy
 await db.get("collection_name", ["age"], [ "age", ">", 20 ])
