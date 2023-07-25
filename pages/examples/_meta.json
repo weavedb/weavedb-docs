@@ -4,7 +4,6 @@
   "relayer-nft": "Cross-Chain NFT Relayer",
   "lit-protocol": "Cross-Chain ACL with Lit Protocol",
   "bundlr": "Large Data Upload with Bundlr",
-  "odd-chances": "Odd Chances Game",
   "custom-auth": "Custom Authentication",
   "nextid-auth": "Web2 Auth with Next.ID"
 }
