@@ -85,7 +85,7 @@ await db.update({ "chars": db.union([ "a", "b", "c", "d" ]) }, "collection_name"
 ### Array remove
 
 ```js copy
-await db.update({ "chars": db.union([ "b", "c" ]) }, "collection_name", "doc_id")
+await db.update({ "chars": db.remove([ "b", "c" ]) }, "collection_name", "doc_id")
 ```
 
 ### Set block timestamp
