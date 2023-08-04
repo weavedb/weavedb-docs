@@ -37,12 +37,24 @@ The query APIs for both the SDKs are the same.
 
 ## Instantiate WeaveDB
 
-```js copy
-import WeaveDB from "weavedb-sdk" // or "weavedb-sdk-node"
+<Tabs items={['weavedb-sdk', 'weavedb-sdk-node']}>
+  <Tab>
+    ```js copy
+    import WeaveDB from "weavedb-sdk"
 
-const db = new WeaveDB({ contractTxId: WEAVEDB_CONTRACT_TX_ID })
-await db.init()
-```
+    const db = new WeaveDB({ contractTxId: WEAVEDB_CONTRACT_TX_ID })
+    await db.init()
+    ```
+  </Tab>
+  <Tab>
+    ```js copy
+    import WeaveDB from "weavedb-sdk-node"
+
+    const db = new WeaveDB({ contractTxId: WEAVEDB_CONTRACT_TX_ID })
+    await db.init()
+    ```
+  </Tab>
+</Tabs>
 
 ### Optional Parameters
 
