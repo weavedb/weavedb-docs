@@ -4,9 +4,9 @@ import { Tabs, Tab } from 'nextra/components'
 # Read Queries
 
 <Callout type="info" emoji="💡">
-`db` is assumed to be the state variable storing the WeaveDB SDK object.
+`db` is assumed to be the state variable storing the WeaveDB SDK object. For reference, see [Initialize WeaveDB](/quick-start#initialize-weavedb)
 
-For reference, see [Initialize WeaveDB](/quick-start#initialize-weavedb)
+Also, it is expected that `collection_name` refers to the string variable that contains the name of your collection, and `doc_id` refers to the string variable that contains the unique identifier of a document from the collection.
 </Callout>
 
 ## get / cget
@@ -24,12 +24,12 @@ The metadata returned with `cget` functions as a cursor for pagination.
 <Tabs items={['get', 'cget']}>
   <Tab>  
     ```js copy
-    await db.get("collection_name", "doc_id")
+    await db.get(collection_name, doc_id)
     ```
   </Tab>
   <Tab>
     ```js copy
-    await db.cget("collection_name", "doc_id")
+    await db.cget(collection_name, doc_id)
     ```
   </Tab>
 </Tabs>
@@ -39,12 +39,12 @@ The metadata returned with `cget` functions as a cursor for pagination.
 <Tabs items={['get', 'cget']}>
   <Tab>
     ```js copy
-    await db.get("collection_name")
+    await db.get(collection_name)
     ```
   </Tab>
   <Tab>
     ```js copy
-    await db.cget("collection_name")
+    await db.cget(collection_name)
     ```
   </Tab>
 </Tabs>
@@ -54,7 +54,7 @@ The metadata returned with `cget` functions as a cursor for pagination.
 Arbitrary length of document nesting is possible.
 
 ```js copy
-await db.get("collection_name", "doc_id", "sub_collection_name_1", "sub_doc_id_1", "sub_collection_name_2")
+await db.get(collection_name, doc_id, "sub_collection_name_1", "sub_doc_id_1", "sub_collection_name_2")
 ```
 
 ### Limit
@@ -62,14 +62,14 @@ await db.get("collection_name", "doc_id", "sub_collection_name_1", "sub_doc_id_1
 Limit the number of docs returned
 
 ```js copy
-await db.get("collection_name", 5)
+await db.get(collection_name, 5)
 ```
 
 ### Sort
 
 Sort by age in descending order
 ```js copy
-await db.get("collection_name", [ "age", "desc" ])
+await db.get(collection_name, [ "age", "desc" ])
 ```
 
 Sort by age in ascending order
@@ -77,13 +77,13 @@ Sort by age in ascending order
 By default, the property `age` is sorted in ascending order because the second element in the array is not defined
 
 ```js copy
-await db.get("collection_name", [ "age" ])
+await db.get(collection_name, [ "age" ])
 ```
 
 Sort by age in descending order, then sort by name in ascending order
 
 ```js copy
-await db.get("collection_name", [ "age", "desc" ], [ "name", "asc" ])
+await db.get(collection_name, [ "age", "desc" ], [ "name", "asc" ])
 ```
 
 ### Where
@@ -91,7 +91,7 @@ await db.get("collection_name", [ "age", "desc" ], [ "name", "asc" ])
 Get docs where the age is 20
 
 ```js copy
-await db.get("collection_name", ["age"], [ "age", ">", 20 ])
+await db.get(collection_name, ["age"], [ "age", ">", 20 ])
 ```
 
 `==` `>` `>=` `<` `<=` `!=` `in` `not-in` `array-contains`, and `array-contains-any` are supported.
@@ -111,8 +111,8 @@ deprecated
 ### Skip
 
 ```js copy
-await db.get("collection_name", [ "age" ], [ "startAfter", 20 ], [ "endAt", 60 ])
-await db.get("collection_name", [ "age" ], [ "name", "desc" ], [ "startAfter", 20, "Bob" ])
+await db.get(collection_name, [ "age" ], [ "startAfter", 20 ], [ "endAt", 60 ])
+await db.get(collection_name, [ "age" ], [ "name", "desc" ], [ "startAfter", 20, "Bob" ])
 ```
 
 `startAt`, `startAfter`, `endAt`, and `endAfter` are supported.
@@ -120,8 +120,8 @@ await db.get("collection_name", [ "age" ], [ "name", "desc" ], [ "startAfter", 2
 ### Pagination
 
 ```js copy
-const docs_page1 = db.cget("collection_name", [ "age" ])
-const docs_page2 = db.cget("collection_name", [ "age" ], ["startAfter", docs_page1[docs_page1.length - 1]])
+const docs_page1 = db.cget(collection_name, [ "age" ])
+const docs_page2 = db.cget(collection_name, [ "age" ], ["startAfter", docs_page1[docs_page1.length - 1]])
 ```
 ## getNonce
 
@@ -131,13 +131,28 @@ To get the next nonce for an address. Nonces are internally used for signature v
 await db.getNonce("address")
 ```
 
-## getIds
+## on / con
 
-To get the last added doc id, use `getIds`.
+You can subscribe to state changes with `on` and `con`. They are the counterparts of `get` and `cget` respectively.
 
-```js copy
-const tx = await db.add({ "age": 20, "name": "Bob" }, "collection_name")
-const doc_id = (await db.getIds(tx))[0]
+These only work with `weavedb-sdk-node` for now.
+
+```js
+const unsubscribe = await on.(collection_name, doc_id, (data) => {
+  console.log(data)
+  unsubscribe()
+})
+```
+
+## getCache / cgetCache
+
+They are the same as `get` / `cget`, but get values from the cached state, which is faster but may not be the most up-to-date values.
+
+These only work with `weavedb-sdk-node` for now.
+
+```js
+await db.getCache(collection_name, doc_id)
+await db.cgetCache(collection_name, doc_id)
 ```
 
 ## listCollections
@@ -146,7 +161,7 @@ List collection names
 
 ```js copy
 await db.listCollections() // list root collections
-await db.listCollections("collection_name", "doc_id") // list sub collections
+await db.listCollections(collection_name, doc_id) // list sub collections
 ```
 {/* /docs/authentication/auth.md */}
 {/* ## getAddressLink */}
