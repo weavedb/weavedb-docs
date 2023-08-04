@@ -48,6 +48,8 @@ await db.upsert({ age: 20, name: "Bob" }, collection_name, doc_id)
 
 ## update
 
+Update a document from the collection
+
 ```js copy
 await db.update({ age: 25 }, collection_name, doc_id)
 ```
@@ -79,18 +81,18 @@ await db.update({ age: db.inc(-5) }, collection_name, doc_id)
 ### Array union
 
 ```js copy
-await db.update({ "chars": db.union([ "a", "b", "c", "d" ]) }, collection_name, doc_id)
+await db.update({ chars: db.union([ "a", "b", "c", "d" ]) }, collection_name, doc_id)
 ```
 
 ### Array remove
 
 ```js copy
-await db.update({ "chars": db.remove([ "b", "c" ]) }, collection_name, doc_id)
+await db.update({ chars: db.remove([ "b", "c" ]) }, collection_name, doc_id)
 ```
 
 ### Set block timestamp
 ```js copy
-await db.update({ "date": db.ts() }, collection_name, doc_id)
+await db.update({ date: db.ts() }, collection_name, doc_id)
 ```
 
 ### Set signer Ethereum address
@@ -102,8 +104,25 @@ In regard to Arweave wallet addresses, the case will be retained, because it's R
 </Callout>
 
 ```js copy
-await db.update({ "address": db.signer() }, collection_name, doc_id)
+await db.update({ address: db.signer() }, collection_name, doc_id)
 ```
+
+{/* contract version 0.28
+### Replace a field with relayer's extra data
+
+```js
+// icon field will be automatically replaced with `image.png` from the relayer
+const query = await db.sign(
+  "update",
+  { icon: db.data("extra_data_key") },
+  collection_name,
+  doc_id,
+  { jobID: "jobID", evm: signer_wallet },
+)
+
+await db.relay("jobID", query, { extra_data_key: "image.png" }, { evm: relayer_wallet })
+```
+ */}
 
 ## delete
 
