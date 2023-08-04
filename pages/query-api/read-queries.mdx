@@ -131,6 +131,15 @@ To get the next nonce for an address. Nonces are internally used for signature v
 await db.getNonce("address")
 ```
 
+## getIds
+
+To get the last added doc id, use `getIds`.
+
+```js copy
+const tx = await db.add({ age: 20, name: "Bob" }, collection_name)
+const doc_id = (await db.getIds(tx))[0]
+```
+
 ## on / con
 
 You can subscribe to state changes with `on` and `con`. They are the counterparts of `get` and `cget` respectively.
