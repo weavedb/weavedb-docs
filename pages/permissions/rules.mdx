@@ -131,6 +131,14 @@ Javascript functions cannot be passed and stored with Warp contracts. So WeaveDB
 
 Within the rules object, you can define variables under `let` key and later use them within `allow/deny` validation blocks.
 
+<Callout type="info" emoji="💡">
+By default, `let` will execute on create, update, and delete SDK operation. You can specify which operation/s you want `let` to be executed.
+
+`"let create": { }` will execute only when creating a new document from the collection.
+
+`"let create,update": { }` will execute only when creating and updating a document from the collection.
+
+</Callout>
 
 ```js copy
 const rules = {
