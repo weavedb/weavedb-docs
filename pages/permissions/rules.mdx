@@ -6,12 +6,6 @@ import { Callout } from "nextra/components"
 
 Access control rules are as important as the schemas for decentralized database. WeaveDB rules are extremely powerful using [JsonLogic](https://jsonlogic.com/) with an original add-on that enables JSON-based [ramda](https://ramdajs.com/) functional programming.
 
-<Callout type="info" emoji="💡">
-`db` is assumed to be the state variable storing the WeaveDB SDK object.
-
-For reference, see [Initialize WeaveDB](/quick-start#initialize-weavedb)
-</Callout>
-
 Add rules:
 
 ```js copy
@@ -55,6 +49,11 @@ const rules = {
 }
 await db.setRules(rules, "bookmarks")
 ```
+
+<Callout type="info" emoji="💡">
+`db` is assumed to be the state variable storing the WeaveDB SDK object. For reference, see [Initialize WeaveDB](/quick-start#initialize-weavedb)
+</Callout>
+
 Within the rules object, each top level key defines one rule. A keys should be a combination of (`allow` or `deny`) and (`write`, `create`, `update`, `delete`).
 
 `allow write` is equivalent to `allow create,update,delete`.
