@@ -112,7 +112,7 @@ await db.relay("jobID", params, extra, { multisigs: [ sig1, sig2, sig3 ] })
 
 ## Verifiable Oracles with Lit Protocol
 
-[Lit Protocol](https://litprotocol.com/) enables decentralized private keys ([PKP](https://developer.litprotocol.com/coreConcepts/LitActionsAndPKPs/PKPs)) with threshold cryptgraphy, and decentralized executions of verifiable code ([Lit Actions](https://developer.litprotocol.com/coreConcepts/LitActionsAndPKPs/litActions)).
+[Lit Protocol](https://litprotocol.com/) enables decentralized private keys ([PKP](https://developer.litprotocol.com/coreConcepts/LitActionsAndPKPs/PKPs)) with threshold cryptography, and decentralized executions of verifiable code ([Lit Actions](https://developer.litprotocol.com/coreConcepts/LitActionsAndPKPs/litActions)).
 
 With [the mint-grant-burn mechanism](https://developer.litprotocol.com/coreconcepts/litactionsandpkps/intro/#how-can-i-know-that-a-given-pkp-wasnt-used-to-sign-a-bunch-of-stuff-before-it-was-granted-approval-to-use-a-lit-action-what-is-mintgrantburn), we can be sure signatures from a certain PKP only come from the result of executing a certain code stored at a certain IPFS hash. In other words, Lit allows smart contracts to have private keys no one else but the contract with its immutable code can sign.
 
