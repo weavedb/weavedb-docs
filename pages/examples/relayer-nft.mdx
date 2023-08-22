@@ -9,7 +9,7 @@ import { Tabs, Tab } from 'nextra/components'
   continued support.
 </Callout>
 
-In this tutorial, we will build a simple dapp with cross-chain NFT authentication using the [relayer](/docs/sdk/relayers) feature.
+In this tutorial, we will build a simple dapp with cross-chain NFT authentication using the [relayer](/sdk/relayers) feature.
 An off-chain relayer will validate NFT ownerships from another blockchain, and only NFT owners can write to WeaveDB. By default, WeaveDB authenticates users with crypto accounts, but in this dapp, cross-chain NFTs will be used for the authentication.
 
 ![](/img/relayer-nft-2.png)
@@ -127,7 +127,7 @@ cd ../../../
 node scripts/generate-wallet.js mainnet
 yarn deploy
 ```
-Or you could follow [this tutorial](/docs/examples/todos-console) and use the [Web Console](https://console.weavedb.dev).
+Or you could follow [this guide](/get-started/deploy-database) and use the [Web Console](https://console.weavedb.dev).
 
 Now you should receive `contractTxId` for the deployed contract.
 
@@ -268,8 +268,8 @@ Open a new terminal and move to the root directory to continue development.
 
 We use these minimum dependencies.
 
-- [WeaveDB Client](/docs/advanced/client) - to connect with the gRPC node from browsers
-- [WeaveDB Node Client](/docs/advanced/client) - to connect with the gRPC node from the serverless api
+- [WeaveDB Client]() - to connect with the gRPC node from browsers
+- [WeaveDB Node Client]() - to connect with the gRPC node from the serverless api
 - [Ramda.js](https://ramdajs.com/) - functional programming utilities
 - [Chakra UI](https://chakra-ui.com/) - UI library
 - [Ethers.js](https://docs.ethers.org/v5/) - to connect with Metamask
@@ -611,7 +611,7 @@ const params = await sdk.sign(
 ```
 Now send the signed object to the relayer we set up at `/api/ownerOf`. The relayer is going to check the owner of the `tokenID` and relay the query with an additional `owner` data.
 
-The [access control rules](/docs/examples/relayer-nft#set-up-access-control-rules) previously set will make sure the signer is the owner, and only let messages posted if it's true.
+The [access control rules](/examples/relayer-nft#set-up-access-control-rules) previously set will make sure the signer is the owner, and only let messages posted if it's true.
 
 ```js
 const res = await fetch("/api/ownerOf", {
