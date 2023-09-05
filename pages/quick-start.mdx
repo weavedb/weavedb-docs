@@ -46,7 +46,7 @@ Using the [web console](https://console.weavedb.dev/), follow the instructions o
   ```js copy
   import WeaveDB from "weavedb-sdk"
 
-  const db = new WeaveDB({ contractTxId: YOUR_WEAVEDB_CONTRACT_TX_ID })
+  const db = new WeaveDB({ contractTxId: CONTRACT_TX_ID })
   await db.init()
   ```
   </Tab>
@@ -54,21 +54,25 @@ Using the [web console](https://console.weavedb.dev/), follow the instructions o
   ```js copy
   import WeaveDB from "weavedb-sdk-node"
 
-  const db = new WeaveDB({ contractTxId: YOUR_WEAVEDB_CONTRACT_TX_ID })
+  const db = new WeaveDB({ contractTxId: CONTRACT_TX_ID })
   await db.init()
   ```
   </Tab>
 </Tabs>
 
+<Callout type="info" emoji="💡">
+Replace `CONTRACT_TX_ID` with the `contractTxId` string value returned when deploying your database.
+</Callout>
+
 ### Add a document
 
 ```js copy
 const personData = { name: "Bob", age: 20 }
-const result = await db.add(personData, collection_name)
+const tx = await db.add(personData, collection_name)
 ```
 
 <Callout type="info" emoji="💡">
-It is expected that `collection_name` refers to the string value that contains the name of your collection.
+Replace `collection_name` with the string value name of your collection.
 </Callout>
 
 ### Get a collection
