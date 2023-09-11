@@ -103,7 +103,7 @@ The data format to be signed should be `{ extra, jobID, params }`.
 EIP191 signatures can be made by the `signMessage` method with [Ethers.js Signers](https://docs.ethers.org/v5/api/signer/#Signer-signMessage).
 
 ```js copy
-// each signer signs after their own valiations at different locations
+// each signer signs after their own validations at different locations
 const sig1 = await signers.signMessage(JSON.stringify({ extra, jobID, params }))
 
 // after collecting signatures(sig1, sig2, sig3) from approved signers
