@@ -146,7 +146,7 @@ const result = await db.set({ name: "Bob" }, "ppl", "Bob", {
 console.log(`regular result: ${result}`)
 ```
 
-- `cache`: if set `true`, it will be caluculated against the virtual state kept by the WeaveDB SDK, which is much faster (a few ms) than against the Warp SDK dryWrite (a few hundred ms due to checking the latest state with a http request). `false` is still faster than a regular tx execution process (a few seconds). The difference is `true` might return the wrong `dryRead` results if some parallel queries are ongoing on other nodes, which will be solved and roll-backed within 5 seconds.
+- `cache`: if set `true`, it will be calculated against the virtual state kept by the WeaveDB SDK, which is much faster (a few ms) than against the Warp SDK dryWrite (a few hundred ms due to checking the latest state with a http request). `false` is still faster than a regular tx execution process (a few seconds). The difference is `true` might return the wrong `dryRead` results if some parallel queries are ongoing on other nodes, which will be solved and roll-backed within 5 seconds.
 - `cb`: a callback function to immediately execute upon dryWrite.
 - `read`: read queries to immediately execute against the virtual state after dryWrite. The `results` come in the write query return object. This is a great performance optimization compared with separate read queries after a write query.
 
