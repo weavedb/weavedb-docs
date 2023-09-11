@@ -14,7 +14,7 @@ The Lens Profile authentication method is already built-in with WeaveDB and you 
 ![](/img/custom-auth.png)
 
 1. The user owns a Lit Profile NFT (tokenID).
-2. A temp evm address is gerenated before authentication.
+2. A temp evm address is generated before authentication.
 3. The Lit Action will be executed, which verifies the ownership of the NFT, and signs with a PKP.
 4. WeaveDB verifies the PKP signature and link the temp address with the tokenID.
 
@@ -301,7 +301,7 @@ NEXT_PUBLIC_AUTH_NAME="custom"
 - `NEXT_PUBLIC_PKP_PUBLIC_KEY` - PKP Public Key that you had previously obtained from https://explorer.litprotocol.com/pkps/\[tokenID\]
 - `NEXT_PUBLIC_IPFS_ID` - IPFS content identifier (CID) obtained from Pinata.
 
-### Frontened Code
+### Frontend Code
 
 Then update `/pages/index.js` with the following code.
 
