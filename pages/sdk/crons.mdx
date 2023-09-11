@@ -2,7 +2,7 @@ import { Callout } from "nextra/components"
 
 # Crons
 
-With SCP (Storage-based Consensus Paradigm) and its nature of determinictic calculation, defining and executing scheduled tasks can be built-in to smart contracts.
+With SCP (Storage-based Consensus Paradigm) and its nature of deterministic calculation, defining and executing scheduled tasks can be built-in to smart contracts.
 
 You can use JSON-based functional programming language called [FPJSON](https://fpjson.weavedb.dev) to build complex tasks.
 
@@ -23,7 +23,7 @@ await db.addCron(cron, "count-crons")
 - `start` - timestamp the cron should start at, if omitted, it will be set to `block.timestamp`
 - `end` - timestamp the cron should end at, if omitted, it will run indefinitely
 - `span` - seconds between each execution, be careful not to set it too short like `1` second outside the test purposes
-- `do` - wheather the task should be executed at `start`, it defaults to `false` if omitted, and in that case, the first execution time will be `start + span`
+- `do` - whether the task should be executed at `start`, it defaults to `false` if omitted, and in that case, the first execution time will be `start + span`
 - `times` - how many times the task should be executed, it will run forever if omitted
 - `jobs` - array of tasks to be executed
 
@@ -123,7 +123,7 @@ sortBy(prop("age"), people) // ramdajs
 
 Pure functional programming without any side-effects is easy to get extremely complex and entangled even for simple logics.
 
-WeaveDB inserts global variables to each cron scope to ease up the unnecessary complexisities.
+WeaveDB inserts global variables to each cron scope to ease up the unnecessary complexities.
 
 Every time a cron executes, the global variables will start with `block` metadata.
 
