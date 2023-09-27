@@ -71,12 +71,30 @@ const config: DocsThemeConfig = {
   head: (
     <>
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="icon" href="/favicon.ico" />
+
+      <meta property="og:url" content="https://docs.weavedb.dev/" />
+      <meta property="og:type" content="website" />
       <meta property="og:title" content="WeaveDB Documentation" />
       <meta
         property="og:description"
         content="NoSQL Database as a Smart Contract"
       />
-      <link rel="icon" href="/favicon.ico" />
+      <meta
+        property="og:image"
+        content="https://weavedb.dev/twitterImage.png"
+      />
+
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content="WeaveDB Documentation" />
+      <meta
+        name="twitter:description"
+        content="NoSQL Database as a Smart Contract"
+      />
+      <meta
+        name="twitter:image"
+        content="https://weavedb.dev/twitterImage.png"
+      />
     </>
   ),
 }
