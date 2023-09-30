@@ -120,8 +120,8 @@ await db.get(collection_name, [ "age" ], [ "name", "desc" ], [ "startAfter", 20,
 ### Pagination
 
 ```js copy
-const docs_page1 = db.cget(collection_name, [ "age" ])
-const docs_page2 = db.cget(collection_name, [ "age" ], ["startAfter", docs_page1[docs_page1.length - 1]])
+const docs_page1 = await db.cget(collection_name, [ "age" ])
+const docs_page2 = await db.cget(collection_name, [ "age" ], ["startAfter", docs_page1[docs_page1.length - 1]])
 ```
 ## getNonce
 
