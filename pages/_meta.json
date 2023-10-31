@@ -14,13 +14,6 @@
   "development": "Development",
   "web-console": "Web Console",
   "query-api": " Query APIs",
-  "permissions": "Permissions",
-  "authentication": {
-    "title": "Authentication",
-    "theme": {
-      "breadcrumb": false
-    }
-  },
   "sdk": "SDK Reference",
   "examples": "Examples",
   "troubleshooting": {

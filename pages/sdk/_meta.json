@@ -1,6 +1,9 @@
 {
   "setup": "Set up SDK",
+  "authentication": "Authentication",
   "ownership": "Ownership",
+  "schemas": "Data Schema",
+  "rules": "Access Control",
   "indexes": "Indexes",
   "crons": "Crons",
   "relayers": "Relayers",
