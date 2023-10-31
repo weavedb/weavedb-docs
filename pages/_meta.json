@@ -12,6 +12,7 @@
     }
   },
   "get-started": "Get Started",
+  "web-console": "Web Console",
   "query-api": " Query APIs",
   "permissions": "Permissions",
   "authentication": {

@@ -1,0 +1,132 @@
+import { Callout } from "nextra/components"
+
+# Query your Database
+
+Using the [web console](https://console.weavedb.dev/), you can execute any queries in the bottom terminal:
+
+![](https://i.imgur.com/N0K8st0.png)
+
+<Callout type="warning" emoji="⚠️">
+When using the console's terminal, do not insert spaces in objects. Spaces are used to separate arguments so it will be parsed incorrectly, or wrap the object with `'` or `"`.
+</Callout>
+
+## Get Info
+
+To get general information about your database:
+
+```bash copy
+getInfo
+```
+
+## Add
+
+To add a doc to a collection. The doc ID will be auto-generated:
+
+```bash copy
+# add : data_JSON : collection_name
+add {name:"Bob",age:20} people
+```
+
+## Set
+
+To write a new document: 
+
+```bash copy
+# set : data_JSON : collection_name : doc_id
+set {name:"Bob",age:20} people Bob
+```
+
+## Update
+
+To update an existing document:
+
+```bash copy
+# update : data_JSON : collection_name : doc_id
+update {age:30} people Bob
+```
+
+## Delete
+
+To delete an existing document:
+
+```bash copy
+# delete : collection_name : doc_id
+delete people Bob
+```
+
+## Upsert
+
+To update an existing document or create a new one if it does not already exist:
+
+```bash copy
+# upsert : data_JSON : collection_name : doc_id
+upsert {name:"Bob",age:20} people Bob
+```
+
+Let's add some new documents for the following tutorial:
+
+```bash copy
+set {name:"Bob",age:20} people Bob
+set {name:"Alice",age:30} people Alice
+set {name:"Mike",age:40} people Mike
+```
+
+## Get
+
+To get a single doc:
+
+```bash copy
+get people Bob 
+```
+
+To get all the docs in a collection:
+
+```bash copy
+get people
+```
+
+### Limit
+
+To limit the number of the docs returned:
+
+```bash copy
+get people 2
+```
+
+### Where
+
+To get the docs where the age is 20:
+
+```bash copy
+get people ["age","==",20]
+```
+
+<Callout type="info" emoji="💡">
+You can use [the same operators as Firestore](https://firebase.google.com/docs/firestore/query-data/queries#query_operators), which includes `==`, `!=`, `>`, `>=`, `<`, `<=`, `in`, `not-in`, `array-contains`, and `array-contains-any`.
+</Callout>
+
+### Sort
+
+To sort by age in descending order:
+
+```bash copy
+get people ["age","desc"]
+```
+
+<Callout type="info" emoji="💡">
+Single field indexes are automatically generated. But to sort by more than 1 field, multi-field indexes need to be added explicitly. Read onto the following section.
+</Callout>
+
+## Add multi-field indexes
+To set an index to sort people first by age in descending order, then by name in ascending order:
+
+```bash copy
+addIndex [["age","desc"],["name","asc"]] people
+```
+
+Then you can use this query:
+
+
+```bash copy
+get people ["age","desc"] ["name"] 
+```
