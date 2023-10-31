@@ -1,7 +1,0 @@
-{
-  "deploy-database": "Deploy a Database",
-  "create-collection" : "Create a Collection",
-  "query-database" : "Query your Database",
-  "setup-schema" : "Set up Data Schema",
-  "setup-access-control-rules" : "Set up Access Control Rules"
-}
