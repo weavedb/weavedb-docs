@@ -1,0 +1,38 @@
+import { Callout } from 'nextra/components'
+
+# Get Started with WeaveDB Rollup
+
+This guide helps you set up up rollup-based contracts using WeaveDB and its command-line tools.
+
+<Callout type="warning" emoji="⚠️">
+WeaveDB rollup is in early development. Please use it with caution and check for bugs.
+</Callout>
+
+## Prerequisites
+
+- Node.js and npm must be installed
+
+## Test Locally with WeaveDB Tools
+
+- `weavedb-tools` is a command-line utility. It provides a set of commands to facilitate the process of setting up a local WeaveDB instance.
+
+- Before deploying your WeaveDB instance to the main network, it is recommended to first deploy it locally on your machine for testing. This will help you catch any issues early on, reducing risks in your production environment.
+
+### Install WeaveDB Tools
+
+```bash copy
+sudo npm -g install weavedb-tools
+```
+
+Now, you can use the `weavedb` global command.
+
+### Create a Project
+
+```bash
+weavedb create your_project
+cd your_project
+```
+
+<Callout type="info" emoji="💡">
+Use your own project name instead of `your_project`.
+</Callout>
