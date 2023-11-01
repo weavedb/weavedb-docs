@@ -1,3 +1,4 @@
 {
-  "get-started": "Get Started"
+  "run-local-test": "Run Local Test",
+  "run-rollup-node": "Run Rollup Node"
 }
