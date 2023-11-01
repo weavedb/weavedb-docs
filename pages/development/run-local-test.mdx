@@ -1,4 +1,5 @@
 import { Callout } from 'nextra/components'
+import { Tabs, Tab } from 'nextra/components'
 
 # Run Local Test with WeaveDB Tools
 
@@ -12,9 +13,18 @@ import { Callout } from 'nextra/components'
 
 ## Install WeaveDB Tools
 
-```bash copy
-sudo npm -g install weavedb-tools
-```
+<Tabs items={['yarn', 'npm']}>
+  <Tab>
+  ```bash copy
+  sudo yarn global add weavedb-tools
+  ```
+  </Tab>
+  <Tab>
+  ```bash copy
+  sudo npm -g install weavedb-tools
+  ```
+  </Tab>
+</Tabs>
 
 Now, you can use the `weavedb` global command.
 
@@ -127,6 +137,15 @@ In this example, we've written our tests in the `/test/test.js` file.
 
 To run the tests, open your terminal, navigate to your project's root directory, and execute the following command:
 
-```bash copy
-yarn test
-```
+<Tabs items={['yarn', 'npm']}>
+  <Tab>
+  ```bash copy
+  yarn test
+  ```
+  </Tab>
+  <Tab>
+  ```bash copy
+  npm test
+  ```
+  </Tab>
+</Tabs>
