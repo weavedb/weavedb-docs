@@ -11,11 +11,36 @@
       "breadcrumb": false
     }
   },
-  "development": "Development",
-  "web-console": "Web Console",
-  "query-api": " Query APIs",
-  "sdk": "SDK Reference",
-  "advanced": "Advanced",
+  "development": {
+    "title": "Development",
+    "theme": {
+      "breadcrumb": false
+    }
+  },
+  "web-console": {
+    "title": "Web Console",
+    "theme": {
+      "breadcrumb": false
+    }
+  },
+  "query-api": {
+    "title": "Query APIs",
+    "theme": {
+      "breadcrumb": false
+    }
+  },
+  "sdk": {
+    "title": "SDK Reference",
+    "theme": {
+      "breadcrumb": false
+    }
+  },
+  "advanced": {
+    "title": "Advanced",
+    "theme": {
+      "breadcrumb": false
+    }
+  },
   "examples": "Examples",
   "troubleshooting": {
     "title": "Troubleshooting",
