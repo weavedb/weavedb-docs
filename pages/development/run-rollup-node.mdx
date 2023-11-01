@@ -2,8 +2,35 @@ import { Callout } from 'nextra/components'
 
 # Run Rollup Node
 
-This guide helps you set up rollup-based contracts.
-
 <Callout type="warning" emoji="⚠️">
 WeaveDB rollup is in early development. Please use it with caution and check for bugs.
 </Callout>
+
+This guide will help you set up rollup-based contracts. We are actively developing a Rollup-as-a-Service solution. For now, you will need to run your own rollup locally.
+
+Once you have configured and thoroughly tested your database settings in this [guide](/development/run-local-test), you can deploy the database to a local rollup node.
+
+## Generate Test Accounts
+
+You can generate crypto accounts with `yarn keygen`
+You will need at least 3 EVM accounts for rollup `admin`, DB contract `owner`, and `user`  
+and 1 Arweave account for rollup `bundler`.  
+Go to your project root directory.
+
+```bash copy
+yarn keygen admin
+yarn keygen owner
+yarn keygen user
+yarn keygen bundler -t ar # for Arweave account
+```
+
+The generated accounts are stored under `/.weavedb/accounts`.  
+List the accounts.
+
+```bash
+yarn accounts
+```
+
+You can also import existing accounts in `/weavedb.config.js`.
+
+## Clone WeaveDB Repo
