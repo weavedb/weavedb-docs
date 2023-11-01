@@ -1,4 +1,5 @@
 import { Callout } from 'nextra/components'
+import { Tabs, Tab } from 'nextra/components'
 
 # Run Rollup Node
 
@@ -10,27 +11,107 @@ This guide will help you set up rollup-based contracts. We are actively developi
 
 Once you have configured and thoroughly tested your database settings in this [guide](/development/run-local-test), you can deploy the database to a local rollup node.
 
-## Generate Test Accounts
+## Set up Wallet Accounts
 
-You can generate crypto accounts with `yarn keygen`
-You will need at least 3 EVM accounts for rollup `admin`, DB contract `owner`, and `user`  
-and 1 Arweave account for rollup `bundler`.  
-Go to your project root directory.
+You'll need several types of accounts: 3 EVM accounts for the roles of rollup `admin`, database contract `owner`, and `user`, along with 1 Arweave account for the rollup `bundler`
 
-```bash copy
+There are two ways to set up these accounts:
+
+1. Generate new accounts using the `yarn keygen` command.
+2. Import existing accounts by configuring them in `/weavedb.config.js`
+
+### Generate Accounts
+
+In this example, we will generate new accounts. Open your terminal, navigate to your project's root directory, and execute the following commands:
+
+<Tabs items={['yarn', 'npm']}>
+  <Tab>
+  ```bash copy
 yarn keygen admin
 yarn keygen owner
 yarn keygen user
 yarn keygen bundler -t ar # for Arweave account
-```
+  ```
+  </Tab>
+  <Tab>
+  ```bash copy
+npm keygen admin
+npm keygen owner
+npm keygen user
+npm keygen bundler -t ar # for Arweave account
+  ```
+  </Tab>
+</Tabs>
 
-The generated accounts are stored under `/.weavedb/accounts`.  
-List the accounts.
+### List Accounts
 
-```bash
+The generated accounts are stored under `/.weavedb/accounts`
+
+To show a list of accounts, open your terminal, navigate to your project's root directory, and execute the following command:
+
+<Tabs items={['yarn', 'npm']}>
+  <Tab>
+  ```bash copy
 yarn accounts
-```
-
-You can also import existing accounts in `/weavedb.config.js`.
+  ```
+  </Tab>
+  <Tab>
+  ```bash copy
+npm accounts
+  ```
+  </Tab>
+</Tabs>
 
 ## Clone WeaveDB Repo
+
+Open a new terminal and clone the WeaveDB repository into a new directory outside of your project's root directory.
+
+```bash copy
+git clone https://github.com/weavedb/weavedb.git
+cd weavedb
+```
+
+## Write Configuration
+
+1. Open the WeaveDB repo in Visual Studio Code or your preferred code editor.
+
+2. Navigate to `/grpc-node/node-server/` directory and create a new file named `weavedb.standalone.config.js` if it does not already exist.
+
+3. Copy the default configuration below and paste it in `weavedb.standalone.config.js` file.
+
+```js copy filename="/grpc-node/node-server/weavedb.standalone.config.js"
+module.exports = {
+  admin: "admin_private_key",
+  bundler: { /* Arweave bundler account */ },
+  rollups: { }, // this can be empty or pre-defined
+}
+```
+
+4. Locate the `bundler.json` file in your project, found at `/your_project/.weavedb/accounts/ar/bundler.json`. Copy its entire content and paste it as the value for `bundler` in your `weavedb.standalone.config.js` file.
+
+5. Next, locate the `admin.json` file, found at `/your_project/.weavedb/accounts/evm/admin.json`. Copy the `privateKey` from this file and paste it as the string value for `admin` in your `weavedb.standalone.config.js` file.
+
+<Callout type="info" emoji="💡">
+Note: `your_project` refers to the project name you've set up earlier in this [guide](/development/run-local-test#create-a-project).
+</Callout>
+
+## Run Rollup Node
+
+Before proceeding, make sure that `docker` and `docker-compose` are installed on your machine. If not, you can download and install them from [Docker's official site](https://docs.docker.com/get-docker/).
+
+To run the rollup node, open your terminal, navigate to the root directory of your WeaveDB repo, and execute the following command:
+
+<Tabs items={['yarn', 'npm']}>
+  <Tab>
+  ```bash copy
+yarn run-rollup
+  ```
+  </Tab>
+  <Tab>
+  ```bash copy
+npm run-rollup
+  ```
+  </Tab>
+</Tabs>
+
+After successful execution, the rollup node will be available to receive queries at `localhost:8080`
