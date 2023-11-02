@@ -1,7 +1,7 @@
 import { Callout } from 'nextra/components'
 import { Tabs, Tab } from 'nextra/components'
 
-# Run Rollup Node
+# Run a Local Rollup Node
 
 <Callout type="warning" emoji="⚠️">
 WeaveDB rollup is in early development. Please use it with caution and check for bugs.
@@ -109,7 +109,7 @@ Note: `your_project` refers to the project name you've set up earlier in this [g
 
 ## Run Rollup Node
 
-Before proceeding, make sure that `docker` and `docker-compose` are installed on your machine. If not, you can download and install them from [Docker's official site](https://docs.docker.com/get-docker).
+Before proceeding, make sure that `docker` and `docker-compose` are installed and running on your machine. If not, you can download and install them from [Docker's official site](https://docs.docker.com/get-docker).
 
 To run the rollup node, open your terminal, navigate to the root directory of your WeaveDB repo, and execute the following command:
 
@@ -126,4 +126,101 @@ npm run-rollup
   </Tab>
 </Tabs>
 
-After successful execution, the rollup node will be available to receive queries at `localhost:8080`
+After successful execution, your local rollup node will be available to receive queries at `localhost:8080`
+
+## Deploy the Database
+
+The next step is to deploy a database instance after running your local rollup node.
+
+1. Open your [project](/development/run-local-test#create-a-project) in Visual Studio Code or your preferred code editor, then open the `weavedb.config.js` file and replace the string value of your database `name` with a name you prefer.
+
+2. Navigate to your project's root directory in the terminal, then execute the following commands:
+
+<Callout type="info" emoji="💡">
+Replace `db_name` with the name you provided in the `weavedb.config.js` file
+</Callout>
+
+
+<Tabs items={['yarn', 'npm']}>
+  <Tab>
+  ```bash copy
+yarn deploy db_name --owner owner
+  ```
+  </Tab>
+  <Tab>
+  ```bash copy
+npm deploy db_name --owner owner
+  ```
+  </Tab>
+</Tabs>
+
+Then, configure the instance with the database settings.
+
+<Tabs items={['yarn', 'npm']}>
+  <Tab>
+  ```bash copy
+yarn setup db_name --owner owner
+  ```
+  </Tab>
+  <Tab>
+  ```bash copy
+npm setup db_name --owner owner
+  ```
+  </Tab>
+</Tabs>
+
+Now your database is all set and deployed in your local rollup node!
+
+## Run Test Script
+
+You can create and execute scripts using `weavedb-node-client` to interact with your database and familiarize yourself with its operations.
+
+1. Open your [project](/development/run-local-test#create-a-project) in Visual Studio Code or your preferred code editor.
+
+2. Create a new file called `demo.js` in your `scripts` folder if it does not already exist.
+
+3. Copy the example script provided below into your `demo.js` file. This script shows how to add, fetch, and delete posts from the database.
+
+<Callout type="info" emoji="💡">
+Replace `db_name` with the name of the database you specified earlier.
+</Callout>
+
+```js copy filename="/scripts/demo.js"
+const SDK = require("weavedb-node-client")
+const accounts = require("./lib/accounts")
+
+const main = async key => {
+  const COLLECTION_NAME = "posts"
+
+  const userAuth = { privateKey: accounts.evm.user.privateKey }
+  const db = new SDK({ rpc: "localhost:8080", contractTxId: "db_name" })
+
+  // add a post
+  const tx = await db.query("add:post", { body: "test" }, COLLECTION_NAME, userAuth)
+
+  // fetch posts
+  console.log(await db.get(COLLECTION_NAME))
+
+  // delete the recently added post
+  await db.query("delete:post", COLLECTION_NAME, tx.docID, userAuth)
+
+  process.exit()
+}
+
+main()
+```
+
+4. Navigate to your project's root directory in the terminal, and run the script with the following command. It will add a post, fetch the list of posts, and then delete the post.
+
+```bash copy
+node scripts/demo.js
+```
+
+You can review the transactions in the explorer by visiting [scan.weavedb.dev/node/localhost/db/db_name](http://scan.weavedb.dev/node/localhost/db/db_name)
+
+<Callout type="info" emoji="💡">
+Make sure you replace `db_name` at the end of the URL with the actual name of the database you specified earlier.
+</Callout>
+
+## Enable Rollup to Arweave
+
