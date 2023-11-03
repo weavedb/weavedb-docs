@@ -169,7 +169,7 @@ npm setup db_name --owner owner
   </Tab>
 </Tabs>
 
-Now your database is all set and deployed in your local rollup node!
+Now your database is all set and deployed in your local rollup node.
 
 ## Run Test Script
 
@@ -224,3 +224,32 @@ Make sure you replace `db_name` at the end of the URL with the actual name of th
 
 ## Enable Rollup to Arweave
 
+To enable rollup synchronization with the [Warp Sequencer](https://academy.warp.cc/docs/sdk/advanced/bundled-interaction), set the `rollup` configuration in `weavedb.config.js` file to `true` and deploy a new database instance.
+
+<Callout type="warning" emoji="⚠️">
+You must deploy a new database for rollup because existing instances cannot change their rollup state after deployment.
+This ensures the integrity of the L1/L2 verifiability process, as all transactions must include a signature with the L1 `contractTxId`, which is not present in non-rollup databases.
+</Callout>
+
+```js copy filename="/weavedb.config.js"
+module.exports = {
+  db: {
+    app: "http://localhost:3000",
+    name: "Demo Dapp",
+    rollup: true, // Set this to true to enable rollup
+	plugins: {},
+  },
+  accounts: { evm: {}, ar: {} },
+  defaultNetwork: "localhost",
+  networks: {
+    localhost: { url: "localhost:8080", admin: "admin" },
+  },
+}
+```
+- Then, follow the deployment steps outlined earlier in this guide [here](/development/run-rollup-node#deploy-the-database).
+
+- After deployment, you can monitor the rollup blocks in the WeaveDB explorer at [scan.weavedb.dev/node/localhost/db/db_name_prod/blocks](https://scan.weavedb.dev/node/localhost/db/db_name_prod/blocks)
+
+<Callout type="info" emoji="💡">
+Make sure you replace `db_name_prod` in the URL with your actual database name to view the corresponding blocks.
+</Callout>
