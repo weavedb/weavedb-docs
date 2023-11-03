@@ -1,4 +1,5 @@
 {
   "run-local-test": "Run Local Test",
-  "run-rollup-node": "Run Rollup Node"
+  "run-rollup-node": "Run Rollup Node",
+  "run-jots": "Run Jots"
 }
