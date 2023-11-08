@@ -9,47 +9,29 @@ The entire codebase is open source and available on [GitHub](https://github.com/
 
 ## Prerequisites
 
-- To effectively follow this tutorial, you should be familiar with the development workflow as outlined in these guides: [Run Local Test](/development/run-local-test) and [Run Rollup Node](/rollup-node/run-rollup-node).
+- To effectively follow this tutorial, you should be familiar with the development workflow as per the guide: [Run Local Test](/development/run-local-test) and [Run Rollup Node](/rollup-node/run-rollup-node)
 
-- Make sure that you have a local rollup node from WeaveDB up and running.
+- Make sure that you have a local rollup node up and running.
 
-
-## Clone WeaveDB Repo
-
-Open a new terminal and run the commands below to clone the WeaveDB repository and install its dependencies.
-
-<Tabs items={['yarn', 'npm']}>
-  <Tab>
-  ```bash copy
-git clone https://github.com/weavedb/weavedb.git
-cd weavedb
-yarn
-  ```
-  </Tab>
-  <Tab>
-  ```bash copy
-git clone https://github.com/weavedb/weavedb.git
-cd weavedb
-npm install
-  ```
-  </Tab>
-</Tabs>
+- WeaveDB repository needs to be cloned to your local machine. For instructions, see [this guide](/development/clone-the-repo)
 
 ## Generate Accounts
 
-After installing the dependencies, run the following commands in the terminal to navigate to the `db` directory of the Jots project and generate keys for the `owner` and the `relayer`.
+From the root directory of your local WeaveDB repo, run the following commands in the terminal to navigate to the `db` directory of the Jots project and generate keys for the `owner` and the `relayer`.
+
+```bash copy
+cd examples/jots/db
+```
 
 <Tabs items={['yarn', 'npm']}>
   <Tab>
   ```bash copy
-cd examples/jots/db
 yarn keygen owner
 yarn keygen relayer
   ```
   </Tab>
   <Tab>
   ```bash copy
-cd examples/jots/db
 npm keygen owner
 npm keygen relayer
   ```
@@ -90,7 +72,7 @@ module.exports = {
 
 ## Deploy the Database
 
-Run the following commands in the terminal. Make sure your terminal is in the `db` directory of the Jots project.
+Run the following commands in the terminal to deploy and set up a database instance. Make sure your terminal is in the `db` directory of the Jots project.
 
 <Tabs items={['yarn', 'npm']}>
   <Tab>
@@ -132,7 +114,7 @@ To get started with the Jots application, run the following script in the termin
 Replace `0xUser_Address` with the Ethereum address of the user you wish to invite.
 </Callout>
 
-```bash COPY
+```bash copy
 node scripts/initJots.js jots --owner owner --user 0xUser_Address
 ```
 
@@ -176,7 +158,7 @@ GCS_EMAIL="firebase-adminsdk-xyz@project_id.iam.gserviceaccount.com"
 GCS_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n"
 ```
 
-- If rollup was enabled during database deployment, `NEXT_PUBLIC_TXID` should be set to the `contractTxId`. You can find this value at [scan.weavedb.dev/node/localhost/db/db_name](https://scan.weavedb.dev/node/localhost/db/db_name) — make sure to replace `db_name` at the end of the URL with the actual name of your database as specified during deployment.
+- If rollup was enabled during database deployment, `NEXT_PUBLIC_TXID` should be set to the `contractTxId`. You can find this value at [scan.weavedb.dev/node/localhost/db/db_name](https://scan.weavedb.dev/node/localhost/db/db_name) — make sure to replace `db_name` at the end of the URL with the actual name of your database as specified during [deployment](/development/run-jots#deploy-the-database).
 
 - Use the relayer's actual privateKey, which you generated in the [previous step](/development/run-jots#generate-accounts) of this guide.
 
