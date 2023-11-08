@@ -1,13 +1,16 @@
 import { Callout } from 'nextra/components'
 import { Tabs, Tab } from 'nextra/components'
+import { Steps } from 'nextra/components'
 
 # Run Local Test with WeaveDB Tools
 
 - `weavedb-tools` is a command-line utility. It provides a set of commands to facilitate the process of setting up a local WeaveDB instance.
 
-- Before deploying your WeaveDB instance to the main network, it is recommended to first deploy it locally on your machine for testing. This will help you catch any issues early on, reducing risks in your production environment.
+- Prior to deploying your database instance in production, it is recommended to first deploy it locally on your machine for testing. This will help you catch any issues early on, reducing risks in the production environment.
 
 ## Install WeaveDB Tools
+
+Run the following command in your terminal to install `weavedb-tools` globally.
 
 <Tabs items={['yarn', 'npm']}>
   <Tab>
@@ -26,6 +29,8 @@ Now, you can use the `weavedb` global command.
 
 ## Create a Project
 
+Run the following command in your terminal to create a new project, which then navigates to the project's root directory.
+
 ```bash copy
 weavedb create your_project
 cd your_project
@@ -41,7 +46,9 @@ Open your project in Visual Studio Code or your preferred code editor.
 
 Within your project root directory, you'll find a `db` folder. This folder contains configuration files that define the database settings. You will be working with several files to set up [schemas](/sdk/schemas), [indexes](/sdk/indexes), [rules](/sdk/rules), [relayers](/sdk/relayers), [triggers](/sdk/triggers), and [crons](/sdk/crons) based on your app's architecture.
 
-Let's build a simple app where users can post and delete messages. Below are the components you would typically configure:
+In this example, let's build a simple app where users can post and delete messages. Below are the components you would typically configure:
+
+<Steps>
 
 ### Schemas
 
@@ -108,6 +115,8 @@ module.exports = {
   ],
 }
 ```
+
+</Steps>
 
 ## Run Local Test
 
