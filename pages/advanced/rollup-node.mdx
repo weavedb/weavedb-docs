@@ -1,0 +1,96 @@
+# Rollup Node
+
+To set up and run the rollup node, please follow the step-by-step instructions in [Run Rollup Node](/development/run-rollup-node) guide. This page focuses more on the specification overview of the rollup node's functionality and architecture.
+
+
+![](/img/rollup.png)
+
+## Overview
+
+- A rollup node can manage multiple database (DB) instances.
+- The admin user has the authority to add, update, or remove database instances.
+- Upon the addition of a database, the gateway node initiates a rollup child process. This process includes a Layer 2 (L2) DB, a Write-Ahead Logging (WAL) DB, and plugin DBs, all of which are offchain instances of WeaveDB.
+- If a Layer 1 (L1) DB contract is deployed and rollup is activated, the rollup process starts an additional child process for the Warp SDK. This process bundles L2 transactions and synchronizes them with the Warp sequencer in parallel.
+- The L1 WeaveDB contract is capable of receiving bundled transactions that arrive in parallel and in any sequence. It can determine the correct transaction order and compute the exact same state as the L2 contract by resolving the correct order.  L2 transaction hashes are chained in such a way that the L1 contract can determine the order of L2 transactions.
+- When the WeaveDB Gateway receives an L2 query, it dispatches the query to the L2 DB within the rollup process. This, in turn, triggers a query in the WAL DB, which may then cause subsequent queries in the offchain plugin DBs.
+- In the absence of local cache, the rollup node is capable of reconstructing the L2 DB state from the corresponding L1 contract.
+- Direct queries to the DB on the L1 Warp contract are possible since L2 and L1 share the same contract structure. The delay on L1 is minimal, typically only a few seconds, since the rollup process typically completes in under 2 seconds.
+
+
+## Prerequisites
+
+- `docker` and `docker-compose` are installed and running on your machine. If not, you can download and install them from [Docker's official site](https://docs.docker.com/get-docker).
+ 
+- WeaveDB repository needs to be cloned to your local machine. For instructions, see [this guide](/development/clone-the-repo)
+
+## Config File
+
+1. Open the WeaveDB repo in Visual Studio Code or your preferred code editor.
+
+2. Navigate to `/grpc-node/node-server/` directory and create a new file named `weavedb.standalone.config.js` if it does not already exist.
+
+### Required Parameters
+
+- `admin` : an EVM private key for rollup node admin. The admin can add DBs to the node.
+- `bundler` : Arweave RSA keys for rollup bundler.  
+The bundler will pay for rollup transactions and receive rewards from PoS in the future.
+- `rollups` : this can be either empty or filled with pre-defined DB instances. Each key is the database name.
+        - `secure` : passed down to the contract initial-state, allways use `true` in production (default).
+        - `owner` : the DB contract owner EVM address.
+        - `tick` : time span in millisecond in which [tick](/docs/sdk/crons#tick) query will be periodically executed.
+        - `contractTxId` : Warp L1 contractTxId.
+        - `plugins` : add offchain plugins, plugin scripts have to be placed in `/grpc-node/node-server/plugins` with the same name.
+        - `rollup` : a bloolean value to enable rollup to Arweave/Warp
+
+```js copy filename="/grpc-node/node-server/weavedb.standalone.config.js"
+module.exports = {
+  admin: EVM_PRIVATE_KEY,
+  bundler: ARWEAVE_RSA_KEYS,
+  rollups: {},
+}
+```
+
+### Other Parameters
+
+- `dir` : cache dirctory, default to `/grpc-node/node-server/cache`.
+- `dbname` : cache database name, cache will be stored in `dir/dbname`.
+- `nostr` : enable WebSocket for Nostr, this turns the node into a Nostr relay.
+  - `db` : the database name for Nostr events, there can be only one DB instance to receive Nostr events.
+
+
+With everything included,
+
+```js copy filename="/grpc-node/node-server/weavedb.standalone.config.js"
+module.exports = {
+  dir: "/home/xyz/cache",
+  dbname: "mydb",
+  admin: "privateky...",
+  bundler: {
+    kty: "RSA",
+	...
+  },
+  nostr: { db: "nostr" },
+  rollups: {
+    testdb: {
+	  secure: true,
+	  owner: "0xdef...",
+	  tick: 1000 * 60 * 5,
+	  contractTxId: "abcdef...",
+	  rollup: true,
+	  plugins: { notifications: {} },
+	},
+	nostr: {
+	  owner: "0xdef...",
+	  rollup: false,
+	}
+  },
+}
+```
+
+## Run Rollup Node
+
+## Admin Operations
+
+## Plugins
+
+## Explorer
