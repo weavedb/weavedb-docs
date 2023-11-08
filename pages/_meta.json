@@ -11,12 +11,6 @@
       "breadcrumb": false
     }
   },
-  "development": {
-    "title": "Development",
-    "theme": {
-      "breadcrumb": false
-    }
-  },
   "web-console": {
     "title": "Web Console",
     "theme": {
@@ -35,8 +29,14 @@
       "breadcrumb": false
     }
   },
-  "advanced": {
-    "title": "Advanced",
+  "development": {
+    "title": "Development",
+    "theme": {
+      "breadcrumb": false
+    }
+  },
+  "rollup-node": {
+    "title": "Rollup Node",
     "theme": {
       "breadcrumb": false
     }
