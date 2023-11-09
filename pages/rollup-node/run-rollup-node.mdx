@@ -9,7 +9,13 @@ WeaveDB rollup is in early development. Please use it with caution and check for
 
 This guide will help you set up rollup-based contracts. We are actively developing a Rollup-as-a-Service solution. For now, you will need to run your own rollup locally.
 
-Please make sure you have followed and thoroughly tested your database settings as per the [guide](/development/run-local-test) before you proceed to deploy the database to a local rollup node.
+## Prerequisites
+
+- Make sure you have followed and thoroughly tested your database settings as per the [guide](/development/run-local-test) before you proceed to deploy the database to a local rollup node.
+
+- `docker` and `docker-compose` are installed and running on your machine. If not, you can download and install them from [Docker's official site](https://docs.docker.com/get-docker).
+
+- WeaveDB repository needs to be cloned to your local machine. For instructions, see [this guide](/development/clone-the-repo)
 
 ## Set up Wallet Accounts
 
@@ -22,7 +28,7 @@ There are two ways to set up these accounts:
 
 ### Generate Accounts
 
-In this example, we will generate new accounts. Open a terminal, navigate to your [project's root directory](/development/run-local-test#create-a-project), and run the following commands:
+Open a terminal, navigate to your [project's root directory](/development/run-local-test#create-a-project), and run the following commands:
 
 <Tabs items={['yarn', 'npm']}>
   <Tab>
@@ -47,7 +53,7 @@ The generated accounts are stored under `/.weavedb/accounts`
 
 ### List Accounts
 
-Run the following command in your terminal to show a list of accounts. Make sure the terminal is in your project's root directory.
+From the root directory of your [project](/development/run-local-test#create-a-project), run the following command in the terminal to show a list of accounts.
 
 <Tabs items={['yarn', 'npm']}>
   <Tab>
@@ -62,30 +68,9 @@ npm accounts
   </Tab>
 </Tabs>
 
-## Clone WeaveDB Repo
-
-Open a new terminal and run the commands below to clone the WeaveDB repository and install its dependencies. Make sure the terminal is in a new directory outside of your project's root directory.
-
-<Tabs items={['yarn', 'npm']}>
-  <Tab>
-  ```bash copy
-git clone https://github.com/weavedb/weavedb.git
-cd weavedb
-yarn
-  ```
-  </Tab>
-  <Tab>
-  ```bash copy
-git clone https://github.com/weavedb/weavedb.git
-cd weavedb
-npm install
-  ```
-  </Tab>
-</Tabs>
-
 ## Write Configuration
 
-1. Open the WeaveDB repo in Visual Studio Code or your preferred code editor.
+1. Open the [WeaveDB repo](/development/clone-the-repo) in Visual Studio Code or your preferred code editor.
 
 2. Navigate to `/grpc-node/node-server/` directory and create a new file named `weavedb.standalone.config.js` if it does not already exist.
 
@@ -111,7 +96,8 @@ Note: `your_project` refers to the project name you've set up earlier in this [g
 
 Before proceeding, make sure that `docker` and `docker-compose` are installed and running on your machine. If not, you can download and install them from [Docker's official site](https://docs.docker.com/get-docker).
 
-To run the rollup node, open your terminal, navigate to the root directory of your WeaveDB repo, and execute the following command:
+From the root directory of your local [WeaveDB repo](/development/clone-the-repo), execute the following command in the terminal to run the rollup node.
+
 
 <Tabs items={['yarn', 'npm']}>
   <Tab>
@@ -132,12 +118,28 @@ After successful execution, your local rollup node will be available to receive 
 
 The next step is to deploy a database instance after running your local rollup node.
 
-1. Open your [project](/development/run-local-test#create-a-project) in Visual Studio Code or your preferred code editor, then open the `weavedb.config.js` file and replace the string value of your database `name` with a name you prefer.
+1. Open your [project](/development/run-local-test#create-a-project) in Visual Studio Code, then locate the `weavedb.config.js` file. Replace the string value of the `name` property with your preferred database name.
 
-2. Navigate to your project's root directory in the terminal, then run the following commands:
+```js copy filename="/weavedb.config.js"
+module.exports = {
+  db: {
+    app: "http://localhost:3000",
+    name: "Demo Dapp",  // Database name
+    rollup: false,      // Set this to true to enable rollup
+	plugins: {},
+  },
+  accounts: { evm: {}, ar: {} },
+  defaultNetwork: "localhost",
+  networks: {
+    localhost: { url: "localhost:8080", admin: "admin" },
+  },
+}
+```
+
+2. From the root directory of your [project](/development/run-local-test#create-a-project), run the following commands in the terminal to deploy and set up a database instance.
 
 <Callout type="info" emoji="💡">
-Replace `db_name` with the name you provided in the `weavedb.config.js` file
+Replace `db_name` with the `name` you provided in the `weavedb.config.js` file
 </Callout>
 
 
@@ -210,7 +212,7 @@ const main = async key => {
 main()
 ```
 
-4. Navigate to your project's root directory in the terminal, and run the script with the following command. It will add a post, fetch the list of posts, and then delete the post.
+4. From the root directory of your [project](/development/run-local-test#create-a-project), run the following command in the terminal. It will add a post, fetch the list of posts, and then delete the post.
 
 ```bash copy
 node scripts/demo.js
@@ -235,8 +237,8 @@ This ensures the integrity of the L1/L2 verifiability process, as all transactio
 module.exports = {
   db: {
     app: "http://localhost:3000",
-    name: "Demo Dapp",
-    rollup: true, // Set this to true to enable rollup
+    name: "Demo Dapp",  // Database name
+    rollup: true,       // Set this to true to enable rollup
 	plugins: {},
   },
   accounts: { evm: {}, ar: {} },

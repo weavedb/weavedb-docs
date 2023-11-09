@@ -17,7 +17,7 @@ The entire codebase is open source and available on [GitHub](https://github.com/
 
 ## Generate Accounts
 
-From the root directory of your local WeaveDB repo, run the following commands in the terminal to navigate to the `db` directory of the Jots project and generate keys for the `owner` and the `relayer`.
+From the root directory of your local [WeaveDB repo](/development/clone-the-repo), run the following commands in the terminal to navigate to the `db` directory of the Jots project and generate keys for the `owner` and the `relayer`.
 
 ```bash copy
 cd examples/jots/db
@@ -43,7 +43,7 @@ The generated accounts will be stored within the Jots project in the `/db/.weave
 ## Configure the Database
 
 <Callout type="warning" emoji="⚠️">
-The admin account for the database must match with the admin of the rollup node. Locate and copy the `admin` privateKey from the `weavedb.standalone.config.js` file found at `weavedb/grpc-node/node-server/weavedb.standalone.config.js`, which was created in [the previous guide](/rollup-node/run-rollup-node#write-configuration).
+The admin account for the database must match with the admin of the rollup node. Locate and copy the `admin` privateKey from the `weavedb.standalone.config.js` file found at `weavedb/grpc-node/node-server/weavedb.standalone.config.js`, which was created in [this guide](/rollup-node/run-rollup-node#write-configuration)
 </Callout>
 
 Next, you will need to edit the `weavedb.config.js` file within the Jots project directory at `weavedb/examples/jots/db/weavedb.config.js`. Update this config file with the copied admin `privateKey`
@@ -72,7 +72,7 @@ module.exports = {
 
 ## Deploy the Database
 
-Run the following commands in the terminal to deploy and set up a database instance. Make sure your terminal is in the `db` directory of the Jots project.
+From the `db` directory of the Jots project, run the following commands in the terminal to deploy and set up a database instance.
 
 <Tabs items={['yarn', 'npm']}>
   <Tab>
