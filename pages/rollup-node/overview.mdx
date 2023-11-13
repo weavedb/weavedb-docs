@@ -113,17 +113,21 @@ npm install weavedb-node-client
 
 ### Get Rollup Node Info
 
-Within your folder, create a file named `get-node-info.js` if it does not already exist.
+Inside your folder, create a file named `get-node-info.js` if it does not already exist.
 
 Copy the script below, paste it into the `get-node-info.js` file, and replace the placeholder values with the necessary information.
 
 ```js copy filename="/get-node-info.js"
 const WeaveDB = require("weavedb-node-client")
-const db = new WeaveDB({ rpc: "localhost:8080", contractTxId: "your_db_name" })
+
+const db = new WeaveDB({
+  rpc: "localhost:8080",
+  contractTxId: "CONTRACT_TX_ID", // Replace 'CONTRACT_TX_ID' with an existing deployed database contract on the rollup node
+})
 
 const main = async () => {
-    const stats = await db.node({ op: "stats" })
-    console.log("stats", stats)
+  const stats = await db.node({ op: "stats" })
+  console.log("stats", stats)
 }
 
 main()
@@ -137,25 +141,38 @@ node get-node-info.js
 
 ### Add Database Instance
 
-Within your folder, create a file named `add.js` if it does not already exist.
+Inside your folder, create a file named `add.js` if it does not already exist.
 
 Copy the script below, paste it in `add.js` file, and replace the placeholder values with the necessary information.
 
 ```js copy filename="/add.js"
-const tx = await db.admin(
-  {
-    op: "add_db",
-    key: "testdb2",
-    db: {
-      app: "http://localhost:3000", // this will be shown on the explorer
-      name: "Jots",                 // this will be shown on the explorer
-      rollup: false,
-      plugins: { notifications: {} },
-      tick: 1000 * 60 * 5,
+const WeaveDB = require("weavedb-node-client")
+
+const db = new WeaveDB({
+  rpc: "localhost:8080",
+  contractTxId: "CONTRACT_TX_ID", // Replace 'CONTRACT_TX_ID' with an existing deployed database contract on the rollup node
+})
+
+const main = async () => {
+  const tx = await db.admin(
+    {
+      op: "add_db",
+      key: "CONTRACT_DB_NAME", // Replace 'CONTRACT_DB_NAME' with your actual contract database name
+      db: {
+        app: "http://localhost:3000",
+        name: "DB_INSTANCE", // Replace 'DB_INSTANCE' with your actual database instance
+        rollup: false, // Set this to true to deploy your database to roll up to the Layer 1 Warp contract
+        plugins: { notifications: {} },
+        tick: 1000 * 60 * 5,
+      },
     },
-  },
-  { privateKey: admin.privateKey }
-)
+    {
+      privateKey: "ADMIN_PRIVATE_KEY", // Replace 'ADMIN_PRIVATE_KEY' with the actual admin private key
+    }
+  )
+}
+
+main()
 ```
 
 Run the following script in the terminal. 
@@ -166,16 +183,28 @@ node scripts/add.js
 
 ### Deploy Warp L1 Contract
 
-Within your folder, create a file named `deploy.js` if it does not already exist.
+Inside your folder, create a file named `deploy.js` if it does not already exist.
 
 Copy the script below, paste it in `deploy.js` file, and replace the placeholder values with the necessary information.
 
 ```js copy filename="/deploy.js"
-const { contractTxId, srcTxId } = await db.admin(
-  { op: "deploy_contract", key: "testdb2" },
-  { privateKey: admin.privateKey }
-)
-// you will need the "contractTxId" for regular DB queries
+const WeaveDB = require("weavedb-node-client")
+
+const db = new WeaveDB({
+  rpc: "localhost:8080",
+  contractTxId: "CONTRACT_TX_ID", // Replace 'CONTRACT_TX_ID' with an existing deployed database contract on the rollup node
+})
+
+const main = async () => {
+  const { contractTxId, srcTxId } = await db.admin(
+    { op: "deploy_contract", key: "CONTRACT_DB_NAME" }, // Replace 'CONTRACT_DB_NAME' with your actual contract database name
+    {
+      privateKey: "ADMIN_PRIVATE_KEY", // Replace 'ADMIN_PRIVATE_KEY' with the actual admin private key
+    }
+  )
+}
+
+main()
 ```
 
 Run the following script in the terminal. 
@@ -184,36 +213,62 @@ Run the following script in the terminal.
 node scripts/deploy.js
 ```
 
-### Update Database Instance
+{/* ### Update Database Instance
 
-Within your folder, create a file named `update.js` if it does not already exist.
+Inside your folder, create a file named `update.js` if it does not already exist.
 
 Copy the script below, paste it in `update.js` file, and replace the placeholder values with the necessary information.
 
 ```js copy filename="/update.js"
-const tx = await db.admin(
-  { op: "deploy_contract", key: "testdb2" },
-  { privateKey: admin.privateKey }
-)
+const WeaveDB = require("weavedb-node-client")
+
+const db = new WeaveDB({
+  rpc: "localhost:8080",
+  contractTxId: "CONTRACT_TX_ID", // Replace 'CONTRACT_TX_ID' with an existing deployed database contract on the rollup node
+})
+
+const main = async () => {
+  const tx = await db.admin(
+    { op: "update_db", key: "CONTRACT_DB_NAME" }, // Replace 'CONTRACT_DB_NAME' with your actual contract database name
+    {
+      privateKey: "ADMIN_PRIVATE_KEY", // Replace 'ADMIN_PRIVATE_KEY' with the actual admin private key
+    }
+  )
+}
+
+main()
 ```
 
 Run the following script in the terminal. 
 
 ```bash copy
 node scripts/update.js
-```
+``` */}
 
 ### Remove Database Instance
 
-Within your folder, create a file named `remove.js` if it does not already exist.
+Inside your folder, create a file named `remove.js` if it does not already exist.
 
 Copy the script below, paste it in `remove.js` file, and replace the placeholder values with the necessary information.
 
 ```js copy filename="/remove.js"
-const tx = await db.admin(
-  { op: "remove_db", key: "testdb2" },
-  { privateKey: admin.privateKey }
-)
+const WeaveDB = require("weavedb-node-client")
+
+const db = new WeaveDB({
+  rpc: "localhost:8080",
+  contractTxId: "CONTRACT_TX_ID", // Replace 'CONTRACT_TX_ID' with an existing deployed database contract on the rollup node
+})
+
+const main = async () => {
+  const tx = await db.admin(
+    { op: "remove_db", key: "CONTRACT_DB_NAME" }, // Replace 'CONTRACT_DB_NAME' with your actual contract database name
+    {
+      privateKey: "ADMIN_PRIVATE_KEY", // Replace 'ADMIN_PRIVATE_KEY' with the actual admin private key
+    }
+  )
+}
+
+main()
 ```
 
 Run the following script in the terminal. 
@@ -227,14 +282,25 @@ node scripts/remove.js
 You will need the L1 `contractTxId` from the [deployment operation](/rollup-node/overview#deploy-warp-l1-contract) to instantiate the DB client.  
 All L2 transactions will be signed with L1 `contractTxId` for L1/L2 verifiability.
 
-Within your folder, create a file named `query.js` if it does not already exist.
+Inside your folder, create a file named `query.js` if it does not already exist.
 
 Copy the script below, paste it in `query.js` file, and replace the placeholder values with the necessary information.
 
 ```js copy filename="/query.js"
-const DB = require("weavedb-node-client")
-const db = new DB({ rpc: "localhost:8080", contractTxId })
-const db_info = await db.getInfo()
+const WeaveDB = require("weavedb-node-client")
+
+const db = new WeaveDB({
+  rpc: "localhost:8080",
+  contractTxId: "CONTRACT_TX_ID", // Replace 'CONTRACT_TX_ID' with an existing deployed database contract on the rollup node
+})
+
+const main = async () => {
+  const db_info = await db.getInfo()
+  console.log("db_info", db_info)
+}
+
+main()
+
 ```
 
 Run the following script in the terminal. 
@@ -245,4 +311,8 @@ node scripts/query.js
 
 ## Plugins
 
+We currently have only one plugin for [Jots](/development/run-jots#configure-the-database) called `notifications` which generates personal notifications from onchain Jots activities. The notification database will be an offchain WeaveDB instance and will not be recorded on the blockchain. Not all data needs to be on the blockchain. Offchain plugins allow keeping some data off the chain. WeaveDB can seamlessly run in multiple environment such as blockchain, offchain (local), browser and centralized cloud.
+
 ## Explorer
+
+If you are running the rollup node on `localhost:8080`, you can view blocks and transactions on our public [WeaveDB Scan](https://scan.weavedb.dev/node/localhost).
