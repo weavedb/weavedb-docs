@@ -2,6 +2,5 @@
   "overview": "Overview",
   "run-rollup-node": "Run Rollup Node",
   "run-explorer": "Run Explorer",
-  "light-client": "Light Client",
-  "grpc-node": "gRPC Node"
+  "light-client": "Light Client"
 }
