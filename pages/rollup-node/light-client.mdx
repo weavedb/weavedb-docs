@@ -1,13 +1,111 @@
+import { Tabs, Tab } from 'nextra/components'
+
 # Light Client
+
+The light client simplifies browser interactions with the Warp SD. It eliminates the need for storing a full cache, leading to much faster read queries.
+
+To use the light client, a remote rollup node associated with the database instance is necessary. You will need to specify the endpoint URL as `rpc`
 
 ## For Web Browsers
 
 ### Install
 
+From the root directory of your project, run the following command in the terminal to install `weavedb-client`
+
+<Tabs items={['yarn', 'npm']}>
+  <Tab>
+  ```bash copy
+yarn add weavedb-client
+  ```
+  </Tab>
+  <Tab>
+  ```bash copy
+npm install weavedb-client
+  ```
+  </Tab>
+</Tabs>
+
 ### Instantiate
+
+Import WeaveDB Module
+
+```js copy
+import WeaveDB from "weavedb-client"
+```
+
+Create a WeaveDB Instance
+
+```js copy
+const db = new WeaveDB({
+  contractTxId: WEAVEDB_CONTRACT_TX_ID, // Replace WEAVEDB_CONTRACT_TX_ID with your deployed database contract on the rollup node
+  rpc: "http://xxx.yyy.zzz.aaa:8080" // Replace with your rollup node URL
+})
+```
+
+You can start reading and writing to your WeaveDB instance as soon as it is instantiated.
 
 ## For NodeJS
 
 ### Install
 
+From the root directory of your project, run the following command in the terminal to install `weavedb-node-client`
+
+<Tabs items={['yarn', 'npm']}>
+  <Tab>
+  ```bash copy
+yarn add weavedb-node-client
+  ```
+  </Tab>
+  <Tab>
+  ```bash copy
+npm install weavedb-node-client
+  ```
+  </Tab>
+</Tabs>
+
+
 ### Instantiate
+
+Import WeaveDB Module
+
+```js copy
+const WeaveDB = require("weavedb-node-client")
+```
+
+Create a WeaveDB Instance
+
+```js copy
+const db = new WeaveDB({
+  contractTxId: WEAVEDB_CONTRACT_TX_ID, // Replace WEAVEDB_CONTRACT_TX_ID with your deployed database contract on the rollup node
+  rpc: "0.0.0.0:8080" // Replace with your rollup node's IP and port
+})
+```
+
+#### Secure Port
+
+It also works with remote secure ports such as `example.com:443`
+
+```js copy
+const WeaveDB = require("weavedb-node-client")
+
+const db = new WeaveDB({
+  contractTxId: WEAVEDB_CONTRACT_TX_ID, // Replace WEAVEDB_CONTRACT_TX_ID with your deployed database contract on the rollup node
+  rpc: "example.com:443"
+})
+```
+
+or
+
+
+```js copy
+const WeaveDB = require("weavedb-node-client")
+
+const db = new WeaveDB({
+  contractTxId: WEAVEDB_CONTRACT_TX_ID, // Replace WEAVEDB_CONTRACT_TX_ID with your deployed database contract on the rollup node
+  rpc: "example.com",
+  secure: true, // optional
+  cert: YOUR_CERT // optional
+})
+```
+
+You can start reading and writing to your WeaveDB instance as soon as it is instantiated.
