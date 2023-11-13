@@ -28,16 +28,15 @@ To set up and run the rollup node, please follow the step-by-step instructions i
 
 ### Required Parameters
 
-- `admin` : an EVM private key for rollup node admin. The admin can add DBs to the node.
-- `bundler` : Arweave RSA keys for rollup bundler.  
-The bundler will pay for rollup transactions and receive rewards from PoS in the future.
-- `rollups` : this can be either empty or filled with pre-defined DB instances. Each key is the database name.
-        - `secure` : passed down to the contract initial-state, allways use `true` in production (default).
-        - `owner` : the DB contract owner EVM address.
-        - `tick` : time span in millisecond in which [tick](/docs/sdk/crons#tick) query will be periodically executed.
+- `admin` : The admin EVM private key for the rollup node. The admin can add databases to the node.
+- `bundler` : Arweave RSA keys for the rollup bundler. The bundler will pay for rollup transactions and, in the future, receive rewards from Proof of Stake (PoS).
+- `rollups` :  This can be either empty or filled with pre-defined database instances. Each key represents the database name.
+        - `secure` : Passed down to the contract's initial state. Always use true in production (default).
+        - `owner` : The database contract owner's EVM address.
+        - `tick` : Time span in milliseconds during which the [tick](/sdk/crons#tick) query will be periodically executed.
         - `contractTxId` : Warp L1 contractTxId.
-        - `plugins` : add offchain plugins, plugin scripts have to be placed in `/grpc-node/node-server/plugins` with the same name.
-        - `rollup` : a bloolean value to enable rollup to Arweave/Warp
+        - `plugins` : Add offchain plugins. Plugin scripts must be placed in `/grpc-node/node-server/plugins` with the same name.
+        - `rollup` : A bloolean value to enable rollup to Arweave/Warp
 
 ```js copy filename="/grpc-node/node-server/weavedb.standalone.config.js"
 module.exports = {
@@ -49,13 +48,14 @@ module.exports = {
 
 ### Other Parameters
 
-- `dir` : cache dirctory, default to `/grpc-node/node-server/cache`.
-- `dbname` : cache database name, cache will be stored in `dir/dbname`.
-- `nostr` : enable WebSocket for Nostr, this turns the node into a Nostr relay.
-  - `db` : the database name for Nostr events, there can be only one DB instance to receive Nostr events.
+- `dir` : Cache directory, defaults to `/grpc-node/node-server/cache`
+- `dbname` : Cache database name. The cache will be stored in `dir/dbname`
+- `nostr` : Enable WebSocket for Nostr. This turns the node into a Nostr relay.
+  - `db` : The database name for Nostr events. There can be only one DB instance to receive Nostr events.
 
+### Complete Config Sample
 
-With everything included,
+Replace the placeholder values with the necessary information.
 
 ```js copy filename="/grpc-node/node-server/weavedb.standalone.config.js"
 module.exports = {
@@ -86,7 +86,7 @@ module.exports = {
 
 ## Auto Recovery
 
-If `contractTxId` is specified and the rollup node is re-initialized without cache, it will auto-recover the rollup DB state from Warp L1 transaction history.
+If `contractTxId` is specified and the rollup node is reinitialized without its cache, it will automatically recover the state of the rollup database from the Warp Layer 1 transaction history.
 
 ## Admin Operations
 
