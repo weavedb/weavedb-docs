@@ -1,0 +1,41 @@
+# FPJSON 2.0
+
+FPJSON is a domain-specific language (DSL) for WeaveDB that facilitates the development of fully decentralized databases. It is built upon [Ramda.js](https://ramdajs.com), a functional programming library for JavaScript. It utilizes over [250+ pre-defined Ramda functions](https://fpjson.weavedb.dev), enabling users to compose complex logic in a simple JSON array format.
+
+A huge advantage of JSON-style programming is we can store any logic as a JSON data object within smart contract states, allowing for reuse and composition with other logic. 
+This approach provides an effective and powerful mechanism for dynamically constructing, composing, and extending logic after smart contract deployment, eliminating the need for redeployment.
+
+Apart from performance and scalability considerations, you cannot simply convert a traditional Web2 database into a decentralized infrastructure. Due to the permissionless nature of Web3 applications, there are fundamental challenges related to data ownership, access control, and programmable data that must be addressed. Unlike traditional databases, which typically have limited access gateways for administrative users, anyone can write to a Web3 database from anywhere. This requires precise, yet decentralized, control mechanisms. FPJSON and WeaveDB are specifically designed to tackle these challenges, providing a powerful and flexible tool for building secure, decentralized applications.
+
+WeaveDB provides essential decentralized features such as:
+
+- **Crypto Account Authentication** for managing data access and ownership.
+- **Data Schemas** to define and constrain the stored data format.
+- **Access Control Rules** for managing write permissions and data manipulation.
+- **Crons** for scheduling periodic query execution.
+- **Triggers** for chaining queries with predefined logic.
+- **Verifiable Relayers** for importing data from external sources.
+
+Without these features, a decentralized database's capability would be significantly limited or become impossible to manage. FPJSON facilitates these features through simple JSON-style settings. It enables advanced and composable functional programming in an easily understandable JSON format, making WeaveDB a powerful smart contract sandbox.
+
+FPJSON 2.0 represents a significant improvement over [FPJSON 1.0](https://fpjson.weavedb.dev), making complex logic much simpler to implement through syntactic sugar. To set up a database instance, you simply need to store all the necessary [JSON configuration objects in a single location](/development/run-local-test#write-db-settings) and execute a single-line setup command.
+
+## Basic FPJSON Blocks
+
+Below are examples of basic FPJSON blocks:
+
+```js copy
+/* add */
+["add", 1, 2] // = 3
+
+/* difference */
+["difference", [1, 2, 3], [3, 4, 5]] // = [1, 2]
+
+/* map */
+[["map", ["inc"]], [1, 2, 3]] // = [4, 5, 6]
+
+/* compose */
+[["compose", ["map", ["inc"]], ["difference"]], [1, 2, 3], [3, 4, 5]] // = [2, 3]
+```
+
+To learn the 250+ pre-defined functions, see [this guide](https://fpjson.weavedb.dev)

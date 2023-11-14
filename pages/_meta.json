@@ -11,6 +11,12 @@
       "breadcrumb": false
     }
   },
+  "fpjson": {
+    "title": "FPJSON 2.0",
+    "theme": {
+      "breadcrumb": false
+    }
+  },
   "web-console": {
     "title": "Web Console",
     "theme": {
