@@ -38,4 +38,39 @@ Below are examples of basic FPJSON blocks:
 [["compose", ["map", ["inc"]], ["difference"]], [1, 2, 3], [3, 4, 5]] // = [2, 3]
 ```
 
-To learn the 250+ pre-defined functions, see [this guide](https://fpjson.weavedb.dev)
+For a comprehensive guide of the 250+ pre-defined functions in FPJSON, see [this guide](https://fpjson.weavedb.dev)
+
+## Access Control Rules
+
+A significant limitation of FPJSON is its restriction to pure functional programming in a [point-free style](https://en.wikipedia.org/wiki/Tacit_programming), meaning that functions cannot take arguments. While functional programming is highly effective, relying solely on pure functional programming can sometimes render the development of simple logic unnecessarily complex and impractical.
+
+FPJSON 2.0 addresses these challenges by introducing side-effect variables and imperative programming features, such as if-else conditional statements, making the process easier and more practical.
+
+
+### allow() 
+
+The simplest form of access control rules is just allow everything.
+
+```js copy
+["write", ["allow()"]]
+```
+
+### deny()
+
+or deny everything.
+
+```js copy
+["write", ["deny()"]]
+```
+
+### Set single condition
+
+```js copy
+await db.setRules([ ["allow()"] ], "collection_name", "write")
+```
+
+### Set multiple conditions
+
+```js copy
+await db.setRules([ [ "create", ["allow()"] ], [ "delete", ["deny()"] ] ], "collection_name")
+```
