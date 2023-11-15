@@ -5,7 +5,7 @@ FPJSON is a domain-specific language (DSL) for WeaveDB that facilitates the deve
 A huge advantage of JSON-style programming is we can store any logic as a JSON data object within smart contract states, allowing for reuse and composition with other logic. 
 This approach provides an effective and powerful mechanism for dynamically constructing, composing, and extending logic after smart contract deployment, eliminating the need for redeployment.
 
-Apart from performance and scalability considerations, you cannot simply convert a traditional Web2 database into a decentralized infrastructure. Due to the permissionless nature of Web3 applications, there are fundamental challenges related to data ownership, access control, and programmable data that must be addressed. Unlike traditional databases, which typically have limited access gateways for administrative users, anyone can write to a Web3 database from anywhere. This requires precise, yet decentralized, control mechanisms. FPJSON and WeaveDB are specifically designed to tackle these challenges, providing a powerful and flexible tool for building secure, decentralized applications.
+Apart from performance and scalability considerations, you cannot simply convert a traditional Web2 database into a decentralized infrastructure. Due to the permissionless nature of decentralized applications, there are fundamental challenges related to data ownership, access control, and programmable data that must be addressed. Unlike traditional databases, which typically have limited access gateways for administrative users, anyone can write to a decentralize database from anywhere. This requires precise, yet decentralized, control mechanisms. FPJSON and WeaveDB are specifically designed to tackle these challenges, providing a powerful and flexible tool for building secure, decentralized applications.
 
 WeaveDB provides essential decentralized features such as:
 
@@ -49,28 +49,42 @@ FPJSON 2.0 addresses these challenges by introducing side-effect variables and i
 
 ### allow() 
 
-The simplest form of access control rules is just allow everything.
+The simplest form of access control rule is to allow all operations.
 
 ```js copy
 ["write", ["allow()"]]
 ```
 
+This rule effectively grants unrestricted access to the specified collection for write operations.
+
 ### deny()
 
-or deny everything.
+Similarly, you can deny all operations using the deny() function.
 
 ```js copy
 ["write", ["deny()"]]
 ```
 
+This rule effectively prohibits all write operations for the specified collection.
+
 ### Set single condition
+
+To apply a single condition for a specific operation, you can use the allow() or deny() functions within an array.
 
 ```js copy
 await db.setRules([ ["allow()"] ], "collection_name", "write")
 ```
 
+This example sets a rule to allow all write operations for the specified collection.
+
 ### Set multiple conditions
+
+You can define multiple conditions for different operations.
 
 ```js copy
 await db.setRules([ [ "create", ["allow()"] ], [ "delete", ["deny()"] ] ], "collection_name")
 ```
+
+This example sets a rule for the specified collection to allow creation of new documents, but prevents it from being deleted. As a result, once data is added to the collection, it becomes immutable and cannot be removed.
+
+### Pattern matching
