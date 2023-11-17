@@ -183,11 +183,11 @@ node scripts/add.js
 
 ### Deploy Warp L1 Contract
 
-Inside your folder, create a file named `deploy.js` if it does not already exist.
+Inside your folder, create a file named `deploy-warp.js` if it does not already exist.
 
-Copy the script below, paste it in `deploy.js` file, and replace the placeholder values with the necessary information.
+Copy the script below, paste it in `deploy-warp.js` file, and replace the placeholder values with the necessary information.
 
-```js copy filename="/deploy.js"
+```js copy filename="/deploy-warp.js"
 const WeaveDB = require("weavedb-node-client")
 
 const db = new WeaveDB({
@@ -210,7 +210,7 @@ main()
 Run the following script in the terminal. 
 
 ```bash copy
-node scripts/deploy.js
+node scripts/deploy-warp.js
 ```
 
 {/* ### Update Database Instance
