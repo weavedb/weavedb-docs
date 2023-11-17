@@ -1,3 +1,5 @@
+import { Callout } from 'nextra/components'
+
 # FPJSON 2.0
 
 FPJSON is a domain-specific language (DSL) for WeaveDB that facilitates the development of fully decentralized databases. It is built upon [Ramda.js](https://ramdajs.com), a functional programming library for JavaScript. It utilizes over [250+ pre-defined Ramda functions](https://fpjson.weavedb.dev), enabling users to compose complex logic in a simple JSON array format.
@@ -51,7 +53,7 @@ FPJSON 2.0 addresses these challenges by introducing side-effect variables and i
 
 The simplest form of access control rule is to allow all operations.
 
-```js copy
+```js copy filename="/rules.js"
 ["write", ["allow()"]]
 ```
 
@@ -61,7 +63,7 @@ This rule effectively grants unrestricted access to the specified collection for
 
 Similarly, you can deny all operations using the deny() function.
 
-```js copy
+```js copy filename="/rules.js"
 ["write", ["deny()"]]
 ```
 
@@ -87,4 +89,176 @@ await db.setRules([ [ "create", ["allow()"] ], [ "delete", ["deny()"] ] ], "coll
 
 This example sets a rule for the specified collection to allow creation of new documents, but prevents it from being deleted. As a result, once data is added to the collection, it becomes immutable and cannot be removed.
 
-### Pattern matching
+### Pattern Matching
+
+Pattern matching in FPJSON allows for the specification of operation-based access controls based on the type of database query. The first element in a pattern is an accepted operation, and the condition will be evaluated only if the query matches this operation.
+
+```js copy filename="/rules.js"
+["create", ["allow()"]]
+```
+
+#### Operation Types
+
+- `write`: This operation includes all types of data manipulations.
+- `create` | `update` | `delete`: These operations are specific to their respective actions. For example, `update` is applied to existing documents for `set` and `upsert` operations.
+- `add` | `set` | `update` | `upsert` | `delete`: These match specific query types.
+
+#### Custom Operation
+
+You can use [basic operation types](/fpjson#operation-types) or define custom operations for more specific control, such as `add:post` and `delete:post`
+
+The first part (`type`) corresponds to the query type, while the second part (`name`) is an arbitrary operation name.
+
+- Custom operation format: `type:name`
+- Query types: `add` | `set` | `update` | `upsert` | `delete`
+
+By defining custom operations, you can ensure that users execute only predefined operations, thereby enhancing control over the database interactions.
+
+```js copy
+// Example of executing a custom query with the `add:post` operation
+await db.query("add:post", {title: "Test", body: "hello"}, "collection_name")
+```
+
+```js copy
+// This operation will be rejected as `add` is not defined in the access control rules
+await db.add({title: "Test", body: "hello"}, "collection_name")
+```
+
+### Preset Variables
+
+You can access preset variables within access rule evaluations. For more information, refer to [here](/sdk/rules#preset-variables)
+
+```js copy
+const data = {
+  contract: { id, version, owners },
+  request: {
+    caller,
+	op,
+    method,
+    func,
+    auth: { signer, relayer, jobID, extra },
+    block: { height, timestamp },
+    transaction: { id, timestamp },
+    resource: { data },
+    id,
+    path,
+  },
+  resource: { data, setter, newData, id, path },
+}
+```
+
+<Callout type="info" emoji="💡">
+The `request.transaction.timestamp` property is only available for Layer 2 (L2) rollup queries and is measured in milliseconds. 
+In contrast, `request.block.timestamp` is measured in seconds and is less reliable, as it refers to the Arweave block timestamp rather than the more granular transaction timestamp.
+For accuracy in L2 queries, it's recommended to use `$ms` (milliseconds) instead of `$ts` (seconds).
+</Callout>
+
+#### Shortcuts
+
+Shortcut variables provide quick access to commonly used values. Most logic can be handled using these shortcuts. For example, `signer` variable is a shortcut for `request.auth.signer` property, representing the transaction signer.
+
+- `signer` = `request.auth.signer` : Transaction signer
+- `id` = `request.id` : Document ID (Doc ID)
+- `ts` = `request.block.timestamp` : Block timestamp in second
+- `ms` = `request.transaction.timestamp` : Transaction timestamp in millisecond (L2 only)
+- `new` = `resource.newData` : Data after applying the query
+- `old` = `resource.data` : Data before applying the query
+- `req` = `request.resource.data` : Updating data in the query
+
+For example, if the initial stored data is `{ title: "Title", body: "hello"}` and the query updates it to `{body: "bye"}`, the shortcut variables will be assigned as follows:
+
+- `$old` = `{ title: "Title", body: "hellow" }`
+- `$new` = `{ title: "Title", body: "bye" }`
+- `$req` = `{ body: "bye" }`
+
+### mod()
+
+`mod()` is a function that is used to modify data being uploaded before it is committed permanently to the database. This can be useful for adding or modifying data fields based on other values in the request.
+
+In this example, the `mod()` function will automatically set the `id`, `owner`, and `date` fields of the new document. The `id` field will be set to the auto-generated document ID, the `owner` field will be set to the transaction signer, and the `date` field will be set to the transaction timestamp in milliseconds.
+
+```js copy filename="/rules.js"
+// Using mod() to automatically set id, owner, and date fields
+[ "add:post", [ [ "mod()", { id: "$id", owner: "$signer", date: "$ms" } ], ["allow()"] ] ]
+```
+
+```js copy
+// Adding a new post and retrieving it with its auto-assigned extra fields
+const tx = await db.query("add:post", {title: "Test", body: "hello"}, "collection_name")
+
+const post = await db.get("collection_name", tx.docID)
+// The `post` object now contains the auto-assigned extra fields: { title, body, id, owner, date }
+```
+
+Using `mod()` effectively reduces the number of fields users need to provide explicitly, as it allows you to dynamically generate or update values based on pre-defined rules or conditions. This simplifies the user's input and streamlines the data manipulation process.
+
+### fields()
+
+The `fields()` function enables you to restrict the data fields that users can submit. This function is particularly effective when used in combination with [`mod()`](/fpjson#mod).
+
+In the following example, suppose you want users to submit only the `title` and `body` fields. You can enforce this by using `["fields()", ["title", "body"]]`, which restricts changes to these specified fields only.
+
+```js copy filename="/rules.js"
+// This custom operation will only accept changes to the `title` and `body` fields,
+// while it auto-assigns values to the `id`, `owner`, and `date` fields
+[
+  "add:post",
+  [
+    ["fields()", ["title", "body"]],
+    ["mod()", { id: "$id", owner: "$signer", date: "$ms" }],
+    ["allow()"],
+  ],
+]
+```
+
+Adding an asterisk `*` before a field name in the `fields()` function makes that field mandatory. For example, `["fields()", ["*title", "*body"]]` indicates that both `title` and `body` fields are required.
+
+```js copy
+// Examples of rejected queries
+await db.query("add:post", {title: "Test", body: "hello", id: "abc"}, "posts") // Rejected for including an unauthorized field
+await db.query("add:post", {title: "Test"}, "posts") // Rejected for failing to include the required `body` field
+```
+
+You can also individually whitelist and blacklist fields using `requested_fields()` and `disallowed_fields()` respectively.
+
+### =$ operator
+
+The `=$` operator assigns the result of the subsequent array block to a variable. In the second block of the following example, FPJSON logic is utilized to determine the assigned value. It checks if the current signer is the owner of the document data, and then assigns the result to a variable with the `=$` operator
+
+```js copy
+// Using `=$` to assign the result of checking ownership to the `$isOwner` variable
+["=$isOwner", ["equals", "$signer", "$old.owner"]]
+```
+
+### allowif() / allowifall()
+
+[Assigned variables](/fpjson#-operator) can be utilized in later blocks, especially when combined with `allowif()`
+
+```js copy
+// Check if the current signer is the owner and allow the operation if true
+[
+  "delete:post",
+  [
+    ["=$isOwner", ["equals", "$signer", "$old.owner"]],
+    ["allowif()", "$isOwner"], // allow operation if the second element is true
+  ],
+]
+```
+
+The allowifall() function is useful for evaluating multiple conditions. In the following example, it checks if the signer is both the data owner and the database contract owner.
+
+```js copy
+// Using `allowifall()` to check if the signer is both the data owner and the database contract owner
+[
+  "delete:post",
+  [
+    ["=$isDataOwner", ["equals", "$signer", "$old.owner"]],
+    ["=$isContractOwner", ["includes", "$signer", "$contract.owners"]],
+    ["allowifall()", ["$isOwner", "$isContractOwner"]]
+  ]
+]
+```
+
+You can apply the same principle using `allowifany()`, `denyif()`, `denyifall()`, `denyifany()`, and `breakif()`
+
+## Triggers and Crons
