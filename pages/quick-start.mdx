@@ -43,21 +43,33 @@ Using the [web console](https://console.weavedb.dev/), follow the instructions o
   </Tab>
 </Tabs>
 
-### Initialize WeaveDB
+### Import Module
 
 <Tabs items={['Web', 'NodeJS']}>
   <Tab>
   ```js copy
   import WeaveDB from "weavedb-sdk"
+  ```
+  </Tab>
+  <Tab>
+  ```js copy
+  import WeaveDB from "weavedb-sdk-node"
+  ```
+  </Tab>
+</Tabs>
 
+
+### Initialize WeaveDB
+
+<Tabs items={['Web', 'NodeJS']}>
+  <Tab>
+  ```js copy
   const db = new WeaveDB({ contractTxId: CONTRACT_TX_ID })
   await db.init()
   ```
   </Tab>
   <Tab>
   ```js copy
-  import WeaveDB from "weavedb-sdk-node"
-
   const db = new WeaveDB({ contractTxId: CONTRACT_TX_ID })
   await db.init()
   ```
