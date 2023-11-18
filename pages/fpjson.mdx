@@ -2,7 +2,7 @@ import { Callout } from 'nextra/components'
 
 # FPJSON 2.0
 
-FPJSON is a domain-specific language (DSL) for WeaveDB that facilitates the development of fully decentralized databases. It is built upon [Ramda.js](https://ramdajs.com), a functional programming library for JavaScript. It utilizes over [250+ pre-defined Ramda functions](https://fpjson.weavedb.dev), enabling users to compose complex logic in a simple JSON array format.
+FPJSON is a domain-specific language (DSL) for WeaveDB that facilitates the development of fully decentralized databases. It is built upon [Ramda.js](https://ramdajs.com), a functional programming library for JavaScript. It utilizes over [250+ predefined Ramda functions](https://fpjson.weavedb.dev), enabling users to compose complex logic in a simple JSON array format.
 
 A huge advantage of JSON-style programming is we can store any logic as a JSON data object within smart contract states, allowing for reuse and composition with other logic. 
 This approach provides an effective and powerful mechanism for dynamically constructing, composing, and extending logic after smart contract deployment, eliminating the need for redeployment.
@@ -41,7 +41,7 @@ Below are examples of basic FPJSON blocks:
 [["compose", ["map", ["inc"]], ["difference"]], [1, 2, 3], [3, 4, 5]] // = [2, 3]
 ```
 
-For a comprehensive guide of the 250+ pre-defined functions in FPJSON, see [this guide](https://fpjson.weavedb.dev)
+For a comprehensive guide of the 250+ predefined functions in FPJSON, see [this guide](https://fpjson.weavedb.dev)
 
 ## Access Control Rules
 
@@ -148,11 +148,11 @@ const data = {
 }
 ```
 
-<Callout type="info" emoji="💡">
-The `request.transaction.timestamp` property is only available for Layer 2 (L2) rollup queries and is measured in milliseconds. 
+    <Callout type="info" emoji="💡">
+    The `request.transaction.timestamp` property is only available for Layer 2 (L2) rollup queries and is measured in milliseconds. 
 In contrast, `request.block.timestamp` is measured in seconds and is less reliable, as it refers to the Arweave block timestamp rather than the more granular transaction timestamp.
 For accuracy in L2 queries, it's recommended to use `$ms` (milliseconds) instead of `$ts` (seconds).
-</Callout>
+    </Callout>
 
 #### Shortcuts
 
@@ -191,7 +191,7 @@ const post = await db.get("collection_name", tx.docID)
 // The `post` object now contains the auto-assigned extra fields: { title, body, id, owner, date }
 ```
 
-Using `mod()` effectively reduces the number of fields users need to provide explicitly, as it allows you to dynamically generate or update values based on pre-defined rules or conditions. This simplifies the user's input and streamlines the data manipulation process.
+Using `mod()` effectively reduces the number of fields users need to provide explicitly, as it allows you to dynamically generate or update values based on predefined rules or conditions. This simplifies the user's input and streamlines the data manipulation process.
 
 ### fields()
 
@@ -216,8 +216,8 @@ Adding an asterisk `*` before a field name in the `fields()` function makes that
 
 ```js copy
 // Examples of rejected queries
-await db.query("add:post", {title: "Test", body: "hello", id: "abc"}, "posts") // Rejected for including an unauthorized field
-await db.query("add:post", {title: "Test"}, "posts") // Rejected for failing to include the required `body` field
+await db.query("add:post", {title: "Test", body: "hello", id: "abc"}, "collection_name") // Rejected for including an unauthorized field
+await db.query("add:post", {title: "Test"}, "collection_name") // Rejected for failing to include the required `body` field
 ```
 
 You can also individually whitelist and blacklist fields using `requested_fields()` and `disallowed_fields()` respectively.
@@ -226,7 +226,7 @@ You can also individually whitelist and blacklist fields using `requested_fields
 
 The `=$` operator assigns the result of the subsequent array block to a variable. In the second block of the following example, FPJSON logic is utilized to determine the assigned value. It checks if the current signer is the owner of the document data, and then assigns the result to a variable with the `=$` operator
 
-```js copy
+```js copy filename="/rules.js"
 // Using `=$` to assign the result of checking ownership to the `$isOwner` variable
 ["=$isOwner", ["equals", "$signer", "$old.owner"]]
 ```
@@ -235,7 +235,7 @@ The `=$` operator assigns the result of the subsequent array block to a variable
 
 [Assigned variables](/fpjson#-operator) can be utilized in later blocks, especially when combined with `allowif()`
 
-```js copy
+```js copy filename="/rules.js"
 // Check if the current signer is the owner and allow the operation if true
 [
   "delete:post",
@@ -248,7 +248,7 @@ The `=$` operator assigns the result of the subsequent array block to a variable
 
 The allowifall() function is useful for evaluating multiple conditions. In the following example, it checks if the signer is both the data owner and the database contract owner.
 
-```js copy
+```js copy filename="/rules.js"
 // Using `allowifall()` to check if the signer is both the data owner and the database contract owner
 [
   "delete:post",
@@ -262,4 +262,146 @@ The allowifall() function is useful for evaluating multiple conditions. In the f
 
 You can apply the same principle using `allowifany()`, `denyif()`, `denyifall()`, `denyifany()`, and `breakif()`
 
+### get()
+
+`get()` is used for querying data from a database collection during access evaluations. It is equivalent to executing `await db.get("collection_name", "doc_id")` in a regular query. The following example demonstrates checking if the transaction signer exists in the `users` collection.
+
+```js copy filename="/rules.js"
+// Check if the transaction signer exists in the `users` collection and allow the operation if true
+[
+  "add:post",
+  [
+    ["=$user", ["get()", ["users", "$signer"]]], // Fetch the signer's document from the `users` collection and assign the result to `$user`
+    ["=$existsUser", [["complement",["isNil"]], "$user"]], // Check if `$user` is not null and assign the result to `$existsUser`
+    ["allowif()", "$existsUser"],
+  ],
+]
+```
+
+### Shortcut Symbols
+
+Functional programming syntax can sometimes be lengthy, especially for simple logic like checking if a [user exists](/fpjson#get). FPJSON provides a set of shortcut symbols to make this easier:
+
+- `o$` = `["complement",["isNil"]]` : returns true if data exists
+- `x$` = `["isNil"]` : returns true if data is `null` or `undefined`
+- `!$` = `["not"]` : flips a boolean
+- `l$` = `["toLower"]` : converts to lowercase 
+- `u$` = `["toUpper"]` : converts to uppercase
+- `$$` = `["tail"]` : removes the first element, useful for escaping in FPJSON
+
+For instance, the [previous example](/fpjson#get) can be simplified as follows:
+
+```js copy filename="/rules.js"
+// Simplified version using shortcut symbols:  `o$user` returns true if the transaction signer exists in the `users` collection 
+[
+  "add:post",
+  [
+    ["=$user", ["get()", ["users", "$signer"]]], // Fetch the signer's document from the `users` collection and assign the result to `$user`
+    ["allowif()", "o$user"],
+  ],
+]
+```
+
+### if-else conditions
+
+For executing blocks based on specific conditions, you can use `if`, which executes the third array block only if the second block evaluates to `true`.
+
+```js copy filename="/rules.js"
+// Using `if` to assign `true` to `$existsUser` if `$user` exists (denoted by `o$user`)
+["if", "o$user", ["=$existsUser", true]]
+```
+
+You can combine `if` with `elif` and `else`. 
+
+```js copy filename="/rules.js"
+// Combining `if` with `else`: `$existsUser` is set to `true` if `$user` exists, otherwise `false`
+["=$existsUser", ["if", "o$user", true, "else", false]]
+```
+
+Use break to exit the entire evaluation process without using `allow()` or `deny()`. In the following example, `break` is used if `$user` does not exist (indicated by `x$user`).
+
+```js copy filename="/rules.js"
+// Exiting the evaluation if `$user` does not exist
+["if", "x$user", ["break"]]
+```
+
+In scenarios where multiple conditions are defined, such as for both operations: `add:post` and `add`, the query's validity depends on all matched conditions.
+
+### Helper Functions
+
+#### split()
+
+`split()` is particularly useful for creating deterministic Document IDs (docID) based on document fields. For example, to represent 'follow' relationships in a social network, you might use a docID formatted as `fromUserID:toUserID`. In such cases, `split()` comes in very useful.
+
+
+```js copy filename="/rules.js"
+[
+  "set:follow",
+  [
+    // Split the `doc_id` at ':' to assign values to `$from_id` and `$to_id`
+    ["split()", [":", "$id", ["=$from_id", "=$to_id"]]],
+    ["=$isFromSigner", ["equals", "$from_id", "$signer"]],
+  	["mod()", { from: "$from_id", to: "$to_id", date: "$ms" }],
+    ["allowif()", "$isFromSigner"]
+  ],
+]
+```
+
+Users can now send an empty query as long as the docID follows the specified format.
+
+```js
+await db.query("set:follow", {}, "follows", "fromUserID:toUserID")
+```
+
+#### parse()
+
+The `parse()` function is the FPJSON equivalent of `JSON.parse()`, used for converting a JSON string into an object.
+
+#### stringify()
+
+The `stringify()` function is the FPJSON equivalent of `JSON.stringify()`, converting an object to a JSON string.
+
 ## Triggers and Crons
+
+Both [Triggers](/sdk/triggers) and [Crons](/sdk/crons) utilize FPJSON, but with a different set of predefined variables and helper functions.
+
+### Basic Queries
+
+Beyond [`get()`](/fpjson#get), you also have access to fundamental queries like `add()`, `set()`, `update()`, `upsert()`, `delete()`, and `batch()`.
+
+For example, to increment `followers_count` when a new follow occurs, you could set a trigger on the `follows` collection as shown below.
+
+```js copy
+{
+  key: "follow",
+  version: 2,
+  on: "create",
+  func: [
+    ["update()", [{ followers_count: db.inc(1) }, "users", "$data.after.to"]]
+  ],
+}
+```
+### Batch
+
+`batch()` receives special consideration because they are convenien for handling batched querie.. You can group individual queries using `toBatch()` or multiple queries with `toBatchAll()`. All queries compiled during the evaluation process are then executed together at the end.
+
+```js copy
+// send a single query
+["toBatch()", ["add", {}, "posts"]]
+```
+
+```js copy
+// send multiple queries
+["toBatchAll()", [["add", {}, "posts"], ["add",{},"posts"]]]
+```
+
+In FPJSON blocks, `toBatch` and `toBatchAll` can also be used without parentheses, as shown in the following example.
+
+```js copy
+[
+  "when",
+  ["always", true],
+  ["toBatch", ["add", {}, "posts"]],
+  "$some_data_to_trigger",
+]
+```
