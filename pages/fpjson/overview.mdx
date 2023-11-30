@@ -106,7 +106,7 @@ Pattern matching in FPJSON allows for the specification of operation-based acces
 
 #### Custom Operation
 
-You can use [basic operation types](/fpjson#operation-types) or define custom operations for more specific control, such as `add:post` and `delete:post`
+You can use [basic operation types](/fpjson/overview#operation-types) or define custom operations for more specific control, such as `add:post` and `delete:post`
 
 The first part (`type`) corresponds to the query type, while the second part (`name`) is an arbitrary operation name.
 
@@ -195,7 +195,7 @@ Using `mod()` effectively reduces the number of fields users need to provide exp
 
 ### fields()
 
-The `fields()` function enables you to restrict the data fields that users can submit. This function is particularly effective when used in combination with [`mod()`](/fpjson#mod).
+The `fields()` function enables you to restrict the data fields that users can submit. This function is particularly effective when used in combination with [`mod()`](/fpjson/overview#mod).
 
 In the following example, suppose you want users to submit only the `title` and `body` fields. You can enforce this by using `["fields()", ["title", "body"]]`, which restricts changes to these specified fields only.
 
@@ -233,7 +233,7 @@ The `=$` operator assigns the result of the subsequent array block to a variable
 
 ### allowif() / allowifall()
 
-[Assigned variables](/fpjson#-operator) can be utilized in later blocks, especially when combined with `allowif()`
+[Assigned variables](/fpjson/overview#-operator) can be utilized in later blocks, especially when combined with `allowif()`
 
 ```js copy filename="/rules.js"
 // Check if the current signer is the owner and allow the operation if true
@@ -280,7 +280,7 @@ You can apply the same principle using `allowifany()`, `denyif()`, `denyifall()`
 
 ### Shortcut Symbols
 
-Functional programming syntax can sometimes be lengthy, especially for simple logic like checking if a [user exists](/fpjson#get). FPJSON provides a set of shortcut symbols to make this easier:
+Functional programming syntax can sometimes be lengthy, especially for simple logic like checking if a [user exists](/fpjson/overview#get). FPJSON provides a set of shortcut symbols to make this easier:
 
 - `o$` = `["complement",["isNil"]]` : returns true if data exists
 - `x$` = `["isNil"]` : returns true if data is `null` or `undefined`
@@ -289,7 +289,7 @@ Functional programming syntax can sometimes be lengthy, especially for simple lo
 - `u$` = `["toUpper"]` : converts to uppercase
 - `$$` = `["tail"]` : removes the first element, useful for escaping in FPJSON
 
-For instance, the [previous example](/fpjson#get) can be simplified as follows:
+For instance, the [previous example](/fpjson/overview#get) can be simplified as follows:
 
 ```js copy filename="/rules.js"
 // Simplified version using shortcut symbols:  `o$user` returns true if the transaction signer exists in the `users` collection 
@@ -367,7 +367,7 @@ Both [Triggers](/sdk/triggers) and [Crons](/sdk/crons) utilize FPJSON, but with 
 
 ### Basic Queries
 
-Beyond [`get()`](/fpjson#get), you also have access to fundamental queries like `add()`, `set()`, `update()`, `upsert()`, `delete()`, and `batch()`.
+Beyond [`get()`](/fpjson/overview#get), you also have access to fundamental queries like `add()`, `set()`, `update()`, `upsert()`, `delete()`, and `batch()`.
 
 For example, to increment `followers_count` when a new follow occurs, you could set a trigger on the `follows` collection as shown below.
 
