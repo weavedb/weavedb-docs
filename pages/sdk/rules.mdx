@@ -126,6 +126,67 @@ await db.set({ name : "Bob" }, "people", "Bob")
 expect(await db.get("people", "Bob")).to.eql({name : "Bob", address: "0xABC" }) // true
 ```
 
+### Get Other Data
+
+<Callout type="info" emoji="ℹ️">
+  Feature added in contract version 0.28.15
+</Callout>
+
+You can also execute `get` query in `let` variable assignments. Use the syntax `["get", [QUERY]]`.
+
+The following will first get `Bob` from `ppl` collection and assign it to `user`, then set `age` field with the user's age.
+
+```js
+const rules = {
+  "let create" : { "user" : ["get", ["ppl", "Bob"]], "resource.newData.age": {var: "user.age"} },
+  "allow create" : true
+}
+```
+
+### Conditional Statements
+
+<Callout type="info" emoji="ℹ️">
+  Feature added in contract version 0.28.16
+</Callout>
+
+`if` and `ifelse` can be used for conditional statements in access control rules.
+
+```js
+// assigning age=20 if the name is Bob
+const rules = {
+  "let create" : { 
+    "resource.newData.age" : ["if", ["equals", "Bob", {var: "resource.newData.name"}], 20] 
+  },
+  "allow create" : true
+}
+
+// assigning age=20 if the name is Bob, and age=30 otherwise
+const rules = {
+  "let create" : { 
+    "resource.newData.age" : ["ifelse", ["equals", "Bob", {var: "resource.newData.name"}], 20, 30] 
+  },
+  "allow create" : true
+}
+```
+
+### Renaming Method
+
+<Callout type="info" emoji="ℹ️">
+  Feature added in contract version 0.28.16
+</Callout>
+
+You can rename `request.method` to something other than `create` / `update` / `delete` and assign rules to the renamed method for beter branching.
+
+```js
+// rename method to create_bob if the name is Bob, and only allow create_bob
+const rules = {
+  "let create" : { 
+    "request.method" : ["if", ["equals", "Bob", {var: "resource.newData.name"}], "create_bob"] 
+  },
+  "allow create_bob" : true
+}
+```
+
 ## Add-on: JSON-based Functional Programming
 Javascript functions cannot be passed and stored with Warp contracts. So WeaveDB invented a powerful & simple way to do functional programming using JSON objects. You can use most of the [ramda](https://ramdajs.com) functions, which enables highly complex logics for access controls and data validations.
 

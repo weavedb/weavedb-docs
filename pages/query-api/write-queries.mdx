@@ -107,8 +107,13 @@ In regard to Arweave wallet addresses, the case will be retained, because it's R
 await db.update({ address: db.signer() }, collection_name, doc_id)
 ```
 
-{/* contract version 0.28
-### Replace a field with relayer's extra data
+### data()
+
+Replace a field with relayer's extra data
+
+<Callout type="info" emoji="ℹ️">
+  Feature added in contract version 0.28.12
+</Callout>
 
 ```js
 // icon field will be automatically replaced with `image.png` from the relayer
@@ -122,7 +127,43 @@ const query = await db.sign(
 
 await db.relay("jobID", query, { extra_data_key: "image.png" }, { evm: relayer_wallet })
 ```
- */}
+
+### zkp()
+
+<Callout type="info" emoji="ℹ️">
+  Feature added in contract version 0.38.0
+</Callout>
+
+Verify Zero Knowledge Proof with [PolygonID](https://polygonid.com/)
+
+```js
+await db.update({ userID: db.zkp(proof, pub_signals) }, collection_name, doc_id)
+
+/*
+userID will be replaced with the following
+you should modify it further in access control rules
+
+{
+  valid,
+  pub_signals: {
+    value,
+    merklizedn,
+    userID,
+    issuerAuthState,
+    requestID,
+    issuerID,
+    isRevocationChecked,
+    issuerClaimNonRevState,
+    timestamp,
+    claimSchema,
+    claimPathNotExists,
+    claimPathKey,
+    slotIndex,
+    operator,
+  },
+}
+*/
+```
 
 ## delete
 
