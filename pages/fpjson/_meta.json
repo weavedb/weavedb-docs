@@ -1,7 +1,18 @@
 {
-  "overview": "Overview",
-  "setup-access-control": "Set up Access Control",
-  "setup-trigger": "Set up Trigger",
-  "setup-cron": "Set up CRON"
-
+  "overview": {
+    "title": "Overview",
+    "display": "hidden"
+  },
+  "setup-access-control": {
+    "title": "Set up Access Control",
+    "display": "hidden"
+  },
+  "setup-trigger": {
+    "title": "Set up Trigger",
+    "display": "hidden"
+  },
+  "setup-cron": {
+    "title": "Set up CRON",
+    "display": "hidden"
+  }
 }

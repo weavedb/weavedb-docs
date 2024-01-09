@@ -23,12 +23,6 @@
       "breadcrumb": false
     }
   },
-  "fpjson": {
-    "title": "FPJSON 2.0",
-    "theme": {
-      "breadcrumb": false
-    }
-  },
   "sdk": {
     "title": "SDK Reference",
     "theme": {
@@ -41,8 +35,14 @@
       "breadcrumb": false
     }
   },
+  "fpjson": {
+    "title": "FPJSON 2.0",
+    "theme": {
+      "breadcrumb": false
+    }
+  },
   "rollup-node": {
-    "title": "Rollup Node",
+    "title": "zkRollup",
     "theme": {
       "breadcrumb": false
     }
