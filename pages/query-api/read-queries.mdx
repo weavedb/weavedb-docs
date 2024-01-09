@@ -4,22 +4,26 @@ import { Tabs, Tab } from 'nextra/components'
 # Read Queries
 
 <Callout type="info" emoji="💡">
-`db` is assumed to be the state variable storing the WeaveDB SDK object. For reference, see [Initialize WeaveDB](/quick-start#initialize-weavedb)
+In the following sample code, `db` represents the state variable of your database instance. For reference, see [Initialize WeaveDB](/quick-start#initialize-weavedb)
 
-Also, it is expected that `collection_name` refers to the string value that contains the name of your collection, and `doc_id` refers to the string value that contains the unique identifier of a document from the collection.
+`collection_name` refers to the string value that contains the name of your collection, and `doc_id` refers to the string value that contains the unique identifier of a document from the collection.
 </Callout>
 
 ## get / cget
 
-`get` only returns data, whereas `cget` returns metadata of the docs too.
+Fetches data from the database collection. The `get` query returns only the data, while `cget` also provides metadata of the documents.
 
-```js copy
+The following is the metadata format returned by `cget` :
+
+```js filename="metadata"
 { id, setter, data, block: { height, timestamp } }
 ```
 
 The metadata returned with `cget` functions as a cursor for pagination.
 
-### Get a doc
+### Fetch a single document
+
+Use `get` or `cget` to fetch a single document from a collection. `cget` additionally returns document metadata.
 
 <Tabs items={['get', 'cget']}>
   <Tab>  
@@ -34,7 +38,9 @@ The metadata returned with `cget` functions as a cursor for pagination.
   </Tab>
 </Tabs>
 
-### Get a collection
+### Fetch all documents in a collection
+
+Use `get` or `cget` to fetch all documents from a collection. `cget` additionally returns document metadata.
 
 <Tabs items={['get', 'cget']}>
   <Tab>
@@ -49,9 +55,9 @@ The metadata returned with `cget` functions as a cursor for pagination.
   </Tab>
 </Tabs>
 
-### Get a sub collection
+### Fetch documents from a sub collection
 
-Arbitrary length of document nesting is possible.
+Arbitrary levels of document nesting are supported, allowing access to subcollection documents.
 
 ```js copy
 await db.get(collection_name, doc_id, "sub_collection_name_1", "sub_doc_id_1", "sub_collection_name_2")
@@ -59,7 +65,7 @@ await db.get(collection_name, doc_id, "sub_collection_name_1", "sub_doc_id_1", "
 
 ### Limit
 
-Limit the number of docs returned
+Limits the number of documents returned from a collection. By specifying a number after the collection name, you can control how many documents are fetched.
 
 ```js copy
 await db.get(collection_name, 5)
@@ -67,20 +73,28 @@ await db.get(collection_name, 5)
 
 ### Sort
 
-Sort by age in descending order
+Sorts the documents in a collection based on a specified field and order. Supports both ascending and descending order.
+
+
+#### Descending order
+
+In this example, documents in the collection are sorted by `age` in descending order.
+
 ```js copy
 await db.get(collection_name, [ "age", "desc" ])
 ```
 
-Sort by age in ascending order
+#### Ascending order
 
-By default, the property `age` is sorted in ascending order because the second element in the array is not defined
+In this example, the `age` field is sorted in ascending order by default because the second element in the array is not defined.
 
 ```js copy
 await db.get(collection_name, [ "age" ])
 ```
 
-Sort by age in descending order, then sort by name in ascending order
+#### Multiple fields
+
+In this example, documents in the collection are sorted by `age` in descending order, then sorted by `name` in ascending order.
 
 ```js copy
 await db.get(collection_name, [ "age", "desc" ], [ "name", "asc" ])
@@ -88,7 +102,10 @@ await db.get(collection_name, [ "age", "desc" ], [ "name", "asc" ])
 
 ### Where
 
-Get docs where the age is 20
+Retrieves documents from a collection based on specific query conditions. Supports a range of operators for flexible querying.
+
+The following example returns all documents where the `age` field is greater than 20.
+
 
 ```js copy
 await db.get(collection_name, ["age"], [ "age", ">", 20 ])
@@ -99,30 +116,54 @@ await db.get(collection_name, ["age"], [ "age", ">", 20 ])
 <Callout type="info" emoji="💡">
 Dot notation can be used to specify nested object fields. (e.g. `[ "favorites.food", "==", "apple" ]`)
  
-Note that dot notation only works with `where` for now.
+Note that dot notation only works with `where` operation for now.
 </Callout>
 
 <Callout type="warning" emoji="⚠️">
-deprecated
-
 `=` is deprecated and replaced by `==` at `v0.23.0`. You can still use it for backward compatibility.
 </Callout>
 
 ### Skip
 
-```js copy
-await db.get(collection_name, [ "age" ], [ "startAfter", 20 ], [ "endAt", 60 ])
-await db.get(collection_name, [ "age" ], [ "name", "desc" ], [ "startAfter", 20, "Bob" ])
-```
+Enables skipping over a specified number of documents, useful for implementing pagination or bypassing previously processed data.
 
 `startAt`, `startAfter`, `endAt`, and `endAfter` are supported.
 
+- `startAt` : Begin fetching documents starting at a specific value.
+- `startAfter` : Fetch documents after a specific value.
+- `endAt` : Fetch documents up to a specific value.
+- `endAfter` : Fetch documents until just after a specific value.
+
+#### Skip with limit range
+
+The following example will sort the documents from the collection using the `age` field in ascending order. It will then start fetching documents from the collection where the `age` is greater than 20 but less than or equal to 60.
+
+```js copy
+await db.get(collection_name, [ "age" ], [ "startAfter", 20 ], [ "endAt", 60 ])
+```
+
+#### Skip with specific start point
+
+The following example will sort the documents from the collection using the `age` field in ascending order, then by the `name` field in descending order. The documents to be fetched will start after the first document where the `age` is 20 and `name` is "Bob".
+
+```js copy
+await db.get(
+  collection_name,
+  ["age"],
+  ["name", "desc"],
+  ["startAfter", 20, "Bob"]
+)
+```
+
 ### Pagination
+
+Manages the retrieval of documents in pages, facilitating the handling of large datasets.
 
 ```js copy
 const docs_page1 = await db.cget(collection_name, [ "age" ])
 const docs_page2 = await db.cget(collection_name, [ "age" ], ["startAfter", docs_page1[docs_page1.length - 1]])
 ```
+
 ## getNonce
 
 To get the next nonce for an address. Nonces are internally used for signature verification to write data.

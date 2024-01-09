@@ -1,0 +1,23 @@
+import { Callout } from "nextra/components"
+
+# Set up Access Control Rules
+
+Using the [web console](https://console.weavedb.dev/), navigate to the `Access Control Rules` section in the side menu, select your collection from the list, then click the edit icon in the top right corner of the `Rules` box.
+
+![](/img/quick-start-1.png)
+
+In this example, we define a rule for the `people` collection. This rule allows anyone to create a new document in the collection and ensures that only the original data creators can update their own data.
+```js copy filename="Rules"
+{
+  "allow create": true,
+  "allow update": {
+    "==": [{ var: "request.auth.signer" }, { var: "resource.setter" }]
+  }
+}
+```
+
+ You can copy & paste the rules object above to the popped-up textarea and click `Add`.
+ 
+![](/img/quick-start-2.png)
+
+Now if you try to update an existing data with another wallet, the transaction will fail.

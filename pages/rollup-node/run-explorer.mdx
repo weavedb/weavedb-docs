@@ -1,0 +1,32 @@
+import { Tabs, Tab } from 'nextra/components'
+
+# Run WeaveDB Scan Explorer
+
+WeaveDB repository needs to be cloned to your local machine. For instructions, see [this guide](/development/clone-the-repo)
+
+From the root directory of your local [WeaveDB repo](/development/clone-the-repo), run the following command in the terminal to navigate to the directory at `/weavedb/explorer`
+
+```bash copy
+cd explorer
+```
+
+Then execute the following commands in the terminal to install the dependencies and run the app on your localhost
+
+<Tabs items={['yarn', 'npm']}>
+  <Tab>
+  ```bash copy
+yarn
+yarn dev
+  ```
+  </Tab>
+  <Tab>
+  ```bash copy
+npm install
+npm run dev
+  ```
+  </Tab>
+</Tabs>
+
+Now WeaveDB Scan Explorer is running at [localhost:3000](http://localhost:3000)
+
+You can also conveniently access the publicly deployed WeaveDB Scan Explorer at [scan.weavedb.dev](https://scan.weavedb.dev)

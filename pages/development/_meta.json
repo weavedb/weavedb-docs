@@ -1,0 +1,13 @@
+{
+  "clone-the-repo": {
+    "title": "Clone the Repo"
+  },
+  "run-local-test": {
+    "title": "Run Local Test",
+    "display": "hidden"
+  },
+  "run-jots": {
+    "title": "Run Jots",
+    "display": "hidden"
+  }
+}

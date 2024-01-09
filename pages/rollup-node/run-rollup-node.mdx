@@ -1,0 +1,239 @@
+import { Callout } from 'nextra/components'
+import { Tabs, Tab } from 'nextra/components'
+
+# Run a Local Rollup Node
+
+<Callout type="warning" emoji="⚠️">
+WeaveDB rollup is in early development. Please use it with caution and check for bugs.
+</Callout>
+
+This guide will help you set up rollup-based contracts. We are actively developing a Rollup-as-a-Service solution. For now, you will need to run your own rollup locally.
+
+## Prerequisites
+
+- Make sure you have followed and thoroughly tested your database settings as per the [guide](/development/run-local-test) before you proceed to deploy the database to a local rollup node.
+
+- `docker` and `docker-compose` are installed and running on your machine. If not, you can download and install them from [Docker's official site](https://docs.docker.com/get-docker).
+
+- WeaveDB repository needs to be cloned to your local machine. For instructions, see [this guide](/development/clone-the-repo)
+
+## Set up Wallet Accounts
+
+You'll need several types of accounts: 3 EVM accounts for the roles of rollup `admin`, database contract `owner`, and `user`, along with 1 Arweave account for the rollup `bundler`
+
+There are two ways to set up these accounts:
+
+1. Generate new accounts using the `yarn keygen` command.
+2. Import existing accounts by configuring them in `/weavedb.config.js`
+
+### Generate Accounts
+
+Open a terminal, navigate to your [project's root directory](/development/run-local-test#create-a-project), and run the following commands:
+
+<Tabs items={['yarn', 'npm']}>
+  <Tab>
+  ```bash copy
+yarn keygen admin
+yarn keygen owner
+yarn keygen user
+yarn keygen bundler -t ar # for Arweave account
+  ```
+  </Tab>
+  <Tab>
+  ```bash copy
+npm run keygen admin
+npm run keygen owner
+npm run keygen user
+npm run keygen bundler -t ar # for Arweave account
+  ```
+  </Tab>
+</Tabs>
+
+The generated accounts are stored under `/.weavedb/accounts`
+
+### List Accounts
+
+From the root directory of your [project](/development/run-local-test#create-a-project), run the following command in the terminal to show a list of accounts.
+
+<Tabs items={['yarn', 'npm']}>
+  <Tab>
+  ```bash copy
+yarn accounts
+  ```
+  </Tab>
+  <Tab>
+  ```bash copy
+npm run accounts
+  ```
+  </Tab>
+</Tabs>
+
+## Write Configuration
+
+1. Open the [WeaveDB repo](/development/clone-the-repo) in Visual Studio Code or your preferred code editor.
+
+2. Navigate to `/grpc-node/node-server/` directory and create a file named `weavedb.standalone.config.js` if it does not already exist.
+
+3. Copy the default configuration below and paste it in `weavedb.standalone.config.js` file.
+
+```js copy filename="/grpc-node/node-server/weavedb.standalone.config.js"
+module.exports = {
+  admin: "admin_private_key",
+  bundler: { /* Arweave bundler account */ },
+  rollups: { }, // this can be empty or pre-defined
+}
+```
+
+4. Locate the `bundler.json` file in your [project](/development/run-local-test#create-a-project), found at `/your_project/.weavedb/accounts/ar/bundler.json`. Copy its entire content and paste it as the value for `bundler` in your `weavedb.standalone.config.js` file.
+
+5. Next, locate the `admin.json` file, found at `/your_project/.weavedb/accounts/evm/admin.json`. Copy the `privateKey` from this file and paste it as the string value for `admin` in your `weavedb.standalone.config.js` file.
+
+<Callout type="info" emoji="💡">
+Note: `your_project` refers to the project name you've set up earlier in this [guide](/development/run-local-test#create-a-project).
+</Callout>
+
+## Run Rollup Node
+
+Before proceeding, make sure that `docker` and `docker-compose` are installed and running on your machine. If not, you can download and install them from [Docker's official site](https://docs.docker.com/get-docker).
+
+From the root directory of your local [WeaveDB repo](/development/clone-the-repo), execute the following command in the terminal to run the rollup node.
+
+
+<Tabs items={['yarn', 'npm']}>
+  <Tab>
+  ```bash copy
+yarn run-rollup
+  ```
+  </Tab>
+  <Tab>
+  ```bash copy
+npm run run-rollup
+  ```
+  </Tab>
+</Tabs>
+
+After successful execution, your local rollup node will be available to receive queries at `localhost:8080`
+
+## Deploy the Database
+
+The next step is to deploy a database instance after running your local rollup node.
+
+From the root directory of your [project](/development/run-local-test#create-a-project), run the following commands in the terminal to deploy and set up a database instance.
+
+<Callout type="info" emoji="💡">
+Replace `db_name` with your actual database name.
+</Callout>
+
+
+<Tabs items={['yarn', 'npm']}>
+  <Tab>
+  ```bash copy
+yarn deploy db_name --owner owner
+  ```
+  </Tab>
+  <Tab>
+  ```bash copy
+npm run deploy db_name --owner owner
+  ```
+  </Tab>
+</Tabs>
+
+Then, configure the instance with the database settings.
+
+<Tabs items={['yarn', 'npm']}>
+  <Tab>
+  ```bash copy
+yarn setup db_name --owner owner
+  ```
+  </Tab>
+  <Tab>
+  ```bash copy
+npm run setup db_name --owner owner
+  ```
+  </Tab>
+</Tabs>
+
+Now your database is all set and deployed in your local rollup node.
+
+## Run Test Script
+
+You can create and execute scripts using `weavedb-node-client` to interact with your database and familiarize yourself with its operations.
+
+1. Open your [project](/development/run-local-test#create-a-project) in Visual Studio Code or your preferred code editor.
+
+2. Create a file called `demo.js` in your `scripts` folder if it does not already exist.
+
+3. Copy the example script provided below into your `demo.js` file. This script shows how to add, fetch, and delete posts from the database.
+
+<Callout type="info" emoji="💡">
+Replace `db_name` with the name of the database you specified earlier.
+</Callout>
+
+```js copy filename="/scripts/demo.js"
+const SDK = require("weavedb-node-client")
+const accounts = require("./lib/accounts")
+
+const main = async key => {
+  const COLLECTION_NAME = "posts"
+
+  const userAuth = { privateKey: accounts.evm.user.privateKey }
+  const db = new SDK({ rpc: "localhost:8080", contractTxId: "db_name" })
+
+  // add a post
+  const tx = await db.query("add:post", { body: "test" }, COLLECTION_NAME, userAuth)
+
+  // fetch posts
+  console.log(await db.get(COLLECTION_NAME))
+
+  // delete the recently added post
+  await db.query("delete:post", COLLECTION_NAME, tx.docID, userAuth)
+
+  process.exit()
+}
+
+main()
+```
+
+4. From the root directory of your [project](/development/run-local-test#create-a-project), run the following command in the terminal. It will add a post, fetch the list of posts, and then delete the post.
+
+```bash copy
+node scripts/demo.js
+```
+
+You can review the transactions in the explorer by visiting [scan.weavedb.dev/node/localhost/db/db_name](http://scan.weavedb.dev/node/localhost/db/db_name)
+
+<Callout type="info" emoji="💡">
+Make sure you replace `db_name` at the end of the URL with the actual name of the database you specified earlier.
+</Callout>
+
+## Enable Rollup to Arweave
+
+To enable rollup synchronization with the [Warp Sequencer](https://academy.warp.cc/docs/sdk/advanced/bundled-interaction), set the `rollup` configuration in `weavedb.config.js` file to `true` and deploy a new database instance.
+
+<Callout type="warning" emoji="⚠️">
+You must deploy a new database for rollup because existing instances cannot change their rollup state after deployment.
+This ensures the integrity of the L1/L2 verifiability process, as all transactions must include a signature with the L1 `contractTxId`, which is not present in non-rollup databases.
+</Callout>
+
+```js copy filename="/weavedb.config.js"
+module.exports = {
+  db: {
+    app: "http://localhost:3000",
+    name: "Demo Dapp", // DB Instance
+    rollup: true, // Set this to true to deploy your database to roll up to the Layer 1 Warp contract
+	plugins: {},
+  },
+  accounts: { evm: {}, ar: {} },
+  defaultNetwork: "localhost",
+  networks: {
+    localhost: { url: "localhost:8080", admin: "admin" },
+  },
+}
+```
+- Then, follow the deployment steps outlined earlier in this guide [here](/rollup-node/run-rollup-node#deploy-the-database).
+
+- After deployment, you can monitor the rollup blocks in the WeaveDB explorer at [scan.weavedb.dev/node/localhost/db/db_name/blocks](https://scan.weavedb.dev/node/localhost/db/db_name_prod/blocks)
+
+<Callout type="info" emoji="💡">
+Make sure you replace `db_name` in the URL with your actual database name to view the corresponding blocks.
+</Callout>

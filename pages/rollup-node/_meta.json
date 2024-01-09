@@ -1,0 +1,18 @@
+{
+  "overview": {
+    "title": "Overview",
+    "display": "hidden"
+  },
+  "run-rollup-node": {
+    "title": "Run Rollup Node",
+    "display": "hidden"
+  },
+  "run-explorer": {
+    "title": "Run Explorer",
+    "display": "hidden"
+  },
+  "light-client": {
+    "title": "Light Client",
+    "display": "hidden"
+  }
+}

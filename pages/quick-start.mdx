@@ -4,17 +4,22 @@ import { Callout } from "nextra/components"
 
 # Quick Start
 
+This guide shows you how to quickly set up the WeaveDB SDK, along with steps to add and read data from a database collection. To keep things simple, it skips out configurations such as data schema and access control rules, making it easier to dive into advanced topics later.
 <Steps>
 
-## Deploy a Database
+### Deploy a Database
 
-Using the [web console](https://console.weavedb.dev/), follow the instructions on [Deploying a Database](/get-started/deploy-database)
+Using the [web console](https://console.weavedb.dev/), follow the instructions on [Deploying a Database](/web-console/deploy-database)
 
-## Create a Collection
+### Create a Collection
 
-Using the [web console](https://console.weavedb.dev/), follow the instructions on [Creating a Collection](/get-started/create-collection)
+Using the [web console](https://console.weavedb.dev/), follow the instructions on [Creating a Collection](/web-console/create-collection)
 
-## Install WeaveDB
+### Install WeaveDB
+
+Creating a new Next.js app is recommended, but you can also install WeaveDB to an already existing project right away.
+
+Open a terminal, go to the root directory of your project, and execute one of the following commands to install WeaveDB.
 
 <Tabs items={['Web', 'NodeJS']}>
   <Tab>
@@ -39,21 +44,37 @@ Using the [web console](https://console.weavedb.dev/), follow the instructions o
   </Tab>
 </Tabs>
 
-## Initialize WeaveDB
+### Import Module
+
+Begin using WeaveDB by importing the appropriate module for your development environment.
 
 <Tabs items={['Web', 'NodeJS']}>
   <Tab>
   ```js copy
   import WeaveDB from "weavedb-sdk"
+  ```
+  </Tab>
+  <Tab>
+  ```js copy
+  import WeaveDB from "weavedb-sdk-node"
+  ```
+  </Tab>
+</Tabs>
 
+
+### Initialize WeaveDB
+
+ Initialize a new WeaveDB instance by passing in the `contractTxId` and calling `init()` on the instance.
+
+<Tabs items={['Web', 'NodeJS']}>
+  <Tab>
+  ```js copy
   const db = new WeaveDB({ contractTxId: CONTRACT_TX_ID })
   await db.init()
   ```
   </Tab>
   <Tab>
   ```js copy
-  import WeaveDB from "weavedb-sdk-node"
-
   const db = new WeaveDB({ contractTxId: CONTRACT_TX_ID })
   await db.init()
   ```
@@ -64,7 +85,9 @@ Using the [web console](https://console.weavedb.dev/), follow the instructions o
 Replace `CONTRACT_TX_ID` with the `contractTxId` string value returned when deploying your database.
 </Callout>
 
-## Add a document
+### Add a document
+
+Insert a new document into the database collection by calling `add` on the instance, passing in the data and the collection name.
 
 ```js copy
 const personData = { name: "Bob", age: 20 }
@@ -75,18 +98,16 @@ const tx = await db.add(personData, collection_name)
 Replace `collection_name` with the string value name of your collection.
 </Callout>
 
-## Get a collection
+### Get a collection
 
-Use `get` to read a collection:
+Fetch all documents from the database collection by calling `get` on the instance, passing in the collection name.
 
 ```js copy
 const result = await db.get(collection_name)
 ```
 
-And `cget` to return the metadata of the documents too:
-
-```js copy
-const result = await db.cget(collection_name)
-```
+<Callout type="info" emoji="💡">
+Replace `collection_name` with the string value name of your collection.
+</Callout>
 
 </Steps>

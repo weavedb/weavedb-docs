@@ -1,0 +1,407 @@
+import { Callout } from 'nextra/components'
+
+# FPJSON 2.0
+
+FPJSON is a domain-specific language (DSL) for WeaveDB that facilitates the development of fully decentralized databases. It is built upon [Ramda.js](https://ramdajs.com), a functional programming library for JavaScript. It utilizes over [250+ predefined Ramda functions](https://fpjson.weavedb.dev), enabling users to compose complex logic in a simple JSON array format.
+
+A huge advantage of JSON-style programming is we can store any logic as a JSON data object within smart contract states, allowing for reuse and composition with other logic. 
+This approach provides an effective and powerful mechanism for dynamically constructing, composing, and extending logic after smart contract deployment, eliminating the need for redeployment.
+
+Apart from performance and scalability considerations, you cannot simply convert a traditional Web2 database into a decentralized infrastructure. Due to the permissionless nature of decentralized applications, there are fundamental challenges related to data ownership, access control, and programmable data that must be addressed. Unlike traditional databases, which typically have limited access gateways for administrative users, anyone can write to a decentralize database from anywhere. This requires precise, yet decentralized, control mechanisms. FPJSON and WeaveDB are specifically designed to tackle these challenges, providing a powerful and flexible tool for building secure, decentralized applications.
+
+WeaveDB provides essential decentralized features such as:
+
+- **Crypto Account Authentication** for managing data access and ownership.
+- **Data Schemas** to define and constrain the stored data format.
+- **Access Control Rules** for managing write permissions and data manipulation.
+- **Crons** for scheduling periodic query execution.
+- **Triggers** for chaining queries with predefined logic.
+- **Verifiable Relayers** for importing data from external sources.
+
+Without these features, a decentralized database's capability would be significantly limited or become impossible to manage. FPJSON facilitates these features through simple JSON-style settings. It enables advanced and composable functional programming in an easily understandable JSON format, making WeaveDB a powerful smart contract sandbox.
+
+FPJSON 2.0 has made it much easier to write complex logic compared to [FPJSON 1.0](https://fpjson.weavedb.dev). It introduces new shorthand ways of writing code that makes things simpler for developers to implement complex logic. To set up a database instance, you simply need to store all the necessary [JSON configuration objects in a single location](/development/run-local-test#write-db-settings) and execute a single-line setup command.
+
+
+## Basic FPJSON Blocks
+
+Below are examples of basic FPJSON blocks:
+
+```js copy
+/* add */
+["add", 1, 2] // = 3
+
+/* difference */
+["difference", [1, 2, 3], [3, 4, 5]] // = [1, 2]
+
+/* map */
+[["map", ["inc"]], [1, 2, 3]] // = [4, 5, 6]
+
+/* compose */
+[["compose", ["map", ["inc"]], ["difference"]], [1, 2, 3], [3, 4, 5]] // = [2, 3]
+```
+
+For a comprehensive guide of the 250+ predefined functions in FPJSON, see [this guide](https://fpjson.weavedb.dev)
+
+## Access Control Rules
+
+A significant limitation of FPJSON is its restriction to pure functional programming in a [point-free style](https://en.wikipedia.org/wiki/Tacit_programming), meaning that functions cannot take arguments. While functional programming is highly effective, relying solely on pure functional programming can sometimes render the development of simple logic unnecessarily complex and impractical.
+
+FPJSON 2.0 addresses these challenges by introducing side-effect variables and imperative programming features, such as if-else conditional statements, making the process easier and more practical.
+
+
+### allow() 
+
+The simplest form of access control rule is to allow all operations.
+
+```js copy filename="/rules.js"
+["write", ["allow()"]]
+```
+
+This rule effectively grants unrestricted access to the specified collection for write operations.
+
+### deny()
+
+Similarly, you can deny all operations using the deny() function.
+
+```js copy filename="/rules.js"
+["write", ["deny()"]]
+```
+
+This rule effectively prohibits all write operations for the specified collection.
+
+### Set single condition
+
+To apply a single condition for a specific operation, you can use the allow() or deny() functions within an array.
+
+```js copy
+await db.setRules([ ["allow()"] ], "collection_name", "write")
+```
+
+This example sets a rule to allow all write operations for the specified collection.
+
+### Set multiple conditions
+
+You can define multiple conditions for different operations.
+
+```js copy
+await db.setRules([ [ "create", ["allow()"] ], [ "delete", ["deny()"] ] ], "collection_name")
+```
+
+This example sets a rule for the specified collection to allow creation of new documents, but prevents it from being deleted. As a result, once data is added to the collection, it becomes immutable and cannot be removed.
+
+### Pattern Matching
+
+Pattern matching in FPJSON allows for the specification of operation-based access controls based on the type of database query. The first element in a pattern is an accepted operation, and the condition will be evaluated only if the query matches this operation.
+
+```js copy filename="/rules.js"
+["create", ["allow()"]]
+```
+
+#### Operation Types
+
+- `write`: This operation includes all types of data manipulations.
+- `create` | `update` | `delete`: These operations are specific to their respective actions. For example, `update` is applied to existing documents for `set` and `upsert` operations.
+- `add` | `set` | `update` | `upsert` | `delete`: These match specific query types.
+
+#### Custom Operation
+
+You can use [basic operation types](/fpjson/overview#operation-types) or define custom operations for more specific control, such as `add:post` and `delete:post`
+
+The first part (`type`) corresponds to the query type, while the second part (`name`) is an arbitrary operation name.
+
+- Custom operation format: `type:name`
+- Query types: `add` | `set` | `update` | `upsert` | `delete`
+
+By defining custom operations, you can ensure that users execute only predefined operations, thereby enhancing control over the database interactions.
+
+```js copy
+// Example of executing a custom query with the `add:post` operation
+await db.query("add:post", {title: "Test", body: "hello"}, "collection_name")
+```
+
+```js copy
+// This operation will be rejected as `add` is not defined in the access control rules
+await db.add({title: "Test", body: "hello"}, "collection_name")
+```
+
+### Preset Variables
+
+You can access preset variables within access rule evaluations. For more information, refer to [here](/sdk/rules#preset-variables)
+
+```js copy
+const data = {
+  contract: { id, version, owners },
+  request: {
+    caller,
+	op,
+    method,
+    func,
+    auth: { signer, relayer, jobID, extra },
+    block: { height, timestamp },
+    transaction: { id, timestamp },
+    resource: { data },
+    id,
+    path,
+  },
+  resource: { data, setter, newData, id, path },
+}
+```
+
+    <Callout type="info" emoji="💡">
+    The `request.transaction.timestamp` property is only available for Layer 2 (L2) rollup queries and is measured in milliseconds. 
+In contrast, `request.block.timestamp` is measured in seconds and is less reliable, as it refers to the Arweave block timestamp rather than the more granular transaction timestamp.
+For accuracy in L2 queries, it's recommended to use `$ms` (milliseconds) instead of `$ts` (seconds).
+    </Callout>
+
+#### Shortcuts
+
+Shortcut variables provide quick access to commonly used values. Most logic can be handled using these shortcuts. For example, `signer` variable is a shortcut for `request.auth.signer` property, representing the transaction signer.
+
+- `signer` = `request.auth.signer` : Transaction signer
+- `id` = `request.id` : Document ID (Doc ID)
+- `ts` = `request.block.timestamp` : Block timestamp in second
+- `ms` = `request.transaction.timestamp` : Transaction timestamp in millisecond (L2 only)
+- `new` = `resource.newData` : Data after applying the query
+- `old` = `resource.data` : Data before applying the query
+- `req` = `request.resource.data` : Updating data in the query
+
+For example, if the initial stored data is `{ title: "Title", body: "hello"}` and the query updates it to `{body: "bye"}`, the shortcut variables will be assigned as follows:
+
+- `$old` = `{ title: "Title", body: "hellow" }`
+- `$new` = `{ title: "Title", body: "bye" }`
+- `$req` = `{ body: "bye" }`
+
+### mod()
+
+`mod()` is a function that is used to modify data being uploaded before it is committed permanently to the database. This can be useful for adding or modifying data fields based on other values in the request.
+
+In this example, the `mod()` function will automatically set the `id`, `owner`, and `date` fields of the new document. The `id` field will be set to the auto-generated document ID, the `owner` field will be set to the transaction signer, and the `date` field will be set to the transaction timestamp in milliseconds.
+
+```js copy filename="/rules.js"
+// Using mod() to automatically set id, owner, and date fields
+[ "add:post", [ [ "mod()", { id: "$id", owner: "$signer", date: "$ms" } ], ["allow()"] ] ]
+```
+
+```js copy
+// Adding a new post and retrieving it with its auto-assigned extra fields
+const tx = await db.query("add:post", {title: "Test", body: "hello"}, "collection_name")
+
+const post = await db.get("collection_name", tx.docID)
+// The `post` object now contains the auto-assigned extra fields: { title, body, id, owner, date }
+```
+
+Using `mod()` effectively reduces the number of fields users need to provide explicitly, as it allows you to dynamically generate or update values based on predefined rules or conditions. This simplifies the user's input and streamlines the data manipulation process.
+
+### fields()
+
+The `fields()` function enables you to restrict the data fields that users can submit. This function is particularly effective when used in combination with [`mod()`](/fpjson/overview#mod).
+
+In the following example, suppose you want users to submit only the `title` and `body` fields. You can enforce this by using `["fields()", ["title", "body"]]`, which restricts changes to these specified fields only.
+
+```js copy filename="/rules.js"
+// This custom operation will only accept changes to the `title` and `body` fields,
+// while it auto-assigns values to the `id`, `owner`, and `date` fields
+[
+  "add:post",
+  [
+    ["fields()", ["title", "body"]],
+    ["mod()", { id: "$id", owner: "$signer", date: "$ms" }],
+    ["allow()"],
+  ],
+]
+```
+
+Adding an asterisk `*` before a field name in the `fields()` function makes that field mandatory. For example, `["fields()", ["*title", "*body"]]` indicates that both `title` and `body` fields are required.
+
+```js copy
+// Examples of rejected queries
+await db.query("add:post", {title: "Test", body: "hello", id: "abc"}, "collection_name") // Rejected for including an unauthorized field
+await db.query("add:post", {title: "Test"}, "collection_name") // Rejected for failing to include the required `body` field
+```
+
+You can also individually whitelist and blacklist fields using `requested_fields()` and `disallowed_fields()` respectively.
+
+### =$ operator
+
+The `=$` operator assigns the result of the subsequent array block to a variable. In the second block of the following example, FPJSON logic is utilized to determine the assigned value. It checks if the current signer is the owner of the document data, and then assigns the result to a variable with the `=$` operator
+
+```js copy filename="/rules.js"
+// Using `=$` to assign the result of checking ownership to the `$isOwner` variable
+["=$isOwner", ["equals", "$signer", "$old.owner"]]
+```
+
+### allowif() / allowifall()
+
+[Assigned variables](/fpjson/overview#-operator) can be utilized in later blocks, especially when combined with `allowif()`
+
+```js copy filename="/rules.js"
+// Check if the current signer is the owner and allow the operation if true
+[
+  "delete:post",
+  [
+    ["=$isOwner", ["equals", "$signer", "$old.owner"]],
+    ["allowif()", "$isOwner"], // allow operation if the second element is true
+  ],
+]
+```
+
+The allowifall() function is useful for evaluating multiple conditions. In the following example, it checks if the signer is both the data owner and the database contract owner.
+
+```js copy filename="/rules.js"
+// Using `allowifall()` to check if the signer is both the data owner and the database contract owner
+[
+  "delete:post",
+  [
+    ["=$isDataOwner", ["equals", "$signer", "$old.owner"]],
+    ["=$isContractOwner", ["includes", "$signer", "$contract.owners"]],
+    ["allowifall()", ["$isOwner", "$isContractOwner"]]
+  ]
+]
+```
+
+You can apply the same principle using `allowifany()`, `denyif()`, `denyifall()`, `denyifany()`, and `breakif()`
+
+### get()
+
+`get()` is used for querying data from a database collection during access evaluations. It is equivalent to executing `await db.get("collection_name", "doc_id")` in a regular query. The following example demonstrates checking if the transaction signer exists in the `users` collection.
+
+```js copy filename="/rules.js"
+// Check if the transaction signer exists in the `users` collection and allow the operation if true
+[
+  "add:post",
+  [
+    ["=$user", ["get()", ["users", "$signer"]]], // Fetch the signer's document from the `users` collection and assign the result to `$user`
+    ["=$existsUser", [["complement",["isNil"]], "$user"]], // Check if `$user` is not null and assign the result to `$existsUser`
+    ["allowif()", "$existsUser"],
+  ],
+]
+```
+
+### Shortcut Symbols
+
+Functional programming syntax can sometimes be lengthy, especially for simple logic like checking if a [user exists](/fpjson/overview#get). FPJSON provides a set of shortcut symbols to make this easier:
+
+- `o$` = `["complement",["isNil"]]` : returns true if data exists
+- `x$` = `["isNil"]` : returns true if data is `null` or `undefined`
+- `!$` = `["not"]` : flips a boolean
+- `l$` = `["toLower"]` : converts to lowercase 
+- `u$` = `["toUpper"]` : converts to uppercase
+- `$$` = `["tail"]` : removes the first element, useful for escaping in FPJSON
+
+For instance, the [previous example](/fpjson/overview#get) can be simplified as follows:
+
+```js copy filename="/rules.js"
+// Simplified version using shortcut symbols:  `o$user` returns true if the transaction signer exists in the `users` collection 
+[
+  "add:post",
+  [
+    ["=$user", ["get()", ["users", "$signer"]]], // Fetch the signer's document from the `users` collection and assign the result to `$user`
+    ["allowif()", "o$user"],
+  ],
+]
+```
+
+### if-else conditions
+
+For executing blocks based on specific conditions, you can use `if`, which executes the third array block only if the second block evaluates to `true`.
+
+```js copy filename="/rules.js"
+// Using `if` to assign `true` to `$existsUser` if `$user` exists (denoted by `o$user`)
+["if", "o$user", ["=$existsUser", true]]
+```
+
+You can combine `if` with `elif` and `else`. 
+
+```js copy filename="/rules.js"
+// Combining `if` with `else`: `$existsUser` is set to `true` if `$user` exists, otherwise `false`
+["=$existsUser", ["if", "o$user", true, "else", false]]
+```
+
+Use break to exit the entire evaluation process without using `allow()` or `deny()`. In the following example, `break` is used if `$user` does not exist (indicated by `x$user`).
+
+```js copy filename="/rules.js"
+// Exiting the evaluation if `$user` does not exist
+["if", "x$user", ["break"]]
+```
+
+In scenarios where multiple conditions are defined, such as for both operations: `add:post` and `add`, the query's validity depends on all matched conditions.
+
+### Helper Functions
+
+#### split()
+
+`split()` is particularly useful for creating deterministic Document IDs (docID) based on document fields. For example, to represent 'follow' relationships in a social network, you might use a docID formatted as `fromUserID:toUserID`. In such cases, `split()` comes in very useful.
+
+
+```js copy filename="/rules.js"
+[
+  "set:follow",
+  [
+    // Split the `doc_id` at ':' to assign values to `$from_id` and `$to_id`
+    ["split()", [":", "$id", ["=$from_id", "=$to_id"]]],
+    ["=$isFromSigner", ["equals", "$from_id", "$signer"]],
+  	["mod()", { from: "$from_id", to: "$to_id", date: "$ms" }],
+    ["allowif()", "$isFromSigner"]
+  ],
+]
+```
+
+Users can now send an empty query as long as the docID follows the specified format.
+
+```js
+await db.query("set:follow", {}, "follows", "fromUserID:toUserID")
+```
+
+#### parse()
+
+The `parse()` function is the FPJSON equivalent of `JSON.parse()`, used for converting a JSON string into an object.
+
+#### stringify()
+
+The `stringify()` function is the FPJSON equivalent of `JSON.stringify()`, converting an object to a JSON string.
+
+## Triggers and Crons
+
+Both [Triggers](/sdk/triggers) and [Crons](/sdk/crons) utilize FPJSON, but with a different set of predefined variables and helper functions.
+
+### Basic Queries
+
+Beyond [`get()`](/fpjson/overview#get), you also have access to fundamental queries like `add()`, `set()`, `update()`, `upsert()`, `delete()`, and `batch()`.
+
+For example, to increment `followers_count` when a new follow occurs, you could set a trigger on the `follows` collection as shown below.
+
+```js copy
+{
+  key: "follow",
+  version: 2,
+  on: "create",
+  func: [
+    ["update()", [{ followers_count: db.inc(1) }, "users", "$data.after.to"]]
+  ],
+}
+```
+### Batch
+
+`batch()` receives special consideration because they are convenien for handling batched querie.. You can group individual queries using `toBatch()` or multiple queries with `toBatchAll()`. All queries compiled during the evaluation process are then executed together at the end.
+
+```js copy
+// send a single query
+["toBatch()", ["add", {}, "posts"]]
+```
+
+```js copy
+// send multiple queries
+["toBatchAll()", [["add", {}, "posts"], ["add",{},"posts"]]]
+```
+
+In FPJSON blocks, `toBatch` and `toBatchAll` can also be used without parentheses, as shown in the following example.
+
+```js copy
+[
+  "when",
+  ["always", true],
+  ["toBatch", ["add", {}, "posts"]],
+  "$some_data_to_trigger",
+]
+```
