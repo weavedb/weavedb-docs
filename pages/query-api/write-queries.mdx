@@ -19,7 +19,7 @@ The differences between `set`, `upsert`, and `update` are:
 
 ## add
 
-Adds a new document with the specified data to the given collection.
+Adds a new document to the given collection.
 
 ```js copy filename="add(data_JSON, collection_name)"
 await db.add({ age: 20, name: "Bob" }, collection_name)
@@ -30,7 +30,7 @@ The document ID will be assigned in a random yet deterministic manner.
 
 ## set
 
-Sets the specified JSON data in a document within the given collection.
+Adds a new document to the given collection and allows you to choose its document ID.
 
 ```js copy filename="set(data_JSON, collection_name, doc_id)"
 await db.set({ age: 20, name: "Bob" }, collection_name, doc_id)
@@ -50,7 +50,7 @@ await db.upsert({ age: 20, name: "Bob" }, collection_name, doc_id)
 
 ## update
 
-Updates a specific document within a collection with the provided data. This command only modifies existing documents and does not create new ones.
+Updates a specific document within a collection. This command only modifies existing documents and does not create new ones.
 
 ```js copy filename="update(data_JSON, collection_name, doc_id)"
 await db.update({ age: 25 }, collection_name, doc_id)
@@ -242,7 +242,7 @@ await db.sign("set", {name: "Bob", age: 20}, collection_name, doc_id)
 
 ## relay
 
-Relay a query, allowing for the execution of a signed operation with additional parameters. Useful for scenarios where you need to delegate the execution of a database operation, potentially with added data.
+Relay a query allows for the execution of a signed operation with additional parameters. Useful for scenarios where you need to delegate the execution of a database operation, potentially with added data.
 
 ```js copy
 const param = await db.sign("set", {name: "Bob"}, collection_name, doc_id)

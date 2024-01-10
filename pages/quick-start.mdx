@@ -4,7 +4,6 @@ import { Callout } from "nextra/components"
 
 # Quick Start
 
-This guide shows you how to quickly set up the WeaveDB SDK, along with steps to add and read data from a database collection. To keep things simple, it skips out configurations such as data schema and access control rules, making it easier to dive into advanced topics later.
 <Steps>
 
 ### Deploy a Database
@@ -17,9 +16,7 @@ Using the [web console](https://console.weavedb.dev/), follow the instructions o
 
 ### Install WeaveDB
 
-Creating a new Next.js app is recommended, but you can also install WeaveDB to an already existing project right away.
-
-Open a terminal, go to the root directory of your project, and execute one of the following commands to install WeaveDB.
+Execute one of the following commands in the root directory of your project.
 
 <Tabs items={['Web', 'NodeJS']}>
   <Tab>
@@ -44,37 +41,21 @@ Open a terminal, go to the root directory of your project, and execute one of th
   </Tab>
 </Tabs>
 
-### Import Module
-
-Begin using WeaveDB by importing the appropriate module for your development environment.
+### Initialize WeaveDB
 
 <Tabs items={['Web', 'NodeJS']}>
   <Tab>
   ```js copy
   import WeaveDB from "weavedb-sdk"
-  ```
-  </Tab>
-  <Tab>
-  ```js copy
-  import WeaveDB from "weavedb-sdk-node"
-  ```
-  </Tab>
-</Tabs>
 
-
-### Initialize WeaveDB
-
- Initialize a new WeaveDB instance by passing in the `contractTxId` and calling `init()` on the instance.
-
-<Tabs items={['Web', 'NodeJS']}>
-  <Tab>
-  ```js copy
   const db = new WeaveDB({ contractTxId: CONTRACT_TX_ID })
   await db.init()
   ```
   </Tab>
   <Tab>
   ```js copy
+  import WeaveDB from "weavedb-sdk-node"
+
   const db = new WeaveDB({ contractTxId: CONTRACT_TX_ID })
   await db.init()
   ```
@@ -87,9 +68,11 @@ Replace `CONTRACT_TX_ID` with the `contractTxId` string value returned when depl
 
 ### Add a document
 
-Insert a new document into the database collection by calling `add` on the instance, passing in the data and the collection name.
-
 ```js copy
+/**
+ * @param {Object} personData - JSON data for the new document
+ * @param {string} collection_name - The collection where the document will be added
+ */
 const personData = { name: "Bob", age: 20 }
 const tx = await db.add(personData, collection_name)
 ```
@@ -99,8 +82,6 @@ Replace `collection_name` with the string value name of your collection.
 </Callout>
 
 ### Get a collection
-
-Fetch all documents from the database collection by calling `get` on the instance, passing in the collection name.
 
 ```js copy
 const result = await db.get(collection_name)

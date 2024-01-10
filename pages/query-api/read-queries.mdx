@@ -129,10 +129,10 @@ Enables skipping over a specified number of documents, useful for implementing p
 
 `startAt`, `startAfter`, `endAt`, and `endAfter` are supported.
 
-- `startAt` : Begin fetching documents starting at a specific value.
-- `startAfter` : Fetch documents after a specific value.
+- `startAt` : Start fetching documents from a specific value.
+- `startAfter` : Fetch documents beginning immediately after a specific value.
 - `endAt` : Fetch documents up to a specific value.
-- `endAfter` : Fetch documents until just after a specific value.
+- `endAfter` : Fetch documents up to and including a specific value.
 
 #### Skip with limit range
 
@@ -142,7 +142,7 @@ The following example will sort the documents from the collection using the `age
 await db.get(collection_name, [ "age" ], [ "startAfter", 20 ], [ "endAt", 60 ])
 ```
 
-#### Skip with specific start point
+#### Skip with a specific start point
 
 The following example will sort the documents from the collection using the `age` field in ascending order, then by the `name` field in descending order. The documents to be fetched will start after the first document where the `age` is 20 and `name` is "Bob".
 
@@ -157,7 +157,7 @@ await db.get(
 
 ### Pagination
 
-Manages the retrieval of documents in pages, facilitating the handling of large datasets.
+Manages the retrieval of documents in pages, making it easier to handle large datasets.
 
 ```js copy
 const docs_page1 = await db.cget(collection_name, [ "age" ])
