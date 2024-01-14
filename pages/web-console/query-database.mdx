@@ -1,0 +1,123 @@
+import { Callout } from "nextra/components"
+
+# Query your Database
+
+Using the [web console](https://console.weavedb.dev/), you can execute any queries in the bottom terminal:
+
+![](https://i.imgur.com/N0K8st0.png)
+
+<Callout type="warning" emoji="⚠️">
+When using the console's terminal, do not insert spaces in objects. Spaces are used to separate arguments so it will be parsed incorrectly, or wrap the object with `'` or `"`.
+</Callout>
+
+## Get Info
+
+When executed, it will return an output containing general information of your database.
+
+```bash copy
+getInfo
+```
+
+## Add
+
+When executed, it will take the JSON data provided and add it as a new document to the specified collection with an auto-generated document ID.
+
+```bash copy filename="add : data_JSON : collection_name "
+add {name:"Bob",age:20} people
+```
+
+## Set
+
+When executed, it sets the specified JSON data in a document within a collection. Depending on whether the document indicated by `doc_id` already exists, the command either updates it with the new data or creates a new document with the supplied `doc_id`
+
+```bash copy filename="set : data_JSON : collection_name : doc_id "
+set {name:"Bob",age:20} people Bob
+```
+
+## Update
+
+When executed, this command updates an existing document in a specified collection using the provided JSON data. It specifically targets the document identified by `doc_id` and only modifies it if it exists, without creating a new document.
+
+```bash copy filename="update : data_JSON : collection_name : doc_id"
+update {age:30} people Bob
+```
+
+## Delete
+
+When executed, this command removes an existing document identified by the given `doc_id` from a specified collection.
+
+```bash copy filename="delete : collection_name : doc_id"
+delete people Bob
+```
+
+## Upsert
+
+When executed, this command either updates an existing document or creates a new one if it doesn't already exist in the specified collection. It utilizes the provided JSON data, targeting the document identified by `doc_id`.
+
+```bash copy filename="upsert : data_JSON : collection_name : doc_id"
+upsert {name:"Bob",age:20} people Bob
+```
+
+## Get
+
+When executed, this command retrieves data from the specified collection. It can be used in two ways: to get a single document by providing the `doc_id` or to get all documents in a collection by only specifying the collection name.
+
+To get a single document:
+
+```bash copy filename="get : collection_name : doc_id"
+get people Bob 
+```
+
+To get all documents in a collection:
+
+```bash copy filename="get : collection_name"
+get people
+```
+
+### Limit
+
+When executed, this command modifies the `get` operation to limit the number of documents returned from a collection. By specifying a number after the collection name, you can control how many documents are fetched. This is particularly useful for large collections where you need only a subset of the data.
+
+```bash copy filename="get : collection_name : limit"
+get people 2
+```
+
+### Where
+
+When executed, this enables the retrieval of documents from a collection based on specific query conditions. It filters the documents in the collection according to the criteria set within the array brackets, supporting various operators for precise querying, similar to those used in Firestore.
+
+The `where` parameter allows filtering the documents returned by `get` command based on criteria. The code shows how to fetch only documents where the `age` field equals 20.
+
+```bash copy filename="get : collection_name : [where condition]"
+get people ["age","==",20]
+```
+
+<Callout type="info" emoji="💡">
+You can use [the same operators as Firestore](https://firebase.google.com/docs/firestore/query-data/queries#query_operators), which includes `==`, `!=`, `>`, `>=`, `<`, `<=`, `in`, `not-in`, `array-contains`, and `array-contains-any`.
+</Callout>
+
+### Sort
+
+When executed, this command arranges the documents in a collection based on a specified field and order. In the example below, documents in the `people` collection are sorted by `age` in descending order.
+
+```bash copy filename="get : collection_name : [sort condition]"
+get people ["age","desc"]
+```
+
+<Callout type="info" emoji="💡">
+Single field indexes are automatically generated. But to sort by more than 1 field, multi-field indexes need to be added explicitly. Read onto the following [section](/web-console/query-database#add-multi-field-indexes)
+</Callout>
+
+## Add multi-field indexes
+
+When executed, this command creates a multi-field index for more complex sorting and querying within a collection. It allows sorting by multiple fields in specified orders. In the example below, setting an index to sort the `people` collection first by `age` in descending order, then by `name` in ascending order, enhances query efficiency and accuracy for such sorted data.
+
+```bash copy filename="addIndex : [multi-field index] : collection_name"
+addIndex [["age","desc"],["name","asc"]] people
+```
+
+After adding the index above, you can perform a sorted query like:
+
+```bash copy
+get people ["age","desc"] ["name"] 
+```

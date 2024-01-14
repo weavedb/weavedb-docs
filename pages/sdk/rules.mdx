@@ -2,11 +2,11 @@ import { Callout } from "nextra/components"
 
 # Access Control
 
-## Rules
+Due to the permissionless nature of decentralized databases, it is essential to have control over who can interact with your database. WeaveDB has a powerful mechanism to precisely set up any advanced logic to your database instance by combining [JsonLogic](https://jsonlogic.com/) and [FPJSON](https://fpjson.weavedb.dev)
 
 Access control rules are as important as the schemas for decentralized database. WeaveDB rules are extremely powerful using [JsonLogic](https://jsonlogic.com/) with an original add-on that enables JSON-based [ramda](https://ramdajs.com/) functional programming.
 
-Add rules:
+Add rules to a collection:
 
 ```js copy
 const rules = {
@@ -51,12 +51,33 @@ await db.setRules(rules, "bookmarks")
 ```
 
 <Callout type="info" emoji="💡">
-`db` is assumed to be the state variable storing the WeaveDB SDK object. For reference, see [Initialize WeaveDB](/quick-start#initialize-weavedb)
+In the following sample code, `db` represents the state variable of your database instance. For reference, see [Initialize WeaveDB](/quick-start#initialize-weavedb)
 </Callout>
 
-Within the rules object, each top level key defines one rule. A keys should be a combination of (`allow` or `deny`) and (`write`, `create`, `update`, `delete`).
+Within the rules object, each top level key defines one rule. The keys should be a combination of (`allow` or `deny`) and (`write` or `create` or `update` or `delete`).
 
-`allow write` is equivalent to `allow create,update,delete`.
+You can set up rules to either the entire write operation with `write` or specific operations such as `create`, `update` and `delete`.
+
+`allow write` is equivalent to `allow create,update,delete`
+
+So `write` = `create` + `update` + `delete`
+
+Within the rules, you can access [various information](/sdk/rules#preset-variables) about the contract, block, transaction, and data to be uploaded.
+
+```js copy
+{
+  contract: { id, owners },
+  request: {
+    auth: { signer, relayer, jobID, extra },
+    block: { height, timestamp },
+    transaction: { id },
+    resource: { data },
+    id,
+    path,
+  },
+  resource: { data, setter, newData, id, path },
+}
+```
 
 ## Preset Variables
 
@@ -76,6 +97,12 @@ const data = {
   resource: { data, setter, newData, id, path },
 }
 ```
+
+And with JsonLogic, you can use `var` to access variables, such as `{var: "resource.newData.user"}` to access the `user` field of the newly updated data.
+
+`resource.setter` is the data creator. The following ensures only the original data creators can update their own data:
+
+To combine multiple operations, chain them with `,` like `allow create,update`
 
 <Callout type="info" emoji="💡">
 `signer` will always be lowercase if it's an EVM wallet address. WeaveDB contract converts everything to lowercase to use them internally.
@@ -124,6 +151,67 @@ If you set `{ name : "Bob"}` with wallet `0xABC`, the stored data will be `{ nam
 ```js copy
 await db.set({ name : "Bob" }, "people", "Bob")
 expect(await db.get("people", "Bob")).to.eql({name : "Bob", address: "0xABC" }) // true
+```
+
+### Get Other Data
+
+<Callout type="info" emoji="ℹ️">
+  Feature added in contract version 0.28.15
+</Callout>
+
+You can also execute `get` query in `let` variable assignments. Use the syntax `["get", [QUERY]]`.
+
+The following will first get `Bob` from `ppl` collection and assign it to `user`, then set `age` field with the user's age.
+
+```js
+const rules = {
+  "let create" : { "user" : ["get", ["ppl", "Bob"]], "resource.newData.age": {var: "user.age"} },
+  "allow create" : true
+}
+```
+
+### Conditional Statements
+
+<Callout type="info" emoji="ℹ️">
+  Feature added in contract version 0.28.16
+</Callout>
+
+`if` and `ifelse` can be used for conditional statements in access control rules.
+
+```js
+// assigning age=20 if the name is Bob
+const rules = {
+  "let create" : { 
+    "resource.newData.age" : ["if", ["equals", "Bob", {var: "resource.newData.name"}], 20] 
+  },
+  "allow create" : true
+}
+
+// assigning age=20 if the name is Bob, and age=30 otherwise
+const rules = {
+  "let create" : { 
+    "resource.newData.age" : ["ifelse", ["equals", "Bob", {var: "resource.newData.name"}], 20, 30] 
+  },
+  "allow create" : true
+}
+```
+
+### Renaming Method
+
+<Callout type="info" emoji="ℹ️">
+  Feature added in contract version 0.28.16
+</Callout>
+
+You can rename `request.method` to something other than `create` / `update` / `delete` and assign rules to the renamed method for beter branching.
+
+```js
+// rename method to create_bob if the name is Bob, and only allow create_bob
+const rules = {
+  "let create" : { 
+    "request.method" : ["if", ["equals", "Bob", {var: "resource.newData.name"}], "create_bob"] 
+  },
+  "allow create_bob" : true
+}
 ```
 
 ## Add-on: JSON-based Functional Programming

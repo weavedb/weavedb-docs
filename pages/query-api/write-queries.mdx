@@ -3,9 +3,9 @@ import { Callout } from "nextra/components"
 # Write Queries
 
 <Callout type="info" emoji="💡">
-`db` is assumed to be the state variable storing the WeaveDB SDK object. For reference, see [Initialize WeaveDB](/quick-start#initialize-weavedb)
+In the following sample code, `db` represents the state variable of your database instance. For reference, see [Initialize WeaveDB](/quick-start#initialize-weavedb)
 
-Also, it is expected that `collection_name` refers to the string value that contains the name of your collection, and `doc_id` refers to the string value that contains the unique identifier of a document from the collection.
+`collection_name` refers to the string value that contains the name of your collection, and `doc_id` refers to the string value that contains the unique identifier of a document from the collection.
 </Callout>
 
 <Callout type="info" emoji="💡">
@@ -19,18 +19,20 @@ The differences between `set`, `upsert`, and `update` are:
 
 ## add
 
-To add a new document:
+Adds a new document to the given collection.
 
-```js copy
+```js copy filename="add(data_JSON, collection_name)"
 await db.add({ age: 20, name: "Bob" }, collection_name)
 ```
 <Callout type="info" emoji="💡">
-The doc id will be randomly yet deterministically assigned.
+The document ID will be assigned in a random yet deterministic manner.
 </Callout>
 
 ## set
 
-```js copy
+Adds a new document to the given collection and allows you to choose its document ID.
+
+```js copy filename="set(data_JSON, collection_name, doc_id)"
 await db.set({ age: 20, name: "Bob" }, collection_name, doc_id)
 ```
 
@@ -40,17 +42,17 @@ This will reset the whole document if the `doc_id` already exists.
 
 ## upsert
 
-Upsert will merge the new data with an existing doc or will set a new doc if it does not already exist:
+Combines the functions of `update` and `set`. It merges the new data with an existing document or creates a new document if it does not already exist.
 
-```js copy
+```js copy filename="upsert(data_JSON, collection_name, doc_id)"
 await db.upsert({ age: 20, name: "Bob" }, collection_name, doc_id)
 ```
 
 ## update
 
-Update a document from the collection
+Updates a specific document within a collection. This command only modifies existing documents and does not create new ones.
 
-```js copy
+```js copy filename="update(data_JSON, collection_name, doc_id)"
 await db.update({ age: 25 }, collection_name, doc_id)
 ```
 
@@ -58,9 +60,13 @@ await db.update({ age: 25 }, collection_name, doc_id)
 This will fail if the `doc_id` does not exist.
 </Callout>
 
+## Special Operations
+
 The following is a list of special operations. WeaveDB has shortcuts for common operations that are only available with the SDK and not with the web console terminal at the moment.
 
 ### Delete a field
+
+Removes a specified field from a document in a collection. Useful for cleaning up data or adhering to data structure changes.
 
 ```js copy
 await db.update({ age: db.del() }, collection_name, doc_id)
@@ -68,11 +74,15 @@ await db.update({ age: db.del() }, collection_name, doc_id)
 
 ### Increase a field
 
+Increments the value of a numeric field in a document by a specified amount. Ideal for updating counters or cumulative values.
+
 ```js copy
 await db.update({ age: db.inc(5) }, collection_name, doc_id)
 ```
 
 ### Decrease a field
+
+Decrements the value of a numeric field in a document by a specified amount. Useful for decrementing counters or adjusting values downwards.
 
 ```js copy
 await db.update({ age: db.inc(-5) }, collection_name, doc_id)
@@ -80,35 +90,49 @@ await db.update({ age: db.inc(-5) }, collection_name, doc_id)
 
 ### Array union
 
+Adds unique elements to an array field in a document. Prevents duplication and is useful for managing lists without redundant entries.
+
 ```js copy
 await db.update({ chars: db.union([ "a", "b", "c", "d" ]) }, collection_name, doc_id)
 ```
 
 ### Array remove
 
+Removes specified elements from an array field in a document. Ideal for filtering out unwanted items from a list.
+
 ```js copy
 await db.update({ chars: db.remove([ "b", "c" ]) }, collection_name, doc_id)
 ```
 
 ### Set block timestamp
+
+Sets the field to the current block timestamp.
+
 ```js copy
 await db.update({ date: db.ts() }, collection_name, doc_id)
 ```
 
 ### Set signer Ethereum address
 
-<Callout type="info" emoji="💡">
-`signer` will always be lowercase if it's an EVM wallet address. WeaveDB contract converts everything to lowercase to use them internally.
-
-In regard to Arweave wallet addresses, the case will be retained, because it's RSA hashes and the case matters.
-</Callout>
+Sets the field to the signer's wallet address.
 
 ```js copy
 await db.update({ address: db.signer() }, collection_name, doc_id)
 ```
 
-{/* contract version 0.28
-### Replace a field with relayer's extra data
+<Callout type="info" emoji="💡">
+`signer` will always be in lowercase if it's an EVM wallet address. WeaveDB contract converts everything to lowercase to use them internally.
+
+In regard to Arweave wallet addresses, the case will be retained, because it's RSA hashes and the case matters.
+</Callout>
+
+### data()
+
+Replace a field with relayer's extra data
+
+<Callout type="info" emoji="ℹ️">
+  Feature added in contract version 0.28.12
+</Callout>
 
 ```js
 // icon field will be automatically replaced with `image.png` from the relayer
@@ -122,11 +146,47 @@ const query = await db.sign(
 
 await db.relay("jobID", query, { extra_data_key: "image.png" }, { evm: relayer_wallet })
 ```
- */}
+
+### zkp()
+
+<Callout type="info" emoji="ℹ️">
+  Feature added in contract version 0.38.0
+</Callout>
+
+Verify Zero Knowledge Proof with [PolygonID](https://polygonid.com/)
+
+```js
+await db.update({ userID: db.zkp(proof, pub_signals) }, collection_name, doc_id)
+
+/*
+userID will be replaced with the following
+you should modify it further in access control rules
+
+{
+  valid,
+  pub_signals: {
+    value,
+    merklizedn,
+    userID,
+    issuerAuthState,
+    requestID,
+    issuerID,
+    isRevocationChecked,
+    issuerClaimNonRevState,
+    timestamp,
+    claimSchema,
+    claimPathNotExists,
+    claimPathKey,
+    slotIndex,
+    operator,
+  },
+}
+*/
+```
 
 ## delete
 
-Delete a doc
+Removes a specified document from a collection.
 
 ```js copy
 await db.delete(collection_name, doc_id)
@@ -182,17 +242,10 @@ await db.sign("set", {name: "Bob", age: 20}, collection_name, doc_id)
 
 ## relay
 
-Relay a query:
+Relay a query allows for the execution of a signed operation with additional parameters. Useful for scenarios where you need to delegate the execution of a database operation, potentially with added data.
 
 ```js copy
 const param = await db.sign("set", {name: "Bob"}, collection_name, doc_id)
 const extra = { age: 20 }
 await db.relay("jobID", param, extra, {evm: relayer_wallet})
 ```
-
-{/* /docs/authentication/auth.md */}
-{/* ## addAddressLink */}
-
-{/* /docs/authentication/auth.md */}
-{/* ## removeAddressLink */}
-

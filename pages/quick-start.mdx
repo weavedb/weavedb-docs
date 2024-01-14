@@ -6,15 +6,17 @@ import { Callout } from "nextra/components"
 
 <Steps>
 
-## Deploy a Database
+### Deploy a Database
 
-Using the [web console](https://console.weavedb.dev/), follow the instructions on [Deploying a Database](/get-started/deploy-database)
+Using the [web console](https://console.weavedb.dev/), follow the instructions on [Deploying a Database](/web-console/deploy-database)
 
-## Create a Collection
+### Create a Collection
 
-Using the [web console](https://console.weavedb.dev/), follow the instructions on [Creating a Collection](/get-started/create-collection)
+Using the [web console](https://console.weavedb.dev/), follow the instructions on [Creating a Collection](/web-console/create-collection)
 
-## Install WeaveDB
+### Install WeaveDB
+
+Execute one of the following commands in the root directory of your project.
 
 <Tabs items={['Web', 'NodeJS']}>
   <Tab>
@@ -39,7 +41,7 @@ Using the [web console](https://console.weavedb.dev/), follow the instructions o
   </Tab>
 </Tabs>
 
-## Initialize WeaveDB
+### Initialize WeaveDB
 
 <Tabs items={['Web', 'NodeJS']}>
   <Tab>
@@ -64,9 +66,13 @@ Using the [web console](https://console.weavedb.dev/), follow the instructions o
 Replace `CONTRACT_TX_ID` with the `contractTxId` string value returned when deploying your database.
 </Callout>
 
-## Add a document
+### Add a document
 
 ```js copy
+/**
+ * @param {Object} personData - JSON data for the new document
+ * @param {string} collection_name - The collection where the document will be added
+ */
 const personData = { name: "Bob", age: 20 }
 const tx = await db.add(personData, collection_name)
 ```
@@ -75,18 +81,14 @@ const tx = await db.add(personData, collection_name)
 Replace `collection_name` with the string value name of your collection.
 </Callout>
 
-## Get a collection
-
-Use `get` to read a collection:
+### Get a collection
 
 ```js copy
 const result = await db.get(collection_name)
 ```
 
-And `cget` to return the metadata of the documents too:
-
-```js copy
-const result = await db.cget(collection_name)
-```
+<Callout type="info" emoji="💡">
+Replace `collection_name` with the string value name of your collection.
+</Callout>
 
 </Steps>

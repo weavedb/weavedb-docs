@@ -11,16 +11,42 @@
       "breadcrumb": false
     }
   },
-  "get-started": "Get Started",
-  "query-api": " Query APIs",
-  "permissions": "Permissions",
-  "authentication": {
-    "title": "Authentication",
+  "web-console": {
+    "title": "Web Console",
     "theme": {
       "breadcrumb": false
     }
   },
-  "sdk": "SDK Reference",
+  "query-api": {
+    "title": "Query APIs",
+    "theme": {
+      "breadcrumb": false
+    }
+  },
+  "sdk": {
+    "title": "SDK Reference",
+    "theme": {
+      "breadcrumb": false
+    }
+  },
+  "development": {
+    "title": "Development",
+    "theme": {
+      "breadcrumb": false
+    }
+  },
+  "fpjson": {
+    "title": "FPJSON 2.0",
+    "theme": {
+      "breadcrumb": false
+    }
+  },
+  "rollup-node": {
+    "title": "zkRollup",
+    "theme": {
+      "breadcrumb": false
+    }
+  },
   "examples": "Examples",
   "troubleshooting": {
     "title": "Troubleshooting",

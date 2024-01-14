@@ -1,0 +1,33 @@
+import { Tabs, Tab } from 'nextra/components'
+
+# Clone the Repo
+
+[WeaveDB](https://github.com/weavedb/weavedb) is a monorepo that consists of [Warp contracts](https://warp.cc), [SDK](https://github.com/weavedb/weavedb/tree/master/sdk), [REPL](https://github.com/weavedb/weavedb/blob/master/scripts/runNode.js), a [web console](https://github.com/weavedb/weavedb/tree/master/console), [Jots (Social App)](https://github.com/weavedb/weavedb/tree/master/examples/jots) and many helper [scripts](https://github.com/weavedb/weavedb/tree/master/scripts).
+
+Before cloning the repo, make sure you have the following prerequisites:
+
+- [Node.js](https://nodejs.org/en) >= 18
+- [yarn](https://classic.yarnpkg.com) or [npm](https://nodejs.org/en)
+- [docker](https://docs.docker.com/get-docker)
+- [docker-compose](https://docs.docker.com/get-docker)
+- [Git](https://git-scm.com/downloads)
+
+
+Open a terminal and run the following commands to clone the WeaveDB repository and install its dependencies.
+
+<Tabs items={['yarn', 'npm']}>
+  <Tab>
+  ```bash copy
+git clone https://github.com/weavedb/weavedb.git
+cd weavedb
+yarn
+  ```
+  </Tab>
+  <Tab>
+  ```bash copy
+git clone https://github.com/weavedb/weavedb.git
+cd weavedb
+npm install
+  ```
+  </Tab>
+</Tabs>
